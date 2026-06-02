@@ -1,0 +1,4 @@
+scraping/
+__pycache__/
+.vscode/
+.env
