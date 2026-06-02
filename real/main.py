@@ -11,16 +11,27 @@ TITLE_FONT = ("Inter", 35, "bold")
 root = Path(__file__).resolve().parent
 resource_path = os.path.join(root, "resource")
 
-logo_path = os.path.join(resource_path, "logo.png")
+settings_icon_path = os.path.join(resource_path, "settings_icon.png")
+home_icon_path = os.path.join(resource_path, "home_icon.png")
+search_icon_path = os.path.join(resource_path, "search_icon.png")
+star_icon_path = os.path.join(resource_path, "star_icon.png")
 theme_path = os.path.join(resource_path, "Sweetkind.json")
+
+logo_path = os.path.join(resource_path, "logo.png")
 background_path = os.path.join(resource_path, "placeholder_background.png")
 login_background_path = os.path.join(resource_path, "placeholder_background.png")
 
-ctk.set_appearance_mode("Dark")
-ctk.set_default_color_theme(theme_path)
+settings_icon = Image.open(settings_icon_path)
+home_icon = Image.open(home_icon_path)
+search_icon = Image.open(search_icon_path)
+star_icon = Image.open(star_icon_path)
+
 logo_image = Image.open(logo_path)
 background_image = Image.open(background_path)
 login_background_image = Image.open(login_background_path)
+
+ctk.set_appearance_mode("Dark")
+ctk.set_default_color_theme(theme_path)
 
 class LoadingScreen(ctk.CTkFrame):
     def __init__(self, master, loading_text):
@@ -57,6 +68,29 @@ class LoginScreen(ctk.CTkFrame):
     def login_submit(self):
         self.switch_function((self.name_entry.get(), self.password_entry.get()))
 
+class Sidebar(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master, fg_color="transparent")
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
+        
+        self.home_image = ctk.CTkImage(home_icon, size=(64, 64))
+        self.home_button = ctk.CTkButton(self, image=self.home_image, text="")
+
+        self.settings_image = ctk.CTkImage(settings_icon, size=(64, 64))
+        self.settings_button = ctk.CTkButton(self, image=self.settings_image, text="")
+
+        self.search_image = ctk.CTkImage(search_icon, size=(64, 64))
+        self.search_button = ctk.CTkButton(self, image=self.search_image, text="")
+
+        self.star_image = ctk.CTkImage(star_icon, size=(64, 64))
+        self.star_button = ctk.CTkButton(self, image=self.star_image, text="")
+
+        self.home_button.grid(row=0, column=0, pady=(10, 10), sticky="nsew")
+        self.search_button.grid(row=1, column=0, pady=(10, 10), sticky="nsew")
+        self.star_button.grid(row=2, column=0, pady=(10, 10), sticky="nsew")
+        self.settings_button.grid(row=4, column=0, pady=(10, 10), sticky="nsew")
+
 class MovieBrowser(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
@@ -69,6 +103,9 @@ class MovieBrowser(ctk.CTkFrame):
         self.logo = ctk.CTkImage(logo_image, size=(100,100))
         self.logo_label = ctk.CTkLabel(self, image=self.logo, text="")
         self.logo_label.grid(row=0,column=0,padx=10,pady=10,sticky="nsew")
+
+        self.sidebar = Sidebar(self)
+        self.sidebar.grid(row=1, column=0, rowspan=99, pady=(50, 10))
 
 class StreamingApp(ctk.CTk):
     def __init__(self):
