@@ -24,7 +24,7 @@ login_background_image = Image.open(login_background_path)
 
 class LoadingScreen(ctk.CTkFrame):
     def __init__(self, master, loading_text):
-        super().__init__(master, fg_color="transparent")
+        super().__init__(master)
         self.grid_columnconfigure((0, 1, 2), weight=1)
         self.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
         self.loading_bar = ctk.CTkProgressBar(self)
@@ -37,16 +37,16 @@ class LoadingScreen(ctk.CTkFrame):
 
 class LoginScreen(ctk.CTkFrame):
     def __init__(self, master, switch_function):
-        super().__init__(master, fg_color="transparent")
+        super().__init__(master)
         self.grid_columnconfigure((1), weight=1)
         self.switch_function = switch_function
-        self.title_label = ctk.CTkLabel(self, text="henry + benjamin streaming service", font=TITLE_FONT, fg_color="transparent")
-        self.name_entry = ctk.CTkEntry(self, placeholder_text="Enter your username...", fg_color="transparent")
-        self.login_button = ctk.CTkButton(self, text="Login", command=self.login_submit, hover_color="#3e8a7e", fg_color="transparent")
-        self.password_entry = ctk.CTkEntry(self, show="*", placeholder_text="Enter your password...", fg_color="transparent")
+        self.title_label = ctk.CTkLabel(self, text="henry + benjamin streaming service", font=TITLE_FONT)
+        self.name_entry = ctk.CTkEntry(self, placeholder_text="Enter your username...", width=300)
+        self.login_button = ctk.CTkButton(self, text="Login", command=self.login_submit, hover_color="#3e8a7e", font=TITLE_FONT)
+        self.password_entry = ctk.CTkEntry(self, show="*", placeholder_text="Enter your password...", width=300)
         self.stay_logged_in = ctk.CTkSwitch(self, text="Stay logged in")
         #self.login_background = ctk.CTkImage(login_background_image, login_background_image, (1280, 720))
-        #self.login_background_label = ctk.CTkLabel(self, image=self.login_background, text="", fg_color="transparent", bg_color="transparent")
+        #self.login_background_label = ctk.CTkLabel(self, image=self.login_background, text="", bg_color="transparent")
         
         self.title_label.grid(row=0, column=1, pady=(50,0))
         self.name_entry.grid(row=1, column=1, pady=(25,10))

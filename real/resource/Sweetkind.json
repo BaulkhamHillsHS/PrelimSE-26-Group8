@@ -15,8 +15,8 @@
     "corner_radius": 6,
     "border_width": 0,
     "fg_color": [
-      "#181b28",
-      "#181b28"
+      "#2e1982",
+      "#2e1982"
     ],
     "top_fg_color": [
       "#181b28",
@@ -120,12 +120,12 @@
     "corner_radius": 1000,
     "border_width": 0,
     "fg_color": [
-      "#c452f8",
-      "#c452f8"
+      "#1f2233",
+      "#1f2233"
     ],
     "progress_color": [
-      "#363844",
-      "#363844"
+      "#00e6c3",
+      "#00e6c3"
     ],
     "border_color": [
       "#0d101f",
