@@ -12,3 +12,16 @@ real project in `real/`
 
 new pull request from branch `branch-name`  
 https://github.com/BaulkhamHillsHS/PrelimSE-26-Group8/pull/new/branch-name
+
+search by name, genre, rating, etc
+by collection
+sidebar
+
+home
+search
+watch later
+explore (collections, language, actors, genres, etc)
+settings
+
+btw we dont need imdb ratings we'll just use vote average
+imdb id could be used, maybe, though
