@@ -35,3 +35,11 @@ git add . ; git commit -m "comit message" ;
 git push origin ben 
 ```
 then make a pr and merge if there are no conflicts
+
+
+
+ BTW
+
+ https://github.com/BaulkhamHillsHS/PrelimSE-26-Group8/pull/new/ben
+
+ for pull request
