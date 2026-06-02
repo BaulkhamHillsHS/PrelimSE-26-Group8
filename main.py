@@ -7,9 +7,12 @@ import os
 FONT = ("Inter", 14, "bold")
 
 root = Path(__file__).resolve().parent
+logo_path = os.path.join(root, "public", "logo.png")
+theme_path = os.path.join(root, "Sweetkind.json")
+
 ctk.set_appearance_mode("Dark")
-ctk.set_default_color_theme(os.path.join(root, "Sweetkind.json"))
-logo_image = Image.open(os.path.join(root, "public", "logo.png"))
+ctk.set_default_color_theme(theme_path)
+logo_image = Image.open(logo_path)
 
 class LoginScreen(ctk.CTkFrame):
     def __init__(self, master, switch_function):
@@ -31,35 +34,22 @@ class LoginScreen(ctk.CTkFrame):
 class MovieBrowser(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
-        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(0, minsize=100)
+        self.grid_columnconfigure(1, weight=1)
         
-        self.title_label = ctk.CTkLabel(self, text="STreaming servicentawotihawegaw45y93468y0i9p", font=FONT)
-        self.title_label.pack()
+        self.title_label = ctk.CTkLabel(self, text="streaming service", font=FONT)
+        self.title_label.grid(row=0, column=1, rowspan=1, columnspan=1, sticky="nsew")
         
         self.logo = ctk.CTkImage(logo_image, size=(100,100))
-        
-        self.bind("<Configure>", self.resize_image)
-            
         self.logo_label = ctk.CTkLabel(self, image=self.logo, text="", font=FONT)
-        self.logo_label.pack(pady=(20,0))
-        
-
-    def resize_image(self, event):
-        new_width = event.width
-        new_height = event.height
-        if new_width > 0 and new_height > 0:
-            self.logo.configure(size=(new_width, new_height))
-            self.logo_label.configure(image=self.logo)
+        self.logo_label.grid(row=0,column=0,padx=10,pady=10,sticky="nsew")
 
 class StreamingApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         
-        FONT = ctk.CTkFont("Inter", 14, "bold")
-        
-
         self.title("streaming service")
-        self.geometry("400x220")
+        self.geometry("1280x720")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
@@ -72,11 +62,8 @@ class StreamingApp(ctk.CTk):
         user, password = userdata
         print(f"Logging in as {user} with password {password}")
         self.login_frame.pack_forget()
-        self.browse_frame.pack()
+        self.browse_frame.grid(row=0,column=0,sticky="nsew")
 
-    def button_callback(self):
-        print("hi")
-
-
-app = StreamingApp()
-app.mainloop()
+if __name__ == "__main__":
+    app = StreamingApp()
+    app.mainloop()
