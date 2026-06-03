@@ -53,12 +53,13 @@ class LoginScreen(ctk.CTkFrame):
         super().__init__(master)
         self.grid_columnconfigure((1), weight=1)
         self.switch_function = switch_function
+        self.show_password_state = tk.BooleanVar(value=False)
+
         self.title_label = ctk.CTkLabel(self, text="HBflix login", font=TITLE_FONT)
         self.name_entry = ctk.CTkEntry(self, placeholder_text="Enter your username...", width=300)
         self.login_button = ctk.CTkButton(self, text="Login", command=self.login_submit, hover_color="#3e8a7e", font=TITLE_FONT)
         self.password_entry = ctk.CTkEntry(self, show="*", placeholder_text="Enter your password...", width=300)
-        self.show_password = ctk.CTkCheckBox(self, text="Show password")
-        self.show_password_state = tk.BooleanVar(value=False)
+        self.show_password = ctk.CTkCheckBox(self, text="Show password", variable=self.show_password_state, command=self.toggle_show_password)
         #self.login_background = ctk.CTkImage(login_background_image, login_background_image, (1280, 720))
         #self.login_background_label = ctk.CTkLabel(self, image=self.login_background, text="", bg_color="transparent")
         
@@ -70,6 +71,12 @@ class LoginScreen(ctk.CTkFrame):
         
     def login_submit(self):
         self.switch_function((self.name_entry.get(), self.password_entry.get()))
+
+    def toggle_show_password(self):
+        if self.show_password_state.get():
+            self.password_entry.configure(show="")
+        else:
+            self.password_entry.configure(show="*")
 
 class Sidebar(ctk.CTkFrame):
     def __init__(self, master, handle_function):
@@ -110,7 +117,7 @@ class MovieBrowser(ctk.CTkFrame):
 
         self.quit = quit
         self.name = name
-        self.title_label = ctk.CTkLabel(self, text=f"Welcome, {name}", font=TITLE_FONT)
+        self.title_label = ctk.CTkLabel(self, text=f"Welcome, {self.name}", font=TITLE_FONT)
         self.title_label.grid(row=0, column=1, rowspan=1, columnspan=1, sticky="nsew")
         
         self.logo = ctk.CTkImage(logo_image, size=(100,100))
@@ -125,6 +132,11 @@ class MovieBrowser(ctk.CTkFrame):
             self.quit()
         else:
             print(button_name, "button pressed")
+
+    def change_name(self, new_name):
+        self.name = new_name
+        print(self.name)
+        self.title_label.configure(text=f"Welcome, {self.name}")
 
 class StreamingApp(ctk.CTk):
     def __init__(self):
@@ -152,7 +164,7 @@ class StreamingApp(ctk.CTk):
         print(f"Logging in as {user} with password {password}")
         self.switch_frame(self.login_frame, self.loading_frame)
         self.user = user
-        self.browse_frame = MovieBrowser(self, self.user, self.quit)
+        self.browse_frame.change_name(user)
         self.after(3000, lambda:self.switch_frame(self.loading_frame, self.browse_frame))
 
     def quit(self):
