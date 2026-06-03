@@ -24,4 +24,10 @@ explore (collections, language, actors, genres, etc)
 settings
 
 btw we dont need imdb ratings we'll just use vote average
+
 imdb id could be used, maybe, though
+
+add accounts class systems, subscription, payment info, inputs for these
+
+free tier
+
