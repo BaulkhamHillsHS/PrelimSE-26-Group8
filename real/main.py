@@ -55,14 +55,15 @@ class LoginScreen(ctk.CTkFrame):
         self.name_entry = ctk.CTkEntry(self, placeholder_text="Enter your username...", width=300)
         self.login_button = ctk.CTkButton(self, text="Login", command=self.login_submit, hover_color="#3e8a7e", font=TITLE_FONT)
         self.password_entry = ctk.CTkEntry(self, show="*", placeholder_text="Enter your password...", width=300)
-        self.stay_logged_in = ctk.CTkSwitch(self, text="Stay logged in")
+        self.show_password = ctk.CTkCheckBox(self, text="Show password")
+        self.show_password_state = tk.BooleanVar(value=False)
         #self.login_background = ctk.CTkImage(login_background_image, login_background_image, (1280, 720))
         #self.login_background_label = ctk.CTkLabel(self, image=self.login_background, text="", bg_color="transparent")
         
-        self.title_label.grid(row=0, column=1, pady=(50,0))
+        self.title_label.grid(row=0, column=1, pady=(50,50))
         self.name_entry.grid(row=1, column=1, pady=(25,10))
         self.password_entry.grid(row=2, column=1, pady=(0,10))
-        self.stay_logged_in.grid(row=3, column=1, pady=(10, 0))
+        self.show_password.grid(row=3, column=1, pady=(10, 0))
         self.login_button.grid(row=4, column=1, pady=(10,0))
         
     def login_submit(self):
