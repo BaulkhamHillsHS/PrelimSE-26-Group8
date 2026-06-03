@@ -31,3 +31,11 @@ add accounts class systems, subscription, payment info, inputs for these
 
 free tier
 
+
+
+profile picture
+forget password
+remember me
+show password
+change password
+stripe pay
