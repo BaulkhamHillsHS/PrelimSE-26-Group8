@@ -36,14 +36,17 @@ ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme(theme_path)
 
 class LoadingScreen(ctk.CTkFrame):
-    def __init__(self, master, loading_text):
+    def __init__(self, master, loading_text: str):
         super().__init__(master)
         self.grid_columnconfigure((0, 1, 2), weight=1)
         self.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
-        self.loading_bar = ctk.CTkProgressBar(self)
-        self.loading_text = ctk.CTkLabel(self, text=loading_text, font=TITLE_FONT)
+        self.loading_text = loading_text
+        self.build_ui()
 
-        self.loading_text.grid(row=2, column=1, padx=(10, 10), pady=(10, 10), sticky="ew")
+    def build_ui(self):
+        self.loading_bar = ctk.CTkProgressBar(self)
+        self.loading_label = ctk.CTkLabel(self, text=self.loading_text, font=TITLE_FONT)
+        self.loading_label.grid(row=2, column=1, padx=(10, 10), pady=(10, 10), sticky="ew")
         self.loading_bar.grid(row=3, column=1, padx=(10, 10), pady=(10, 10), sticky="ew")
         self.loading_bar.configure(mode="indeterminate")
         self.loading_bar.start()
@@ -54,7 +57,9 @@ class LoginScreen(ctk.CTkFrame):
         self.grid_columnconfigure((1), weight=1)
         self.switch_function = switch_function
         self.show_password_state = tk.BooleanVar(value=False)
+        self.build_ui()
 
+    def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text="HBflix login", font=TITLE_FONT)
         self.name_entry = ctk.CTkEntry(self, placeholder_text="Enter your username...", width=300)
         self.login_button = ctk.CTkButton(self, text="Login", command=self.login_submit, hover_color="#3e8a7e", font=TITLE_FONT)
@@ -62,7 +67,6 @@ class LoginScreen(ctk.CTkFrame):
         self.show_password = ctk.CTkCheckBox(self, text="Show password", variable=self.show_password_state, command=self.toggle_show_password)
         #self.login_background = ctk.CTkImage(login_background_image, login_background_image, (1280, 720))
         #self.login_background_label = ctk.CTkLabel(self, image=self.login_background, text="", bg_color="transparent")
-        
         self.title_label.grid(row=0, column=1, pady=(50,30))
         self.name_entry.grid(row=1, column=1, pady=(25,10))
         self.password_entry.grid(row=2, column=1, pady=(0,10))
@@ -84,7 +88,9 @@ class Sidebar(ctk.CTkFrame):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
         self.handle_function = handle_function
-        
+        self.build_ui()
+
+    def build_ui(self):
         self.home_image = ctk.CTkImage(home_icon, size=(64, 64))
         self.home_button = ctk.CTkButton(self, image=self.home_image, text="", command=lambda: self.handle_button_press("home"))
 
@@ -117,6 +123,9 @@ class MovieBrowser(ctk.CTkFrame):
 
         self.quit = quit
         self.name = name
+        self.build_ui()
+    
+    def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text=f"Welcome, {self.name}", font=TITLE_FONT)
         self.title_label.grid(row=0, column=1, rowspan=1, columnspan=1, sticky="nsew")
         
@@ -146,7 +155,9 @@ class StreamingApp(ctk.CTk):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         self.user = ""
+        self.build_ui()
 
+    def build_ui(self):
         #self.background_image = ctk.CTkImage(background_image, size=(1280,720))
         #self.background_label = ctk.CTkLabel(self, image=self.background_image, text="")
 

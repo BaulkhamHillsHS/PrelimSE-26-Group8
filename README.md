@@ -39,3 +39,12 @@ remember me
 show password
 change password
 stripe pay
+
+profiles in a csv
+watch later
+home
+make profiles
+search
+sort by rating
+save to playlist
+actually watch the movie/tv show
