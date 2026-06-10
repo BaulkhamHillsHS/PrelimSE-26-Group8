@@ -8,6 +8,7 @@ import os
 
 TITLE_FONT = ("Inter", 35, "bold")
 TEXT_FONT = ("Arial", 20)
+IDK_FONT = ("Courier New", 14)
 
 root = Path(__file__).resolve().parent
 resource_path = os.path.join(root, "resource")
