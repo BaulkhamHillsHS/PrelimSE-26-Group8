@@ -105,11 +105,11 @@ class Panel():
 class Login(ctk.CTk):
     def __init__(
         self, 
-        fg_color: tuple[str, str] | str = "white",
+        fg_color: tuple[str, str] | str = "black",
         geometry: str = pos(500, 400, 0, 0),
         title: str = "Untitled App",
-        minsize: tuple[int, int] = None,
-        maxsize: tuple[int, int] = None,
+        minsize: tuple[int, int] = (0, 0),
+        maxsize: tuple[int, int] = (0, 0),
         resizable: tuple[bool, ...] = (True, True),
     ):
         super().__init__(fg_color)

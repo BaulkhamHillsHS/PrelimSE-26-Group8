@@ -11,26 +11,23 @@ TITLE_FONT = ("Inter", 35, "bold")
 root = Path(__file__).resolve().parent
 resource_path = os.path.join(root, "resource")
 
-settings_icon_path = os.path.join(resource_path, "settings_icon.png")
-home_icon_path = os.path.join(resource_path, "home_icon.png")
-search_icon_path = os.path.join(resource_path, "search_icon.png")
-star_icon_path = os.path.join(resource_path, "star_icon.png")
-quit_icon_path = os.path.join(resource_path, "quit_icon.png")
+image_names = [
+          "settings_icon",
+          "home_icon",
+          "search_icon",
+          "star_icon",
+          "quit_icon",
+          "logo",
+          ]
+
+images = {}
+
+for name in image_names:
+    image_path = os.path.join(resource_path, name+".png")
+    image = Image.open(image_path)
+    images[name] = image
 
 theme_path = os.path.join(resource_path, "Sweetkind.json")
-logo_path = os.path.join(resource_path, "logo.png")
-background_path = os.path.join(resource_path, "placeholder_background.png")
-login_background_path = os.path.join(resource_path, "placeholder_background.png")
-
-settings_icon = Image.open(settings_icon_path)
-home_icon = Image.open(home_icon_path)
-search_icon = Image.open(search_icon_path)
-star_icon = Image.open(star_icon_path)
-quit_icon = Image.open(quit_icon_path)
-
-logo_image = Image.open(logo_path)
-background_image = Image.open(background_path)
-login_background_image = Image.open(login_background_path)
 
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme(theme_path)
@@ -91,19 +88,19 @@ class Sidebar(ctk.CTkFrame):
         self.build_ui()
 
     def build_ui(self):
-        self.home_image = ctk.CTkImage(home_icon, size=(64, 64))
+        self.home_image = ctk.CTkImage(images["home_icon"], size=(64, 64))
         self.home_button = ctk.CTkButton(self, image=self.home_image, text="", command=lambda: self.handle_button_press("home"))
 
-        self.settings_image = ctk.CTkImage(settings_icon, size=(64, 64))
+        self.settings_image = ctk.CTkImage(images["settings_icon"], size=(64, 64))
         self.settings_button = ctk.CTkButton(self, image=self.settings_image, text="", command=lambda: self.handle_button_press("settings"))
 
-        self.search_image = ctk.CTkImage(search_icon, size=(64, 64))
+        self.search_image = ctk.CTkImage(images["search_icon"], size=(64, 64))
         self.search_button = ctk.CTkButton(self, image=self.search_image, text="", command=lambda: self.handle_button_press("search"))
 
-        self.star_image = ctk.CTkImage(star_icon, size=(64, 64))
+        self.star_image = ctk.CTkImage(images["star_icon"], size=(64, 64))
         self.star_button = ctk.CTkButton(self, image=self.star_image, text="", command=lambda: self.handle_button_press("star"))
 
-        self.quit_image = ctk.CTkImage(quit_icon, size=(64, 64))
+        self.quit_image = ctk.CTkImage(images["quit_icon"], size=(64, 64))
         self.quit_button = ctk.CTkButton(self, image=self.quit_image, text="", command=lambda: self.handle_button_press("quit"))
 
         self.home_button.grid(row=0, column=0, pady=(10, 10), sticky="nsew")
@@ -129,7 +126,7 @@ class MovieBrowser(ctk.CTkFrame):
         self.title_label = ctk.CTkLabel(self, text=f"Welcome, {self.name}", font=TITLE_FONT)
         self.title_label.grid(row=0, column=1, rowspan=1, columnspan=1, sticky="nsew")
         
-        self.logo = ctk.CTkImage(logo_image, size=(100,100))
+        self.logo = ctk.CTkImage(images["logo_image"], size=(100,100))
         self.logo_label = ctk.CTkLabel(self, image=self.logo, text="")
         self.logo_label.grid(row=0,column=0,padx=10,pady=10,sticky="nsew")
 
