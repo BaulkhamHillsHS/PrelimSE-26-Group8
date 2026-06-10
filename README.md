@@ -74,10 +74,24 @@ profile and data saving seems to be really annoying to program
 
 do the thing where when ur searching it shows recommendations then u click on it and it says wait we dont have this
 
-move everyting to tabview cuz wow i didnt know that existed -_-
-
 auth could use inputdialogue window check cmplxexample
 
 fix search title diff height to home title label
 
 real logging in csv account + profiles -_---- list of dicts probably
+
+tabview for subscription plan viewing
+
+```py
+self.tabs = ctk.CTktabview(self)
+self.tabs.add("...")
+
+self.tab_a = self.tabs.tab("Account")
+self.a_things = AThingsFrame(self.tab_a)
+```
+
+make the movies buttons not labels
+
+ben background could be scrolling movie posters instead of netflix
+
+secure password somehow maybe

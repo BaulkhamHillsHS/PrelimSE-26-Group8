@@ -1,9 +1,11 @@
+import csv
 import time
 import random
 from PIL import Image
 import customtkinter as ctk
 import tkinter as tk
 from pathlib import Path
+from enum import Enum
 import os
 
 TITLE_FONT = ("Inter", 35, "bold")
@@ -34,6 +36,69 @@ theme_path = os.path.join(resource_path, "Sweetkind.json")
 
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme(theme_path)
+
+class SubscriptionPlan(Enum):
+    BRONZE = "Bronze"
+    SILVER = "Silver"
+    GOLD = "Gold"
+    PLATINUM = "Platinum"
+    #BHHS_ORCHESTRA = "too much aura"
+
+class Profile:
+    def __init__(self, name, age_rating):
+        self.name = name
+        self.age_rating = age_rating
+        self.watchlist = []
+        self.watch_history = []
+
+class Account:
+    def __init__(self, name, email, password, subscription_plan: SubscriptionPlan, payment_info):
+        self.name = name
+        self.email = email
+        self.__password = password
+        self.__payment_info = payment_info
+        self.subscription_plan = subscription_plan
+        self.profiles = []
+
+    def check_password(self, attempt):
+        return attempt==self.__password
+    
+    def get_password(self):
+        return self.__password
+    
+    def get_payment_info(self):
+        return self.__payment_info
+    
+class AccountManager:
+    def __init__(self, filepath):
+        self.filepath = filepath
+        self.fields = ["name", "email", "password", "subscription_plan", "payment_info", "profiles"]
+    
+    def load_accounts(self):
+        accounts = []
+        with open(self.filepath, "r", newline="") as f:
+            reader=csv.DictReader(f)
+            for row in reader:
+                accounts.append(Account(row["name"], row["email"], row["password"], SubscriptionPlan(row["subscription_plan"]), row["payment_info"]))
+        return accounts
+    
+    def save_account(self, account: Account):
+        with open(self.filepath, "a", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=self.fields)
+            writer.writerow({
+                "name": account.name, 
+                "email": account.email, 
+                "password": account.get_password(), 
+                "subscription_plan": account.subscription_plan.value, 
+                "payment_info": account.get_payment_info(),
+                "profiles": str(account.profiles)
+                })
+
+
+
+
+
+
 
 class LoadingScreen(ctk.CTkFrame):
     def __init__(self, master, loading_text: str):
@@ -256,12 +321,17 @@ class SettingsFrame(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
         self.columnconfigure(0, weight=1)
-        self.rowconfigure(0, weight=1)
+        self.rowconfigure((0, 1), weight=1)
         self.build_ui()
 
     def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text="Settings", font=TITLE_FONT)
         self.title_label.grid(row=0, column=0, sticky="nsew")
+
+        self.tabs= ctk.CTkTabview(self)
+        self.tabs.add("Settings1")
+        self.tabs.add("Settings2")
+        self.tabs.grid(row=1, column=0, sticky="nsew")
 
 class AccountFrame(ctk.CTkFrame):
     def __init__(self, master, name):
