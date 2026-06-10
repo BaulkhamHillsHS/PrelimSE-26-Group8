@@ -53,6 +53,9 @@ actually watch the movie/tv show
 henry to add
 - make it highlight on the sidebar which one is being shown
 - search functionality
-- add account to sidebar bottom, changing subscription plan, change profile, etc
+- changing subscription plan, change profile, etc
+- change password
+- txt watch history
+- logout
 
 gridcolumnconfigure vs columnconfigure

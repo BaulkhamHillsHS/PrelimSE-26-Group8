@@ -169,7 +169,7 @@ class HomeFrame(ctk.CTkScrollableFrame):
     def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text=f"Welcome, {self.name}", font=TITLE_FONT)
         self.title_label.grid(row=0, column=0, sticky="nsew")
-        self.movie_bar_1.grid(row=1, column=0, sticky="nsew")
+        self.movie_bar_1.grid(row=1, column=0, sticky="nsew", pady=(0, 10))
         self.movie_bar_2.grid(row=2, column=0, sticky="nsew")
         self.movie_bar_3.grid(row=3, column=0, sticky="nsew")
 
@@ -226,6 +226,8 @@ class MovieBrowser(ctk.CTkFrame):
         super().__init__(master)
         self.grid_columnconfigure(0, minsize=100)
         self.grid_columnconfigure(1, weight=1)
+        self.rowconfigure(0, weight=0)
+        self.rowconfigure(1, weight=1)
 
         self.quit = quit
         self.name = name
@@ -245,9 +247,9 @@ class MovieBrowser(ctk.CTkFrame):
         self.logo_label.grid(row=0,column=0,padx=10,pady=10,sticky="nsew")
 
         self.sidebar = Sidebar(self, self.handle_sidebar)
-        self.sidebar.grid(row=1, column=0, rowspan=99, pady=(50, 10), padx=(10, 10))
+        self.sidebar.grid(row=1, column=0, pady=(50, 10), padx=(10, 10), sticky="ns")
 
-        self.home_frame.grid(row=0, column=1, rowspan=99, sticky="nsew", pady=(10, 10), padx=(10, 10))
+        self.home_frame.grid(row=0, column=1, rowspan=2, sticky="nsew", pady=(10, 10), padx=(10, 10))
 
     def handle_sidebar(self, button_name):
         if button_name == "quit":
@@ -270,7 +272,7 @@ class MovieBrowser(ctk.CTkFrame):
 
     def switch_frame(self, new_frame):
         self.current_frame.grid_forget()
-        new_frame.grid(row=0, column=1, rowspan=99, sticky="nsew", pady=(10, 10), padx=(10, 10))
+        new_frame.grid(row=0, column=1, rowspan=2, sticky="nsew", pady=(10, 10), padx=(10, 10))
         self.current_frame = new_frame
 
 class StreamingApp(ctk.CTk):
