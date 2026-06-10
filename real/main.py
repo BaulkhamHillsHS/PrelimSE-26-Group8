@@ -126,7 +126,7 @@ class MovieBrowser(ctk.CTkFrame):
         self.title_label = ctk.CTkLabel(self, text=f"Welcome, {self.name}", font=TITLE_FONT)
         self.title_label.grid(row=0, column=1, rowspan=1, columnspan=1, sticky="nsew")
         
-        self.logo = ctk.CTkImage(images["logo_image"], size=(100,100))
+        self.logo = ctk.CTkImage(images["logo"], size=(100,100))
         self.logo_label = ctk.CTkLabel(self, image=self.logo, text="")
         self.logo_label.grid(row=0,column=0,padx=10,pady=10,sticky="nsew")
 
