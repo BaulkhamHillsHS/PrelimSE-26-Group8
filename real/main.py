@@ -135,7 +135,7 @@ class Moviebar(ctk.CTkScrollableFrame):
     def build_ui(self):
         for i, movie in enumerate(self.movies):
             movie_image = ctk.CTkImage(images["logo"], size=(64, 128))
-            movie_label = ctk.CTkLabel(self, image=movie_image, text="", fg_color="transparent", bg_color="transparent")
+            movie_label = ctk.CTkLabel(self, image=movie_image, text="", fg_color="transparent")
             self.movie_images.append(movie_image)
             movie_label.grid(row=0, column=i, sticky="ew", pady=0, padx=(10, 10))
 
@@ -156,11 +156,12 @@ class LabelledMoviebar(ctk.CTkFrame):
 
 class HomeFrame(ctk.CTkScrollableFrame):
     def __init__(self, master, name):
-        super().__init__(master, fg_color="transparent", bg_color="transparent")
+        super().__init__(master, fg_color="transparent")
         self.name = name
 
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_rowconfigure((1, 2, 3, 4, 5), weight=1)
         self.movie_bar_1 = LabelledMoviebar(self, name="Recommended movies", movies=[0]*20)
         self.movie_bar_2 = LabelledMoviebar(self, name="TV shows", movies=[0]*3)
         self.movie_bar_3 = LabelledMoviebar(self, name="placeholder 3", movies=[0])
@@ -178,20 +179,71 @@ class HomeFrame(ctk.CTkScrollableFrame):
         self.name = new_name
         self.title_label.configure(text=f"Welcome, {self.name}")
 
+class FilterSortFrame(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master, fg_color="transparent")
+        self.columnconfigure((0, 1, 2), weight=1)
+        self.rowconfigure((0, 1), weight=1)
+        self.restrictions_map = {
+            "any": [""],
+            "score rating": [">9", ">8.5", ">8", ">7"],
+            "age rating": ["PG", "PG13", "MA15+", "M", "R"],
+            "length": ["<75m", "<90m", "<120m", ">75m", ">90m", ">120m"],
+            "genre": ["sci-fi", "action", "fantasy", "whatever"]
+        }
+
+        self.build_ui()
+
+    def build_ui(self):
+        self.filter_by = ctk.CTkOptionMenu(self, values=["any", "score rating", "age rating", "length", "genre"], command=self.filter_change)
+        self.filter_by_restriction_menu = ctk.CTkOptionMenu(self, values=self.restrictions_map["any"])
+        self.sort_by = ctk.CTkOptionMenu(self, values=["score rating", "age rating", "length", "genre"])
+
+        self.filter_label = ctk.CTkLabel(self, text="Filter by...", font=TEXT_FONT)
+        self.sort_label = ctk.CTkLabel(self, text="Sort by...", font=TEXT_FONT)
+
+        self.filter_label.grid(row=0, column=0, columnspan=2, pady=10, padx=10)
+        self.sort_label.grid(row=0, column=2, padx=10, pady=10)
+
+        self.filter_by.grid(row=1, column=0, padx=10, pady=10)
+        self.filter_by_restriction_menu.grid(row=1, column=1, padx=10, pady=10)
+        self.sort_by.grid(row=1, column=2, padx=10, pady=10)
+
+    def filter_change(self, new: str):
+        if new in self.restrictions_map:
+            self.filter_by_restriction_menu.configure(values=self.restrictions_map[new])
+            self.filter_by_restriction_menu.set(self.restrictions_map[new][0])
+
+    def get_filter(self):
+        return (self.filter_by.get(), self.filter_by_restriction_menu.get())
+    
+    def get_sort(self):
+        return (self.sort_by.get())
+
 class SearchFrame(ctk.CTkFrame):
     def __init__(self, master):
-        super().__init__(master, fg_color="transparent", bg_color="transparent")
-        self.columnconfigure(0, weight=1)
-        self.rowconfigure(0, weight=1)
+        super().__init__(master, fg_color="transparent")
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_rowconfigure((1, 2, 3), weight=1)
         self.build_ui()
 
     def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text="Search", font=TITLE_FONT)
+        self.filter_sort_frame = FilterSortFrame(self)
+        self.a_button = ctk.CTkButton(self, text="Search button", command=self.button_callback)
+
         self.title_label.grid(row=0, column=0, sticky="nsew")
+        self.filter_sort_frame.grid(row=1, column=0)
+        self.a_button.grid(row=2, column=0)
+        
+    def button_callback(self):
+        print(self.filter_sort_frame.get_filter())
+        print(self.filter_sort_frame.get_sort())
 
 class StarredFrame(ctk.CTkFrame):
     def __init__(self, master):
-        super().__init__(master, fg_color="transparent", bg_color="transparent")
+        super().__init__(master, fg_color="transparent")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
         self.build_ui()
@@ -202,7 +254,7 @@ class StarredFrame(ctk.CTkFrame):
 
 class SettingsFrame(ctk.CTkFrame):
     def __init__(self, master):
-        super().__init__(master, fg_color="transparent", bg_color="transparent")
+        super().__init__(master, fg_color="transparent")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
         self.build_ui()
@@ -212,15 +264,20 @@ class SettingsFrame(ctk.CTkFrame):
         self.title_label.grid(row=0, column=0, sticky="nsew")
 
 class AccountFrame(ctk.CTkFrame):
-    def __init__(self, master):
-        super().__init__(master, fg_color="transparent", bg_color="transparent")
+    def __init__(self, master, name):
+        super().__init__(master, fg_color="transparent")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
+        self.name = name
         self.build_ui()
 
     def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text="Account", font=TITLE_FONT)
         self.title_label.grid(row=0, column=0, sticky="nsew")
+
+    def change_name(self, new_name):
+        self.name = new_name
+        self.title_label.configure(text=f"Account: {self.name}")
 
 class MovieBrowser(ctk.CTkFrame):
     def __init__(self, master, name, quit):
@@ -236,7 +293,7 @@ class MovieBrowser(ctk.CTkFrame):
         self.search_frame = SearchFrame(self)
         self.star_frame = StarredFrame(self)
         self.settings_frame = SettingsFrame(self)
-        self.account_frame = AccountFrame(self)
+        self.account_frame = AccountFrame(self, self.name)
 
         self.current_frame = self.home_frame
 
@@ -270,6 +327,7 @@ class MovieBrowser(ctk.CTkFrame):
 
     def change_name(self, new_name: str):
         self.home_frame.change_name(new_name)
+        self.account_frame.change_name(new_name)
 
     def switch_frame(self, new_frame):
         self.current_frame.grid_forget()
