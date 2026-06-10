@@ -189,12 +189,6 @@ class Login(ctk.CTk):
         self.hide = ctk.CTkButton(self.password_frame, width=0, height=40, text="", fg_color="#4C4C53", image=ctk.CTkImage(light_image=(p:=self.visibility[1]), size=p.size), command=lambda: self.toggle_show(self.password, self.hide), anchor="center", hover_color="#4C4C53")
         self.hide.grid(row=0, column=2, padx=(0, 5), pady=(3, 0))
         
-        self.remember = ctk.CTkCheckBox(self, text_color="#AAAAAD", bg_color="#36363B", font=("Inter Regular", 14), text="Remember me", checkbox_height=16, border_width=2, fg_color="red", hover=False)
-        self.remember.place(x=login_panel.get_pos()[0] + login_panel.padding[0] + 1, y=self.canvas.bbox(self.netflix)[3] + 40 + 56 + 24 + 56 + 12)
-        
-        self.forgot = ctk.CTkButton(self, width=140, text="Forgot password?", border_width=0, bg_color="#36363B", fg_color="#36363B", anchor="e", text_color="#AAAAAD", hover=False, font=("Inter Regular", 14))
-        self.forgot.place(x=login_panel.get_pos()[0] + login_panel.get_dim()[0] - login_panel.padding[0] - 140, y=self.canvas.bbox(self.netflix)[3] + 40 + 56 + 24 + 56 + 12)
-        
         button_width = 56
         self.login_button = ctk.CTkButton(self, login_panel.get_dim()[0] - login_panel.padding[0] - login_panel.padding[1], button_width, 10, bg_color="#36363B", fg_color="#d81f26", text="Login", font=("Inter Black", 20), text_color="white", hover_color="#b41f24")
         self.login_button.place(x=login_panel.get_pos()[0] + login_panel.padding[0], y=login_panel.get_pos()[1] + login_panel.get_dim()[1] - login_panel.padding[3] - button_width)
