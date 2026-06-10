@@ -7,6 +7,7 @@ from pathlib import Path
 import os
 
 TITLE_FONT = ("Inter", 35, "bold")
+TEXT_FONT = ("Arial", 20)
 
 root = Path(__file__).resolve().parent
 resource_path = os.path.join(root, "resource")
@@ -17,6 +18,7 @@ image_names = [
           "search_icon",
           "star_icon",
           "quit_icon",
+          "account_icon",
           "logo",
           ]
 
@@ -71,7 +73,10 @@ class LoginScreen(ctk.CTkFrame):
         self.login_button.grid(row=4, column=1, pady=(10,0))
         
     def login_submit(self):
-        self.switch_function((self.name_entry.get(), self.password_entry.get()))
+        if self.name_entry.get() == "":
+            self.switch_function(("Guest", ""))
+        else:
+            self.switch_function((self.name_entry.get(), self.password_entry.get()))
 
     def toggle_show_password(self):
         if self.show_password_state.get():
@@ -83,34 +88,138 @@ class Sidebar(ctk.CTkFrame):
     def __init__(self, master, handle_function):
         super().__init__(master, fg_color="transparent")
         self.grid_columnconfigure(1, weight=1)
-        self.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
+        self.grid_rowconfigure(5, minsize=60)
+        self.grid_rowconfigure((0, 1, 2, 3, 4, 6), weight=1)
         self.handle_function = handle_function
         self.build_ui()
 
     def build_ui(self):
-        self.home_image = ctk.CTkImage(images["home_icon"], size=(64, 64))
+        self.home_image = ctk.CTkImage(images["home_icon"], size=(48, 48))
         self.home_button = ctk.CTkButton(self, image=self.home_image, text="", command=lambda: self.handle_button_press("home"))
 
-        self.settings_image = ctk.CTkImage(images["settings_icon"], size=(64, 64))
+        self.settings_image = ctk.CTkImage(images["settings_icon"], size=(48, 48))
         self.settings_button = ctk.CTkButton(self, image=self.settings_image, text="", command=lambda: self.handle_button_press("settings"))
 
-        self.search_image = ctk.CTkImage(images["search_icon"], size=(64, 64))
+        self.search_image = ctk.CTkImage(images["search_icon"], size=(48, 48))
         self.search_button = ctk.CTkButton(self, image=self.search_image, text="", command=lambda: self.handle_button_press("search"))
 
-        self.star_image = ctk.CTkImage(images["star_icon"], size=(64, 64))
+        self.star_image = ctk.CTkImage(images["star_icon"], size=(48, 48))
         self.star_button = ctk.CTkButton(self, image=self.star_image, text="", command=lambda: self.handle_button_press("star"))
 
-        self.quit_image = ctk.CTkImage(images["quit_icon"], size=(64, 64))
+        self.quit_image = ctk.CTkImage(images["quit_icon"], size=(48, 48))
         self.quit_button = ctk.CTkButton(self, image=self.quit_image, text="", command=lambda: self.handle_button_press("quit"))
+
+        self.account_image = ctk.CTkImage(images["account_icon"], size=(48, 48))
+        self.account_button = ctk.CTkButton(self, image=self.account_image, text="", command=lambda: self.handle_button_press("account"))
 
         self.home_button.grid(row=0, column=0, pady=(10, 10), sticky="nsew")
         self.search_button.grid(row=1, column=0, pady=(10, 10), sticky="nsew")
         self.star_button.grid(row=2, column=0, pady=(10, 10), sticky="nsew")
         self.settings_button.grid(row=3, column=0, pady=(10, 10), sticky="nsew")
         self.quit_button.grid(row=4, column=0, pady=(10, 10), sticky="nsew")
+        self.account_button.grid(row=6, column=0, pady=(10, 10), sticky="nsew")
 
     def handle_button_press(self, button):
         self.handle_function(button)
+
+class Moviebar(ctk.CTkScrollableFrame):
+    def __init__(self, master, movies):
+        super().__init__(master, orientation="horizontal")
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.movies = movies
+        self.movie_images = []
+        self.build_ui()
+
+    def build_ui(self):
+        for i, movie in enumerate(self.movies):
+            movie_image = ctk.CTkImage(images["logo"], size=(64, 128))
+            movie_label = ctk.CTkLabel(self, image=movie_image, text="", fg_color="transparent", bg_color="transparent")
+            self.movie_images.append(movie_image)
+            movie_label.grid(row=0, column=i, sticky="ew", pady=0, padx=(10, 10))
+
+class LabelledMoviebar(ctk.CTkFrame):
+    def __init__(self, master, name, movies):
+        super().__init__(master)
+        self.name = name
+        self.movies = movies
+        self.movie_bar = Moviebar(self, self.movies)
+        self.rowconfigure((0, 1), weight=1)
+        self.columnconfigure(0, weight=1)
+        self.build_ui()
+
+    def build_ui(self):
+        self.label = ctk.CTkLabel(self, text=self.name, font=TEXT_FONT)
+        self.label.grid(row=0, column=0, sticky="w", pady=(0, 10))
+        self.movie_bar.grid(row=1, column=0, sticky="ew", pady=0)
+
+class HomeFrame(ctk.CTkScrollableFrame):
+    def __init__(self, master, name):
+        super().__init__(master, fg_color="transparent", bg_color="transparent")
+        self.name = name
+
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
+        self.movie_bar_1 = LabelledMoviebar(self, name="Recommended movies", movies=[0]*20)
+        self.movie_bar_2 = LabelledMoviebar(self, name="TV shows", movies=[0]*3)
+        self.movie_bar_3 = LabelledMoviebar(self, name="placeholder 3", movies=[0])
+
+        self.build_ui()
+
+    def build_ui(self):
+        self.title_label = ctk.CTkLabel(self, text=f"Welcome, {self.name}", font=TITLE_FONT)
+        self.title_label.grid(row=0, column=0, sticky="nsew")
+        self.movie_bar_1.grid(row=1, column=0, sticky="nsew")
+        self.movie_bar_2.grid(row=2, column=0, sticky="nsew")
+        self.movie_bar_3.grid(row=3, column=0, sticky="nsew")
+
+    def change_name(self, new_name):
+        self.name = new_name
+        self.title_label.configure(text=f"Welcome, {self.name}")
+
+class SearchFrame(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master, fg_color="transparent", bg_color="transparent")
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.build_ui()
+
+    def build_ui(self):
+        self.title_label = ctk.CTkLabel(self, text="Search", font=TITLE_FONT)
+        self.title_label.grid(row=0, column=0, sticky="nsew")
+
+class StarredFrame(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master, fg_color="transparent", bg_color="transparent")
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.build_ui()
+
+    def build_ui(self):
+        self.title_label = ctk.CTkLabel(self, text="Starred movies and TV shows", font=TITLE_FONT)
+        self.title_label.grid(row=0, column=0, sticky="nsew")
+
+class SettingsFrame(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master, fg_color="transparent", bg_color="transparent")
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.build_ui()
+
+    def build_ui(self):
+        self.title_label = ctk.CTkLabel(self, text="Settings", font=TITLE_FONT)
+        self.title_label.grid(row=0, column=0, sticky="nsew")
+
+class AccountFrame(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master, fg_color="transparent", bg_color="transparent")
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.build_ui()
+
+    def build_ui(self):
+        self.title_label = ctk.CTkLabel(self, text="Account", font=TITLE_FONT)
+        self.title_label.grid(row=0, column=0, sticky="nsew")
 
 class MovieBrowser(ctk.CTkFrame):
     def __init__(self, master, name, quit):
@@ -120,29 +229,49 @@ class MovieBrowser(ctk.CTkFrame):
 
         self.quit = quit
         self.name = name
+        self.home_frame = HomeFrame(self, self.name)
+        self.search_frame = SearchFrame(self)
+        self.star_frame = StarredFrame(self)
+        self.settings_frame = SettingsFrame(self)
+        self.account_frame = AccountFrame(self)
+
+        self.current_frame = self.home_frame
+
         self.build_ui()
     
     def build_ui(self):
-        self.title_label = ctk.CTkLabel(self, text=f"Welcome, {self.name}", font=TITLE_FONT)
-        self.title_label.grid(row=0, column=1, rowspan=1, columnspan=1, sticky="nsew")
-        
         self.logo = ctk.CTkImage(images["logo"], size=(100,100))
         self.logo_label = ctk.CTkLabel(self, image=self.logo, text="")
         self.logo_label.grid(row=0,column=0,padx=10,pady=10,sticky="nsew")
 
         self.sidebar = Sidebar(self, self.handle_sidebar)
-        self.sidebar.grid(row=1, column=0, rowspan=99, pady=(50, 10))
+        self.sidebar.grid(row=1, column=0, rowspan=99, pady=(50, 10), padx=(10, 10))
+
+        self.home_frame.grid(row=0, column=1, rowspan=99, sticky="nsew", pady=(10, 10), padx=(10, 10))
 
     def handle_sidebar(self, button_name):
         if button_name == "quit":
             self.quit()
         else:
-            print(button_name, "button pressed")
+            match button_name:
+                case "home":
+                    self.switch_frame(self.home_frame)
+                case "star":
+                    self.switch_frame(self.star_frame)
+                case "settings":
+                    self.switch_frame(self.settings_frame)
+                case "search":
+                    self.switch_frame(self.search_frame)
+                case "account":
+                    self.switch_frame(self.account_frame)
 
-    def change_name(self, new_name):
-        self.name = new_name
-        print(self.name)
-        self.title_label.configure(text=f"Welcome, {self.name}")
+    def change_name(self, new_name: str):
+        self.home_frame.change_name(new_name)
+
+    def switch_frame(self, new_frame):
+        self.current_frame.grid_forget()
+        new_frame.grid(row=0, column=1, rowspan=99, sticky="nsew", pady=(10, 10), padx=(10, 10))
+        self.current_frame = new_frame
 
 class StreamingApp(ctk.CTk):
     def __init__(self):
@@ -173,7 +302,7 @@ class StreamingApp(ctk.CTk):
         self.switch_frame(self.login_frame, self.loading_frame)
         self.user = user
         self.browse_frame.change_name(user)
-        self.after(3000, lambda:self.switch_frame(self.loading_frame, self.browse_frame))
+        self.after(500, lambda:self.switch_frame(self.loading_frame, self.browse_frame))
 
     def quit(self):
         self.destroy()

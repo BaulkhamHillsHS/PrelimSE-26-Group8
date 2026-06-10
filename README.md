@@ -48,3 +48,11 @@ search
 sort by rating
 save to playlist
 actually watch the movie/tv show
+
+
+henry to add
+- make it highlight on the sidebar which one is being shown
+- search functionality
+- add account to sidebar bottom, changing subscription plan, change profile, etc
+
+gridcolumnconfigure vs columnconfigure
