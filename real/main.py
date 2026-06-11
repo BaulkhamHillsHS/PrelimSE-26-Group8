@@ -1,3 +1,4 @@
+import json
 import csv
 import time
 import random
@@ -32,17 +33,40 @@ for name in image_names:
     image = Image.open(image_path)
     images[name] = image
 
-theme_path = os.path.join(resource_path, "Sweetkind.json")
+def read_json(filepath: str):
+    assert os.path.exists(filepath)
+    with open(filepath, "r") as f:
+        data = json.load(f)
+    return data
+
+def write_json(obj, filepath: str):
+    assert os.path.exists(filepath)
+    with open(filepath, "w") as f:
+        json.dump(obj, f)
+
+json_names = [
+    "movie"
+    "tv",
+    "anime_movies",
+    "anime",
+    "theme"
+]
+
+jsons = {}
+
+for name in json_names:
+    json_path = os.path.join(resource_path, name+".json")
+    data = read_json(json_path)
+    jsons[name] = data
 
 ctk.set_appearance_mode("Dark")
-ctk.set_default_color_theme(theme_path)
+ctk.set_default_color_theme(jsons["theme"])
 
 class SubscriptionPlan(Enum):
     BRONZE = "Bronze"
     SILVER = "Silver"
     GOLD = "Gold"
     PLATINUM = "Platinum"
-    #BHHS_ORCHESTRA = "too much aura"
 
 class Profile:
     def __init__(self, name, age_rating):
