@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Union
 import json
 import csv
@@ -45,6 +46,15 @@ for name in image_names:
     image = Image.open(image_path)
     images[name] = image
 
+def pretty_time(minutes: int, clock=False):
+    if clock:
+        return f"{minutes//60}:{minutes%60}"
+    else:
+        return f"{minutes//60}h{minutes%60}m"
+    
+def get_current():
+    return datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
 def read_json(filepath: str):
     assert os.path.exists(filepath)
     with open(filepath, "r") as f:
@@ -73,78 +83,6 @@ for name in json_names:
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme(os.path.join(resource_path, "theme.json"))
 
-def movie_get_attribute(movie_data, attribute) -> Union[str, int, float]:
-    match attribute:
-        case "score_rating":
-            return movie_data["vote_average"]
-        case "age rating":
-            raise ValueError() # FIXME:
-        case "length":
-            return movie_data["runtime"]
-        case "genre":
-            return movie_data["genres"]
-        case "popularity":
-            return movie_data["popularity"]
-    raise ValueError() # FIXME:
-
-def restriction_check(filter: str, restriction: str, movie_data: dict):
-    assert filter in FILTER_SORT_OPTIONS
-    assert restriction in RESTRICTIONS_MAP[filter]
-    match filter:
-        case "any":
-            return True
-        case "score rating":
-            movie_score = movie_data["vote_average"] #FIXME: why hardcode movie? also, use the movie_get_attribute function or similar
-            required = float(restriction[1:])
-            return movie_score>=required
-        case "age rating":
-            raise ValueError() # No age ratings yet... FIXME:
-        case "length":
-            movie_length = movie_data["runtime"]
-            required = int(restriction[1:-1])
-            if restriction[0]=="<":
-                return movie_length<required
-            else:
-                return movie_length>required
-        case "genre":
-            movie_genres = movie_data["genres"]
-            for genre in movie_genres:
-                if genre["name"]==restriction:
-                    return True
-            return False
-        case "popularity":
-            movie_popularity = movie_data["popularity"]
-            required = int(restriction[1:])
-            return movie_popularity>=required
-    raise ValueError()  # FIXME: debug, delete later
-    return False
-
-def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int):
-    match media_type:
-        case "movie":
-            media_dict = jsons["movie"]
-        case "tv_show":
-            media_dict = jsons["tv"]
-        case "anime_movie":
-            media_dict = jsons["anime_movie"]
-        case "anime":
-            media_dict = jsons["anime"]
-        case _:
-            raise ValueError()
-        
-    assert filter_by, sort_by in FILTER_SORT_OPTIONS
-    assert restriction in RESTRICTIONS_MAP[filter_by]
-    out = []
-    for movie in media_dict:
-        if restriction_check(filter_by, restriction, movie):
-            out.append(movie)
-    if sort_by=="any":
-        return out[:count]
-    out.sort(key=lambda x: movie_get_attribute(x, sort_by)) # FIXME: tv show anime support
-    return out[:count]
-
-print(*get_media("movie", "score rating", ">8.5", "any", 10))
-# FIXME: debug command
 
 class SubscriptionPlan(Enum):
     BRONZE = "Bronze"
@@ -246,8 +184,8 @@ class Movie(Media):
         self.poster = ctk.CTkImage(self.pillow_image, size=self.dimensions)
 
     def __str__(self) -> str:
-        return str(self.get_title())
-
+        return f"{self.get_title()}({self.get_runtime()})"
+    
 class Show(Media):
     def __init__(self, media_data, dimensions: tuple[int, int]=(500, 750)):
         super().__init__(media_data, dimensions=dimensions)
@@ -293,6 +231,83 @@ class Season():
         assert type(movie_id) == int
         return movie_id
     
+
+def movie_get_attribute(movie_data, attribute) -> Union[str, int, float]:
+    match attribute:
+        case "score_rating":
+            return movie_data["vote_average"]
+        case "age rating":
+            raise ValueError() # FIXME:
+        case "length":
+            return movie_data["runtime"]
+        case "genre":
+            return movie_data["genres"]
+        case "popularity":
+            return movie_data["popularity"]
+    raise ValueError() # FIXME:
+
+def restriction_check(filter: str, restriction: str, movie_data: dict):
+    assert filter in FILTER_SORT_OPTIONS
+    assert restriction in RESTRICTIONS_MAP[filter]
+    match filter:
+        case "any":
+            return True
+        case "score rating":
+            movie_score = movie_data["vote_average"] #FIXME: why hardcode movie? also, use the movie_get_attribute function or similar
+            required = float(restriction[1:])
+            return movie_score>=required
+        case "age rating":
+            raise ValueError() # No age ratings yet... FIXME:
+        case "length":
+            movie_length = movie_data["runtime"]
+            required = int(restriction[1:-1])
+            if restriction[0]=="<":
+                return movie_length<required
+            else:
+                return movie_length>required
+        case "genre":
+            movie_genres = movie_data["genres"]
+            for genre in movie_genres:
+                if genre["name"]==restriction:
+                    return True
+            return False
+        case "popularity":
+            movie_popularity = movie_data["popularity"]
+            required = int(restriction[1:])
+            return movie_popularity>=required
+    raise ValueError()  # FIXME: debug, delete later
+    return False
+
+def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int, decreasing: bool=False):
+    match media_type:
+        case "movie":
+            media_dict = jsons["movie"]
+        case "tv_show":
+            media_dict = jsons["tv"]
+        case "anime_movie":
+            media_dict = jsons["anime_movie"]
+        case "anime":
+            media_dict = jsons["anime"]
+        case _:
+            raise ValueError()
+        
+    assert filter_by, sort_by in FILTER_SORT_OPTIONS
+    assert restriction in RESTRICTIONS_MAP[filter_by]
+    out = []
+    for movie in media_dict:
+        if restriction_check(filter_by, restriction, movie):
+            out.append(movie)
+    if sort_by=="any":
+        return out[:count]
+    out.sort(key=lambda x: movie_get_attribute(x, sort_by), reverse=decreasing) # FIXME: tv show anime support
+    out_movies = [Movie(x) for x in out[:count]]
+    return out_movies
+
+print(*get_media("movie", "score rating", ">8.5", "length", 10, decreasing=True), sep="\n")
+# FIXME: debug command
+
+
+
 class LoadingScreen(ctk.CTkFrame):
     def __init__(self, master, loading_text: str):
         super().__init__(master)
