@@ -46,9 +46,7 @@ home
 make profiles
 search
 sort by rating
-save to playlist
-actually watch the movie/tv show
-
+save to favourite
 
 henry to add
 - make it highlight on the sidebar which one is being shown
@@ -58,7 +56,7 @@ henry to add
 - txt watch history
 - logout
 
-gridcolumnconfigure vs columnconfigure
+gridcolumnconfigure vs columnconfigure fixes
 
 search should include filtering, sorting by, etc
 
