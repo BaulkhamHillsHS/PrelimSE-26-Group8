@@ -97,3 +97,5 @@ secure password somehow maybe
 use json for media data 
 
 decide how to config settings, account, subscription, viewing history, subscription history
+
+add ctrl+ ctrl- zoom hotkeys

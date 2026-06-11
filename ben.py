@@ -102,26 +102,16 @@ class Panel():
     def get_udim(self):
         return (self.width - self.padding[0] - self.padding[1], self.height - self.padding[2] - self.padding[3])
 
-class Login(ctk.CTk):
+class Login(ctk.CTkFrame):
     def __init__(
-        self, 
-        fg_color: tuple[str, str] | str = "black",
-        geometry: str = pos(500, 400, 0, 0),
-        title: str = "Untitled App",
-        minsize: tuple[int, int] = (0, 0),
-        maxsize: tuple[int, int] = (0, 0),
-        resizable: tuple[bool, ...] = (True, True),
+        self,
+        master,
+        width,
+        height,
+        fg_color: tuple[str, str] | str = "black"
     ):
-        super().__init__(fg_color)
-
-        self.geometry(geometry)
-        self.SCREEN_WIDTH = int(geometry.split("x")[0])
-        self.SCREEN_HEIGHT = int(geometry.split("x")[1].split("+")[0])
+        super().__init__(master=master, width=width, height=height, fg_color=fg_color)
         
-        self.title(title)
-        if minsize: self.minsize(*minsize)
-        if maxsize: self.maxsize(*maxsize)
-        self.resizable(*resizable)
         self.update()
         self.build_ui()
     def build_ui(self):
@@ -145,16 +135,16 @@ class Login(ctk.CTk):
 
         self.images = []
         for j in range(self.row_count):
-            y_pos = self.SCREEN_HEIGHT / (self.row_count - 1) * j - self.image_sizes[j % 2][0] / 2
-            x_offset = (j // 2) % 2 * self.SCREEN_WIDTH / self.images_count / 2
+            y_pos = SCREEN_HEIGHT / (self.row_count - 1) * j - self.image_sizes[j % 2][0] / 2
+            x_offset = (j // 2) % 2 * SCREEN_WIDTH / self.images_count / 2
             # speed = random.randint(40, 100) / 50
             speed = (1 + j % 2) / 3
             for i in range(self.images_count + 1):
                 # image = self.canvas.create_image(self.SCREEN_WIDTH / self.images_count * i - 60 + x_offset, y_pos, image=self.photo, anchor="nw")
-                image = Image(self.canvas, self.image if j % 2 == 0 else self.image_dark, (self.SCREEN_WIDTH / self.images_count * i - self.image_sizes[j % 2][0] / 2 + x_offset, y_pos), speed)
+                image = Image(self.canvas, self.image if j % 2 == 0 else self.image_dark, (SCREEN_WIDTH / self.images_count * i - self.image_sizes[j % 2][0] / 2 + x_offset, y_pos), speed)
                 self.images.append(image)
         
-        login_panel = Panel(self.canvas, (w:=400), (f := 0.85)*self.SCREEN_HEIGHT, 40, ((self.SCREEN_WIDTH - w) / 2, (1 - f)*self.SCREEN_HEIGHT / 2), "#36363B", (30, 30, 30, 30))
+        login_panel = Panel(self.canvas, (w:=400), (f := 0.85)*SCREEN_HEIGHT, 40, ((self.SCREEN_WIDTH - w) / 2, (1 - f)*self.SCREEN_HEIGHT / 2), "#36363B", (30, 30, 30, 30))
         
         # Content goes here
         title = im.open("netty.png")
@@ -211,8 +201,10 @@ class Login(ctk.CTk):
         else:
             entry.configure(show="•")
             button.configure(image=ctk.CTkImage(light_image=(p:=self.visibility[0])))
-        
+
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
 
 if __name__ == "__main__":
-    app = Login(fg_color="black", geometry=pos(1280, 720, 0, 0), title="Use this as the background of a login screen or something", resizable=(False, False))
+    app = ctk.CTk(fg_color="black", geometry=pos(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0), title="Use this as the background of a login screen or something", resizable=(False, False))
     app.mainloop()
