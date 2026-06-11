@@ -95,3 +95,5 @@ make the movies buttons not labels
 ben background could be scrolling movie posters instead of netflix
 
 secure password somehow maybe
+
+use json for media data 
