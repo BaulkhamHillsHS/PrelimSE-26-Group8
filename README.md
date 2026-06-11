@@ -97,3 +97,5 @@ ben background could be scrolling movie posters instead of netflix
 secure password somehow maybe
 
 use json for media data 
+
+decide how to config settings, account, subscription, viewing history, subscription history
