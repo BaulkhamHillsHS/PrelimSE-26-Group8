@@ -94,12 +94,74 @@ class AccountManager:
                 "profiles": str(account.profiles)
                 })
 
+class Media():
+    def __init__(self, image_path, media_data: dict):
+        self.image_path = image_path
+        self.image_pillow = Image.open(self.image_path)
+        self.ctk_image = ctk.CTkImage(self.image_pillow)
+        self.media_data = media_data
 
+    def change_image_size(self, width, height):
+        self.ctk_image.configure(size=(width, height))
 
+    def get_image(self):
+        return self.ctk_image
+    
+    def get_data(self, key=None):
+        if key in self.media_data:
+            return self.media_data[key]
+        return self.media_data
+    
+    def get_runtime(self):
+        return self.get_data("runtime")
+    
+    def __str__(self) -> str:
+        return "Base Media"
+    
+    def get_title(self) -> str:
+        return str(self.get_data("title"))
 
+class Movie(Media):
+    def __init__(self, image_path, media_data: dict):
+        super().__init__(image_path, media_data)
+    
+    def __str__(self) -> str:
+        return str(self.get_title())
 
+class Show(Media):
+    def __init__(self, image_path, media_data):
+        super().__init__(image_path, media_data)
+        season_data = self.get_data("seasons")
+        self.season_count = len(season_data)
+        self.seasons = [Season(season_data[i]) for i in range(self.season_count)]
 
+    def __str__(self) -> str:
+        return str(self.get_data("name"))
+    
+    def get_seasons(self):
+        return self.seasons
+    
+    def get_season_n(self, n):
+        if not(0<=n<self.season_count):
+            return {}
+        return self.get_seasons()[n]
 
+class Season():
+    def __init__(self, media_data: dict):
+        self.media_data = media_data
+        self.season_number = self.get_data("season_number")
+    
+    def get_data(self, key=None):
+        if key in self.media_data:
+            return self.media_data[key]
+        return self.media_data
+
+    def get_episode_count(self):
+        return str(self.get_data("episode_count"))
+
+    def __str__(self) -> str:
+        return str(self.get_data("name"))
+    
 class LoadingScreen(ctk.CTkFrame):
     def __init__(self, master, loading_text: str):
         super().__init__(master)
