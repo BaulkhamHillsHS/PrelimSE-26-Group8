@@ -1,21 +1,21 @@
 # Assessment task 2
 
-Sweetkind theme from https://github.com/avalon60/ctk_theme_builder  
-Created by Akascape on Aug 16 2023 11:56:06, made with CTk Theme Builder v2.4.0  
-Includes modifications by me
-
 https://www.veryicon.com/icons/education-technology/big-data-ico-02/home-page-154.html
 home icon 
 
 real project in `real/`
 
 
-new pull request from branch `branch-name`  
-https://github.com/BaulkhamHillsHS/PrelimSE-26-Group8/pull/new/branch-name
+new pull request from branch `ben`  
+https://github.com/BaulkhamHillsHS/PrelimSE-26-Group8/pull/new/ben
 
-search by name, genre, rating, etc
-by collection
-sidebar
+new pr from `henry`
+https://github.com/BaulkhamHillsHS/PrelimSE-26-Group8/pull/new/henry
+
+---
+
+sort by collection(?)
+search for others in collection
 
 home
 search
@@ -23,15 +23,9 @@ watch later
 explore (collections, language, actors, genres, etc)
 settings
 
-btw we dont need imdb ratings we'll just use vote average
-
-imdb id could be used, maybe, though
-
 add accounts class systems, subscription, payment info, inputs for these
 
 free tier
-
-
 
 profile picture
 forget password
@@ -45,10 +39,7 @@ watch later
 home
 make profiles
 search
-sort by rating
 save to favourite
-
-henry to add
 - make it highlight on the sidebar which one is being shown
 - search functionality
 - changing subscription plan, change profile, etc
@@ -97,3 +88,7 @@ secure password somehow maybe
 use json for media data 
 
 decide how to config settings, account, subscription, viewing history, subscription history
+
+add ctrl+ ctrl- zoom hotkeys
+
+watching media and writing time + duration to a json or csv entry

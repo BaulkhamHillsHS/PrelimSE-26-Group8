@@ -1,3 +1,5 @@
+from datetime import datetime
+from typing import Union
 import json
 import csv
 import time
@@ -12,9 +14,20 @@ import os
 TITLE_FONT = ("Inter", 35, "bold")
 TEXT_FONT = ("Arial", 20)
 IDK_FONT = ("Courier New", 14)
+POSTER_SIZE = (96, 144)
+FILTER_SORT_OPTIONS = ["any", "score rating", "age rating", "length", "genre", "popularity"]
+RESTRICTIONS_MAP = {
+            "any": [""],
+            "score rating": [">9", ">8.5", ">8", ">7"],
+            "age rating": ["PG", "PG13", "MA15+", "M", "R"],
+            "length": ["<75m", "<90m", "<120m", ">75m", ">90m", ">120m"],
+            "genre": ["Science Fiction", "Action", "Fantasy", "Comedy", "Adventure"],
+            "popularity": [">200", ">175", ">150", ">100", ">50"]
+        }
 
 root = Path(__file__).resolve().parent
 resource_path = os.path.join(root, "resource")
+posters_path = os.path.join(resource_path, "posters")
 
 image_names = [
           "settings_icon",
@@ -33,6 +46,15 @@ for name in image_names:
     image = Image.open(image_path)
     images[name] = image
 
+def pretty_time(minutes: int, clock=False):
+    if clock:
+        return f"{minutes//60}:{minutes%60}"
+    else:
+        return f"{minutes//60}h{minutes%60}m"
+    
+def get_current():
+    return datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
 def read_json(filepath: str):
     assert os.path.exists(filepath)
     with open(filepath, "r") as f:
@@ -45,11 +67,10 @@ def write_json(obj, filepath: str):
         json.dump(obj, f)
 
 json_names = [
-    "movie"
+    "movie",
     "tv",
-    "anime_movies",
+    "anime_movie",
     "anime",
-    "theme"
 ]
 
 jsons = {}
@@ -60,7 +81,8 @@ for name in json_names:
     jsons[name] = data
 
 ctk.set_appearance_mode("Dark")
-ctk.set_default_color_theme(jsons["theme"])
+ctk.set_default_color_theme(os.path.join(resource_path, "theme.json"))
+
 
 class SubscriptionPlan(Enum):
     BRONZE = "Bronze"
@@ -119,17 +141,20 @@ class AccountManager:
                 })
 
 class Media():
-    def __init__(self, image_path, media_data: dict):
-        self.image_path = image_path
-        self.image_pillow = Image.open(self.image_path)
-        self.ctk_image = ctk.CTkImage(self.image_pillow)
+    def __init__(self, media_data: dict, dimensions: tuple[int, int]):
         self.media_data = media_data
+        self.dimensions=dimensions
+        self.set_poster()
+
+    def set_poster(self):
+        self.pillow_image = Image.open(os.path.join(posters_path, f"m_{self.get_id()}"))
+        self.poster = ctk.CTkImage(self.pillow_image, size=self.dimensions) # FIXME: # type: ignore
 
     def change_image_size(self, width, height):
-        self.ctk_image.configure(size=(width, height))
+        self.poster.configure(size=(width, height))
 
-    def get_image(self):
-        return self.ctk_image
+    def get_poster(self):
+        return self.poster
     
     def get_data(self, key=None):
         if key in self.media_data:
@@ -145,16 +170,25 @@ class Media():
     def get_title(self) -> str:
         return str(self.get_data("title"))
 
-class Movie(Media):
-    def __init__(self, image_path, media_data: dict):
-        super().__init__(image_path, media_data)
+    def get_id(self) -> int:
+        movie_id = self.get_data("id")
+        assert type(movie_id) == int
+        return movie_id
     
-    def __str__(self) -> str:
-        return str(self.get_title())
+class Movie(Media):
+    def __init__(self, media_data: dict, dimensions: tuple[int, int]=(500, 750)):
+        super().__init__(media_data, dimensions)
+    
+    def set_poster(self):
+        self.pillow_image = Image.open(os.path.join(posters_path, f"m_{self.get_id()}.jpg"))
+        self.poster = ctk.CTkImage(self.pillow_image, size=self.dimensions)
 
+    def __str__(self) -> str:
+        return f"{self.get_title()}({self.get_runtime()})"
+    
 class Show(Media):
-    def __init__(self, image_path, media_data):
-        super().__init__(image_path, media_data)
+    def __init__(self, media_data, dimensions: tuple[int, int]=(500, 750)):
+        super().__init__(media_data, dimensions=dimensions)
         season_data = self.get_data("seasons")
         self.season_count = len(season_data)
         self.seasons = [Season(season_data[i]) for i in range(self.season_count)]
@@ -169,11 +203,17 @@ class Show(Media):
         if not(0<=n<self.season_count):
             return {}
         return self.get_seasons()[n]
+    
+    def set_poster(self):
+        self.pillow_image = Image.open(os.path.join(posters_path, f"tv_{self.get_id()}"))
+        self.poster = ctk.CTkImage(self.pillow_image, size=self.dimensions)
 
 class Season():
-    def __init__(self, media_data: dict):
+    def __init__(self, media_data: dict, dimensions=(500, 750)):
         self.media_data = media_data
         self.season_number = self.get_data("season_number")
+        self.pillow_image = Image.open(os.path.join(posters_path, f"s_{self.get_id()}")) # FIXME: incomplete imp
+        self.poster = ctk.CTkImage(self.pillow_image, size=dimensions)
     
     def get_data(self, key=None):
         if key in self.media_data:
@@ -185,7 +225,89 @@ class Season():
 
     def __str__(self) -> str:
         return str(self.get_data("name"))
+
+    def get_id(self) -> int:
+        movie_id = self.get_data("id")
+        assert type(movie_id) == int
+        return movie_id
     
+
+def movie_get_attribute(movie_data, attribute) -> Union[str, int, float]:
+    match attribute:
+        case "score_rating":
+            return movie_data["vote_average"]
+        case "age rating":
+            raise ValueError() # FIXME:
+        case "length":
+            return movie_data["runtime"]
+        case "genre":
+            return movie_data["genres"]
+        case "popularity":
+            return movie_data["popularity"]
+    raise ValueError() # FIXME:
+
+def restriction_check(filter: str, restriction: str, movie_data: dict):
+    assert filter in FILTER_SORT_OPTIONS
+    assert restriction in RESTRICTIONS_MAP[filter]
+    match filter:
+        case "any":
+            return True
+        case "score rating":
+            movie_score = movie_data["vote_average"] #FIXME: why hardcode movie? also, use the movie_get_attribute function or similar
+            required = float(restriction[1:])
+            return movie_score>=required
+        case "age rating":
+            raise ValueError() # No age ratings yet... FIXME:
+        case "length":
+            movie_length = movie_data["runtime"]
+            required = int(restriction[1:-1])
+            if restriction[0]=="<":
+                return movie_length<required
+            else:
+                return movie_length>required
+        case "genre":
+            movie_genres = movie_data["genres"]
+            for genre in movie_genres:
+                if genre["name"]==restriction:
+                    return True
+            return False
+        case "popularity":
+            movie_popularity = movie_data["popularity"]
+            required = int(restriction[1:])
+            return movie_popularity>=required
+    raise ValueError()  # FIXME: debug, delete later
+    return False
+
+def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int, decreasing: bool=False):
+    match media_type:
+        case "movie":
+            media_dict = jsons["movie"]
+        case "tv_show":
+            media_dict = jsons["tv"]
+        case "anime_movie":
+            media_dict = jsons["anime_movie"]
+        case "anime":
+            media_dict = jsons["anime"]
+        case _:
+            raise ValueError()
+        
+    assert filter_by, sort_by in FILTER_SORT_OPTIONS
+    assert restriction in RESTRICTIONS_MAP[filter_by]
+    out = []
+    for movie in media_dict:
+        if restriction_check(filter_by, restriction, movie):
+            out.append(movie)
+    if sort_by=="any":
+        return out[:count]
+    out.sort(key=lambda x: movie_get_attribute(x, sort_by), reverse=decreasing) # FIXME: tv show anime support
+    out_movies = [Movie(x) for x in out[:count]]
+    return out_movies
+
+print(*get_media("movie", "score rating", ">8.5", "length", 10, decreasing=True), sep="\n")
+# FIXME: debug command
+
+
+
 class LoadingScreen(ctk.CTkFrame):
     def __init__(self, master, loading_text: str):
         super().__init__(master)
@@ -285,7 +407,8 @@ class Moviebar(ctk.CTkScrollableFrame):
 
     def build_ui(self):
         for i, movie in enumerate(self.movies):
-            movie_image = ctk.CTkImage(images["logo"], size=(64, 128))
+            assert type(movie)==Movie
+            movie_image = movie.get_poster()
             movie_label = ctk.CTkLabel(self, image=movie_image, text="", fg_color="transparent")
             self.movie_images.append(movie_image)
             movie_label.grid(row=0, column=i, sticky="ew", pady=0, padx=(10, 10))
@@ -313,9 +436,11 @@ class HomeFrame(ctk.CTkScrollableFrame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure((1, 2, 3, 4, 5), weight=1)
-        self.movie_bar_1 = LabelledMoviebar(self, name="Recommended movies", movies=[0]*20)
-        self.movie_bar_2 = LabelledMoviebar(self, name="TV shows", movies=[0]*3)
-        self.movie_bar_3 = LabelledMoviebar(self, name="placeholder 3", movies=[0])
+        self.movie_bar_1 = LabelledMoviebar(self, name="Recommended movies", movies=[Movie(random.choice(jsons["movie"]), POSTER_SIZE) for x in range(20)])
+        self.movie_bar_2 = LabelledMoviebar(self, name="TV shows", movies=[Movie(random.choice(jsons["movie"]), POSTER_SIZE) for x in range(5)])
+        self.movie_bar_3 = LabelledMoviebar(self, name="placeholder 3", movies=[])
+        self.movie_bar_4 = LabelledMoviebar(self, name="Explore(random)", movies=[Movie(random.choice(jsons["movie"]), POSTER_SIZE) for x in range(5)]) # FIXME: Hack
+        self.movie_bar_5 = LabelledMoviebar(self, name="Explore(not random)", movies=[Movie(jsons["movie"][i], POSTER_SIZE) for i in range(5)]) # FIXME: Hack
 
         self.build_ui()
 
@@ -325,6 +450,8 @@ class HomeFrame(ctk.CTkScrollableFrame):
         self.movie_bar_1.grid(row=1, column=0, sticky="nsew", pady=(0, 10))
         self.movie_bar_2.grid(row=2, column=0, sticky="nsew")
         self.movie_bar_3.grid(row=3, column=0, sticky="nsew")
+        self.movie_bar_4.grid(row=4, column=0, sticky="nsew")
+        self.movie_bar_5.grid(row=5, column=0, sticky="nsew")
 
     def change_name(self, new_name):
         self.name = new_name
@@ -335,20 +462,14 @@ class FilterSortFrame(ctk.CTkFrame):
         super().__init__(master, fg_color="transparent")
         self.columnconfigure((0, 1, 2), weight=1)
         self.rowconfigure((0, 1), weight=1)
-        self.restrictions_map = {
-            "any": [""],
-            "score rating": [">9", ">8.5", ">8", ">7"],
-            "age rating": ["PG", "PG13", "MA15+", "M", "R"],
-            "length": ["<75m", "<90m", "<120m", ">75m", ">90m", ">120m"],
-            "genre": ["sci-fi", "action", "fantasy", "whatever"]
-        }
+        self.restrictions_map = RESTRICTIONS_MAP
 
         self.build_ui()
 
     def build_ui(self):
-        self.filter_by = ctk.CTkOptionMenu(self, values=["any", "score rating", "age rating", "length", "genre"], command=self.filter_change)
+        self.filter_by = ctk.CTkOptionMenu(self, values=FILTER_SORT_OPTIONS, command=self.filter_change)
         self.filter_by_restriction_menu = ctk.CTkOptionMenu(self, values=self.restrictions_map["any"])
-        self.sort_by = ctk.CTkOptionMenu(self, values=["score rating", "age rating", "length", "genre"])
+        self.sort_by = ctk.CTkOptionMenu(self, values=FILTER_SORT_OPTIONS)
 
         self.filter_label = ctk.CTkLabel(self, text="Filter by...", font=TEXT_FONT)
         self.sort_label = ctk.CTkLabel(self, text="Sort by...", font=TEXT_FONT)
