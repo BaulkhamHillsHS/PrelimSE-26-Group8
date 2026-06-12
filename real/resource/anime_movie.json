@@ -1,6 +1,5 @@
 [
     {
-        "adult": false,
         "backdrop_path": "/1RgPyOhN4DRs225BGTlHJqCudII.jpg",
         "belongs_to_collection": {
             "id": 925155,
@@ -46,7 +45,6 @@
         "vote_average": 7.728
     },
     {
-        "adult": false,
         "backdrop_path": "/dyJvKsNs2KP8qQnAXbRwDjblViy.jpg",
         "belongs_to_collection": null,
         "budget": 19000000,
@@ -87,7 +85,6 @@
         "vote_average": 8.535
     },
     {
-        "adult": false,
         "backdrop_path": "/8x9iKH8kWA0zdkgNdpAew7OstYe.jpg",
         "belongs_to_collection": null,
         "budget": 7500000,
@@ -128,7 +125,6 @@
         "vote_average": 8.48
     },
     {
-        "adult": false,
         "backdrop_path": "/rI4waA7VlRAynrYUUpiPScsdPm8.jpg",
         "belongs_to_collection": {
             "id": 1544712,
@@ -178,7 +174,6 @@
         "vote_average": 8.4
     },
     {
-        "adult": false,
         "backdrop_path": "/nv5wwZou159v5OC61i4ElR7OqyY.jpg",
         "belongs_to_collection": null,
         "budget": 24000000,
@@ -219,7 +214,6 @@
         "vote_average": 8.388
     },
     {
-        "adult": false,
         "backdrop_path": "/hlfu6g0h0D65SjkVhQBU20zePTl.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -264,7 +258,6 @@
         "vote_average": 7.16
     },
     {
-        "adult": false,
         "backdrop_path": "/gl0jzn4BupSbL2qMVeqrjKkF9Js.jpg",
         "belongs_to_collection": null,
         "budget": 23500000,
@@ -305,7 +298,6 @@
         "vote_average": 8.322
     },
     {
-        "adult": false,
         "backdrop_path": "/rcEDPOOOUTLFxLLQJggfLffbofe.jpg",
         "belongs_to_collection": {
             "id": 1529614,
@@ -351,7 +343,6 @@
         "vote_average": 8.101
     },
     {
-        "adult": false,
         "backdrop_path": "/5lAMQMWpXMsirvtLLvW7cJgEPkU.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -392,7 +383,6 @@
         "vote_average": 8.387
     },
     {
-        "adult": false,
         "backdrop_path": "/mHG7dpLb0ZScSY3LpP443IHRmjy.jpg",
         "belongs_to_collection": null,
         "budget": 3000000,
@@ -429,7 +419,6 @@
         "vote_average": 8.303
     },
     {
-        "adult": false,
         "backdrop_path": "/zkThiZAaAie8Lw7RAc5yPTOewBV.jpg",
         "belongs_to_collection": {
             "id": 1687719,
@@ -475,7 +464,6 @@
         "vote_average": 8.062
     },
     {
-        "adult": false,
         "backdrop_path": "/xPpXYnCWfjkt3zzE0dpCNME1pXF.jpg",
         "belongs_to_collection": {
             "id": 925155,
@@ -521,7 +509,6 @@
         "vote_average": 8.208
     },
     {
-        "adult": false,
         "backdrop_path": "/h5pAEVma835u8xoE60kmLVopLct.jpg",
         "belongs_to_collection": null,
         "budget": 6900000,
@@ -562,7 +549,6 @@
         "vote_average": 7.836
     },
     {
-        "adult": false,
         "backdrop_path": "/xLMJCCSatxENpHO9rLW9yD8A12C.jpg",
         "belongs_to_collection": {
             "id": 96850,
@@ -612,7 +598,6 @@
         "vote_average": 8.3
     },
     {
-        "adult": false,
         "backdrop_path": "/hII4gDYkG9DJZ6iysUO4cNjkD2p.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -653,7 +638,6 @@
         "vote_average": 6.072
     },
     {
-        "adult": false,
         "backdrop_path": "/a0GM57AnJtNi7lMOCamniiyV10W.jpg",
         "belongs_to_collection": null,
         "budget": 50000000,
@@ -694,7 +678,6 @@
         "vote_average": 7.404
     },
     {
-        "adult": false,
         "backdrop_path": "/4tdV5AeojEdbvn6VpeQrbuDlmzs.jpg",
         "belongs_to_collection": null,
         "budget": 13000000,
@@ -739,7 +722,6 @@
         "vote_average": 7.884
     },
     {
-        "adult": false,
         "backdrop_path": "/jIpagj2Dud9g3ZVJFvaWikEWsYz.jpg",
         "belongs_to_collection": {
             "id": 23026,
@@ -785,7 +767,6 @@
         "vote_average": 7.9
     },
     {
-        "adult": false,
         "backdrop_path": "/2Gx0IssZeGhpwvULplQuf9UiI26.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -831,7 +812,6 @@
         "vote_average": 7.774
     },
     {
-        "adult": false,
         "backdrop_path": "/ize3ZieqSy0TCWljmVoEiy8fSFS.jpg",
         "belongs_to_collection": null,
         "budget": 11100000,
@@ -876,7 +856,6 @@
         "vote_average": 7.978
     },
     {
-        "adult": false,
         "backdrop_path": "/7Z7WVzJsSReG8B0CaPk0bvWD7tK.jpg",
         "belongs_to_collection": null,
         "budget": 23000000,
@@ -917,7 +896,6 @@
         "vote_average": 7.668
     },
     {
-        "adult": false,
         "backdrop_path": "/z6OZ2Q4FYELeGoBj9tVDWCvevkj.jpg",
         "belongs_to_collection": null,
         "budget": 3000000,
@@ -966,7 +944,6 @@
         "vote_average": 7.969
     },
     {
-        "adult": false,
         "backdrop_path": "/fK40VGYIm7hmKrLJ26fgPQU0qRG.jpg",
         "belongs_to_collection": null,
         "budget": 5700000,
@@ -1007,7 +984,6 @@
         "vote_average": 7.944
     },
     {
-        "adult": false,
         "backdrop_path": "/tUbwMOYP4cuGL1sQ0edz5943rBY.jpg",
         "belongs_to_collection": {
             "id": 1189668,
@@ -1057,7 +1033,6 @@
         "vote_average": 7.233
     },
     {
-        "adult": false,
         "backdrop_path": "/wGwSWDG3LIQxchg2M8HV7bDqYKU.jpg",
         "belongs_to_collection": {
             "id": 1431054,
@@ -1107,7 +1082,6 @@
         "vote_average": 8.288
     },
     {
-        "adult": false,
         "backdrop_path": "/6oXn0037WWw4fTCc3Qczof71lSp.jpg",
         "belongs_to_collection": null,
         "budget": 2600000,
@@ -1153,7 +1127,6 @@
         "vote_average": 7.813
     },
     {
-        "adult": false,
         "backdrop_path": "/dJwclPgKPnV7hX3OSlvSBiCmuvB.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -1194,7 +1167,6 @@
         "vote_average": 7.449
     },
     {
-        "adult": false,
         "backdrop_path": "/shqLeIkqPAAXM8iT6wVDiXUYz1p.jpg",
         "belongs_to_collection": null,
         "budget": 34000000,
@@ -1235,7 +1207,6 @@
         "vote_average": 7.755
     },
     {
-        "adult": false,
         "backdrop_path": "/521koHpCyK6ZeNpEAvPAuC75cJ5.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -1276,7 +1247,6 @@
         "vote_average": 8.268
     },
     {
-        "adult": false,
         "backdrop_path": "/rogeBJK44LtWynOqzMFmEF30T80.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -1321,7 +1291,6 @@
         "vote_average": 8.102
     },
     {
-        "adult": false,
         "backdrop_path": "/cZmOrIOkJ2SNfVdiO85dUbOAYnL.jpg",
         "belongs_to_collection": {
             "id": 1012210,
@@ -1363,7 +1332,6 @@
         "vote_average": 7.7
     },
     {
-        "adult": false,
         "backdrop_path": "/uR0FopHrAjDlG5q6PZB07a1JOva.jpg",
         "belongs_to_collection": {
             "id": 620873,
@@ -1409,7 +1377,6 @@
         "vote_average": 7.886
     },
     {
-        "adult": false,
         "backdrop_path": "/1EAxNqdkVnp48a7NUuNBHGflowM.jpg",
         "belongs_to_collection": {
             "id": 210303,
@@ -1459,7 +1426,6 @@
         "vote_average": 8.2
     },
     {
-        "adult": false,
         "backdrop_path": "/l8ubUlfzlB5R2j9cJ3CN7tj0gmd.jpg",
         "belongs_to_collection": {
             "id": 23616,
@@ -1505,7 +1471,6 @@
         "vote_average": 7.47
     },
     {
-        "adult": false,
         "backdrop_path": "/gcgKSyE2iqwfKWMDZ8TJPxeIu0P.jpg",
         "belongs_to_collection": {
             "id": 1287339,
@@ -1551,7 +1516,6 @@
         "vote_average": 8.3
     },
     {
-        "adult": false,
         "backdrop_path": "/pfHvwpKwXeQ7GKD91YFFFBtLLJc.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -1601,7 +1565,6 @@
         "vote_average": 7.025
     },
     {
-        "adult": false,
         "backdrop_path": "/uGmONzT0bskwT23Gu07UkeQjvGJ.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -1651,7 +1614,6 @@
         "vote_average": 7.071
     },
     {
-        "adult": false,
         "backdrop_path": "/rWJc5BkI7Op1IYMb3gW6qGjOnIp.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -1700,7 +1662,6 @@
         "vote_average": 7.686
     },
     {
-        "adult": false,
         "backdrop_path": "/wghKvEjM7UzQzQcKnGbDjOyQO13.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -1750,7 +1711,6 @@
         "vote_average": 7.208
     },
     {
-        "adult": false,
         "backdrop_path": "/2okfik8YwzSfdETpT5cUClSiGFO.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -1787,7 +1747,6 @@
         "vote_average": 8.061
     },
     {
-        "adult": false,
         "backdrop_path": "/hkJhGayONXn96CqIRM9GhWKnlCf.jpg",
         "belongs_to_collection": {
             "id": 499270,
@@ -1837,7 +1796,6 @@
         "vote_average": 7.866
     },
     {
-        "adult": false,
         "backdrop_path": "/tlQtvjwwTAAbNbtZ7IIGPlY50Hx.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -1886,7 +1844,6 @@
         "vote_average": 7.131
     },
     {
-        "adult": false,
         "backdrop_path": "/YLyORLsYIjC0d1TFBSpJKk7piP.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -1927,7 +1884,6 @@
         "vote_average": 8.227
     },
     {
-        "adult": false,
         "backdrop_path": "/tLmyP7akYmxLwyfTEt2qyj2sOR3.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -1964,7 +1920,6 @@
         "vote_average": 8.279
     },
     {
-        "adult": false,
         "backdrop_path": "/felXFRjJXF40NPzK1IPib8ojF2X.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -2010,7 +1965,6 @@
         "vote_average": 6.83
     },
     {
-        "adult": false,
         "backdrop_path": "/keIqryt6u5qGVThjrzFURMsRTri.jpg",
         "belongs_to_collection": {
             "id": 23616,
@@ -2064,7 +2018,6 @@
         "vote_average": 7.462
     },
     {
-        "adult": false,
         "backdrop_path": "/xrg1pYVPK1yN0UREAzd1ywoVM6m.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -2110,7 +2063,6 @@
         "vote_average": 7.237
     },
     {
-        "adult": false,
         "backdrop_path": "/nB6IR9XfdRpVRKCz85uT97EjgwB.jpg",
         "belongs_to_collection": {
             "id": 383987,
@@ -2160,7 +2112,6 @@
         "vote_average": 8.684
     },
     {
-        "adult": false,
         "backdrop_path": "/1UQ1CrivYG1duZZGHZ9SXemC3UA.jpg",
         "belongs_to_collection": {
             "id": 190435,
@@ -2207,7 +2158,6 @@
         "vote_average": 7.092
     },
     {
-        "adult": false,
         "backdrop_path": "/ulVUa2MvnJAjAeRt7h23FFJVRKH.jpg",
         "belongs_to_collection": null,
         "budget": 1000000,
@@ -2248,7 +2198,6 @@
         "vote_average": 8.0
     },
     {
-        "adult": false,
         "backdrop_path": "/9guoVF7zayiiUq5ulKQpt375VIy.jpg",
         "belongs_to_collection": {
             "id": 1189668,
@@ -2298,7 +2247,6 @@
         "vote_average": 8.136
     },
     {
-        "adult": false,
         "backdrop_path": "/eA0qc5ihjSKG05tdJO4QPgYPAwY.jpg",
         "belongs_to_collection": {
             "id": 34055,
@@ -2352,7 +2300,6 @@
         "vote_average": 7.0
     },
     {
-        "adult": false,
         "backdrop_path": "/mI0Qo7VtgW5siCtQQqNPXIk0Ar6.jpg",
         "belongs_to_collection": {
             "id": 1166631,
@@ -2402,7 +2349,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/usrUizny0dLNJTrrJSxsvu5V0z0.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -2448,7 +2394,6 @@
         "vote_average": 6.878
     },
     {
-        "adult": false,
         "backdrop_path": "/938lqhAQaO3hmLg44VbUR7OqlMs.jpg",
         "belongs_to_collection": null,
         "budget": 30000000,
@@ -2508,7 +2453,6 @@
         "vote_average": 7.792
     },
     {
-        "adult": false,
         "backdrop_path": "/hBIZ6RiaCWszRbdvHAy6RWHyT3c.jpg",
         "belongs_to_collection": {
             "id": 23616,
@@ -2554,7 +2498,6 @@
         "vote_average": 7.4
     },
     {
-        "adult": false,
         "backdrop_path": "/7drO1kYgQ0PnnU87sAnBEphYrSM.jpg",
         "belongs_to_collection": {
             "id": 133352,
@@ -2604,7 +2547,6 @@
         "vote_average": 7.266
     },
     {
-        "adult": false,
         "backdrop_path": "/tmXP9R43XlYTmVD7XLnakFbf2ax.jpg",
         "belongs_to_collection": {
             "id": 210303,
@@ -2654,7 +2596,6 @@
         "vote_average": 7.6
     },
     {
-        "adult": false,
         "backdrop_path": "/qZi0WpsdFRIc6sT2jTyWVvFPx0b.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -2703,7 +2644,6 @@
         "vote_average": 7.576
     },
     {
-        "adult": false,
         "backdrop_path": "/pFalq14lacs2oO7Q6YKiNqz5uAC.jpg",
         "belongs_to_collection": null,
         "budget": 9200000,
@@ -2744,7 +2684,6 @@
         "vote_average": 7.801
     },
     {
-        "adult": false,
         "backdrop_path": "/jBz9vIqWzjU1vWdRnK2yU6dhknu.jpg",
         "belongs_to_collection": {
             "id": 23616,
@@ -2802,7 +2741,6 @@
         "vote_average": 7.379
     },
     {
-        "adult": false,
         "backdrop_path": "/oMqgJMCaNIqeJtilc71D4nRqdmt.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -2847,7 +2785,6 @@
         "vote_average": 8.216
     },
     {
-        "adult": false,
         "backdrop_path": "/8sM6d8a4GrpYG77lBznvh2cwKIB.jpg",
         "belongs_to_collection": null,
         "budget": 5000000,
@@ -2888,7 +2825,6 @@
         "vote_average": 7.294
     },
     {
-        "adult": false,
         "backdrop_path": "/3vvRZ4jrASzTObkhfne6Mky8LBP.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -2925,7 +2861,6 @@
         "vote_average": 7.841
     },
     {
-        "adult": false,
         "backdrop_path": "/bIlgVsRkASYjLh5BABmAMAMeHji.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -2971,7 +2906,6 @@
         "vote_average": 7.108
     },
     {
-        "adult": false,
         "backdrop_path": "/5nkKy7eEDsXqsxFLJy3GxZhE90J.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -3012,7 +2946,6 @@
         "vote_average": 8.1
     },
     {
-        "adult": false,
         "backdrop_path": "/rphor0XQcYO4CQoQ6auaQm3UPap.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -3053,7 +2986,6 @@
         "vote_average": 7.948
     },
     {
-        "adult": false,
         "backdrop_path": "/lMaWlYThCSnsmW3usxWTpSuyZp1.jpg",
         "belongs_to_collection": null,
         "budget": 49300000,
@@ -3094,7 +3026,6 @@
         "vote_average": 8.095
     },
     {
-        "adult": false,
         "backdrop_path": "/gFzBLipMi8pBn3KkoL4WSgkIUu9.jpg",
         "belongs_to_collection": {
             "id": 140612,
@@ -3149,7 +3080,6 @@
         "vote_average": 7.312
     },
     {
-        "adult": false,
         "backdrop_path": "/3W2I33pTXWMiH8py382Zg86OB9Q.jpg",
         "belongs_to_collection": {
             "id": 148065,
@@ -3207,7 +3137,6 @@
         "vote_average": 6.565
     },
     {
-        "adult": false,
         "backdrop_path": "/Abv3ZtGV2NXxPimArb3LDLg2bDH.jpg",
         "belongs_to_collection": {
             "id": 23616,
@@ -3265,7 +3194,6 @@
         "vote_average": 7.25
     },
     {
-        "adult": false,
         "backdrop_path": "/bW0Hr19Xo7LDnMmywXuH5YoTMY5.jpg",
         "belongs_to_collection": {
             "id": 23616,
@@ -3315,7 +3243,6 @@
         "vote_average": 7.287
     },
     {
-        "adult": false,
         "backdrop_path": "/eHTZoXmB4vnDqANZXPZcdAiYQo5.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -3360,7 +3287,6 @@
         "vote_average": 7.866
     },
     {
-        "adult": false,
         "backdrop_path": "/p6Yh10E46lXpj45XvG9Mwc4HZNi.jpg",
         "belongs_to_collection": {
             "id": 23616,
@@ -3406,7 +3332,6 @@
         "vote_average": 7.411
     },
     {
-        "adult": false,
         "backdrop_path": "/19EKawKy1Z7nUJMhQE28XBL6Guc.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -3447,7 +3372,6 @@
         "vote_average": 7.724
     },
     {
-        "adult": false,
         "backdrop_path": "/lwkwVTNdNeG0a1FT06wr1Ylm1OV.jpg",
         "belongs_to_collection": {
             "id": 122952,
@@ -3505,7 +3429,6 @@
         "vote_average": 7.7
     },
     {
-        "adult": false,
         "backdrop_path": "/g03h9TULzJZOoXA34Abp5LE7lvt.jpg",
         "belongs_to_collection": {
             "id": 1513903,
@@ -3556,7 +3479,6 @@
         "vote_average": 7.4
     },
     {
-        "adult": false,
         "backdrop_path": "/iflKt34Ck2JpY2PY9wW1zwdJgJi.jpg",
         "belongs_to_collection": {
             "id": 148065,
@@ -3614,7 +3536,6 @@
         "vote_average": 6.6
     },
     {
-        "adult": false,
         "backdrop_path": "/g3pIN5kRvmtcdtzjsJomZ1sw2QO.jpg",
         "belongs_to_collection": {
             "id": 1189668,
@@ -3664,7 +3585,6 @@
         "vote_average": 7.587
     },
     {
-        "adult": false,
         "backdrop_path": "/8Cbzx17QdJ6xBx2uDkdlpWsemGg.jpg",
         "belongs_to_collection": {
             "id": 23026,
@@ -3710,7 +3630,6 @@
         "vote_average": 7.347
     },
     {
-        "adult": false,
         "backdrop_path": "/b9qGMCOrMbxUjD6xDAYPoIPnYcC.jpg",
         "belongs_to_collection": {
             "id": 1189668,
@@ -3760,7 +3679,6 @@
         "vote_average": 7.884
     },
     {
-        "adult": false,
         "backdrop_path": "/uAzdAGerv6i1XVl4ACfpuoWtq21.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -3814,7 +3732,6 @@
         "vote_average": 7.299
     },
     {
-        "adult": false,
         "backdrop_path": "/mWhZofAouxfL3nDm1y2UovcpYi6.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -3868,7 +3785,6 @@
         "vote_average": 7.414
     },
     {
-        "adult": false,
         "backdrop_path": "/vqQhjCeXbGDz8IeB27IPk0alfKA.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -3909,7 +3825,6 @@
         "vote_average": 6.348
     },
     {
-        "adult": false,
         "backdrop_path": "/86l1gqKjhPn6Ypd8XSSIGx7ZikB.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -3950,7 +3865,6 @@
         "vote_average": 7.935
     },
     {
-        "adult": false,
         "backdrop_path": "/ijjRrrmQ4kVFkAqnpUNaWZ4h3yW.jpg",
         "belongs_to_collection": {
             "id": 133352,
@@ -4009,7 +3923,6 @@
         "vote_average": 6.919
     },
     {
-        "adult": false,
         "backdrop_path": "/kti9ufHhCKaOLjg2to4RKfrlkmh.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -4050,7 +3963,6 @@
         "vote_average": 7.675
     },
     {
-        "adult": false,
         "backdrop_path": "/hpiEAclfvNJOYPEIhmVewK3n77c.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -4091,7 +4003,6 @@
         "vote_average": 7.507
     },
     {
-        "adult": false,
         "backdrop_path": "/ubj8Y0gFZK3d3glD55BzIx8arOV.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -4141,7 +4052,6 @@
         "vote_average": 7.091
     },
     {
-        "adult": false,
         "backdrop_path": "/fCf8WfsRJEDFf1N6gA6o4ICRYp.jpg",
         "belongs_to_collection": {
             "id": 1185967,
@@ -4191,7 +4101,6 @@
         "vote_average": 7.507
     },
     {
-        "adult": false,
         "backdrop_path": "/6Bev1r0VbGp8Riv9QiSgt832OoW.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -4241,7 +4150,6 @@
         "vote_average": 7.15
     },
     {
-        "adult": false,
         "backdrop_path": "/tED9WowWMskdvK6hfTIUUt0za32.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -4291,7 +4199,6 @@
         "vote_average": 6.931
     },
     {
-        "adult": false,
         "backdrop_path": "/i38wJbIccuU6cmnWLLwgQX3EeYo.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -4337,7 +4244,6 @@
         "vote_average": 7.1
     },
     {
-        "adult": false,
         "backdrop_path": "/lsXnU0zkJSianGyxnK3Jhx4vObM.jpg",
         "belongs_to_collection": {
             "id": 140760,
@@ -4391,7 +4297,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/zVDJ4cRgSpHlILSm7kGiklHQ6O7.jpg",
         "belongs_to_collection": null,
         "budget": 5000000,
@@ -4436,7 +4341,6 @@
         "vote_average": 7.15
     },
     {
-        "adult": false,
         "backdrop_path": "/wyDNiOVWwviCFzWITuxs9CnjmAW.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -4481,7 +4385,6 @@
         "vote_average": 7.323
     },
     {
-        "adult": false,
         "backdrop_path": "/bS93S5uEVZng4qmDhmDMXTSEuay.jpg",
         "belongs_to_collection": {
             "id": 34055,
@@ -4540,7 +4443,6 @@
         "vote_average": 6.7
     },
     {
-        "adult": false,
         "backdrop_path": "/wyVO297404vkmA8UmUofbPvO5mX.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -4585,7 +4487,6 @@
         "vote_average": 7.8
     },
     {
-        "adult": false,
         "backdrop_path": "/5ucjKx2rR8Z55Qd7lK5mBtQPGkr.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -4635,7 +4536,6 @@
         "vote_average": 6.816
     },
     {
-        "adult": false,
         "backdrop_path": "/1aABIiqBY7yoQESE8qWvR0w9bJZ.jpg",
         "belongs_to_collection": {
             "id": 728776,
@@ -4693,7 +4593,6 @@
         "vote_average": 7.396
     },
     {
-        "adult": false,
         "backdrop_path": "/qMNmdJG0WFNXcI6hfZMQH0geHc5.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -4734,7 +4633,6 @@
         "vote_average": 7.588
     },
     {
-        "adult": false,
         "backdrop_path": "/dyDxxLRTwqGFNOCtLbpxD1QLlfJ.jpg",
         "belongs_to_collection": {
             "id": 661031,
@@ -4784,7 +4682,6 @@
         "vote_average": 7.073
     },
     {
-        "adult": false,
         "backdrop_path": "/o72nw4sK9dmle0bGpHoTIvR5N5y.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -4825,7 +4722,6 @@
         "vote_average": 7.6
     },
     {
-        "adult": false,
         "backdrop_path": "/wIeNWRuBCdEBmWoDRcKputYV414.jpg",
         "belongs_to_collection": {
             "id": 1073290,
@@ -4875,7 +4771,6 @@
         "vote_average": 8.227
     },
     {
-        "adult": false,
         "backdrop_path": "/sYE2B3u4A8Z37zafENdT5jW0gsm.jpg",
         "belongs_to_collection": {
             "id": 1143843,
@@ -4921,7 +4816,6 @@
         "vote_average": 6.879
     },
     {
-        "adult": false,
         "backdrop_path": "/6LYJE4q6mujBzdtcrioCMFlKjSg.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -4971,7 +4865,6 @@
         "vote_average": 7.285
     },
     {
-        "adult": false,
         "backdrop_path": "/anb6GDkC5dOnBDkGehxZdPdUrfr.jpg",
         "belongs_to_collection": {
             "id": 148065,
@@ -5029,7 +4922,6 @@
         "vote_average": 7.0
     },
     {
-        "adult": false,
         "backdrop_path": "/kajpfvaVqDt9Rn04StPeEP9rQt2.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -5075,7 +4967,6 @@
         "vote_average": 6.823
     },
     {
-        "adult": false,
         "backdrop_path": "/le7N8M4bAM9suFGGTjvYblfmPT8.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -5125,7 +5016,6 @@
         "vote_average": 7.348
     },
     {
-        "adult": false,
         "backdrop_path": "/f5o7KiOdcM9mqbobPbLDFcVqjcy.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -5183,7 +5073,6 @@
         "vote_average": 6.5
     },
     {
-        "adult": false,
         "backdrop_path": "/8yniaG7C4iCm0VVTSShAPUZYM3Y.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -5236,7 +5125,6 @@
         "vote_average": 7.91
     },
     {
-        "adult": false,
         "backdrop_path": "/2WTjYoswcKZTQrokeUOhY3Xb3mZ.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -5282,7 +5170,6 @@
         "vote_average": 6.8
     },
     {
-        "adult": false,
         "backdrop_path": "/mOd8oNCNyKOXs58FzdD1pPygWD.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -5323,7 +5210,6 @@
         "vote_average": 7.781
     },
     {
-        "adult": false,
         "backdrop_path": "/wMzToVniA09xWS0DXSRQiufVvpZ.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -5373,7 +5259,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/zppxKFz42vmIG41xlwp2DlPmvip.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -5419,7 +5304,6 @@
         "vote_average": 7.173
     },
     {
-        "adult": false,
         "backdrop_path": "/wSFAoevZuVBo4L9f8NgYSD1o9cQ.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -5456,7 +5340,6 @@
         "vote_average": 7.456
     },
     {
-        "adult": false,
         "backdrop_path": "/pLctvg69kQGVfqSLqeL55sbWNRr.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -5497,7 +5380,6 @@
         "vote_average": 7.067
     },
     {
-        "adult": false,
         "backdrop_path": "/a4MrZ711OIObIhSGF8SqcZQTyZo.jpg",
         "belongs_to_collection": {
             "id": 23616,
@@ -5543,7 +5425,6 @@
         "vote_average": 7.169
     },
     {
-        "adult": false,
         "backdrop_path": "/jh6GJSeqyazoKfi3Lu19N1fvr7e.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -5588,7 +5469,6 @@
         "vote_average": 6.597
     },
     {
-        "adult": false,
         "backdrop_path": "/xACr1uSjnqRzw8COb7UUmPca1ZZ.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -5634,7 +5514,6 @@
         "vote_average": 6.634
     },
     {
-        "adult": false,
         "backdrop_path": "/jZW391Kknf4YiIaZ1XHyVjnJaKe.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -5675,7 +5554,6 @@
         "vote_average": 7.848
     },
     {
-        "adult": false,
         "backdrop_path": "/vRgTxWUHK3MKDUr43CaxfCem4rS.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -5716,7 +5594,6 @@
         "vote_average": 7.948
     },
     {
-        "adult": false,
         "backdrop_path": "/crFk9m8DK9lNqlOa7AGTvYsO6Qn.jpg",
         "belongs_to_collection": {
             "id": 661029,
@@ -5770,7 +5647,6 @@
         "vote_average": 6.8
     },
     {
-        "adult": false,
         "backdrop_path": "/A7nW6vbOJXH0uz0SrScdPdvJ416.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -5812,7 +5688,6 @@
         "vote_average": 6.908
     },
     {
-        "adult": false,
         "backdrop_path": "/v3bVN8SjeA9O0nUBtMfRcE0fJpR.jpg",
         "belongs_to_collection": null,
         "budget": 22000000,
@@ -5849,7 +5724,6 @@
         "vote_average": 7.523
     },
     {
-        "adult": false,
         "backdrop_path": "/xzIaIFXs14vr5BGoAQ2IJsQ60EB.jpg",
         "belongs_to_collection": {
             "id": 23616,
@@ -5895,7 +5769,6 @@
         "vote_average": 7.323
     },
     {
-        "adult": false,
         "backdrop_path": "/7aiVtavsu145yo6n4ZpazwMDLXL.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -5936,7 +5809,6 @@
         "vote_average": 7.6
     },
     {
-        "adult": false,
         "backdrop_path": "/8NbxAqVNeU6cnTa8Ito1ESofZKy.jpg",
         "belongs_to_collection": {
             "id": 109079,
@@ -5982,7 +5854,6 @@
         "vote_average": 6.667
     },
     {
-        "adult": false,
         "backdrop_path": "/tQprwIKzFx83JpM5dVrGRC4UpF.jpg",
         "belongs_to_collection": {
             "id": 688209,
@@ -6032,7 +5903,6 @@
         "vote_average": 7.797
     },
     {
-        "adult": false,
         "backdrop_path": "/z4T0CZxl8WQqNA8K5tZoBQib4jL.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -6078,7 +5948,6 @@
         "vote_average": 7.048
     },
     {
-        "adult": false,
         "backdrop_path": "/k5F9jYfcsp4EFDVaUvyWd1uyXsX.jpg",
         "belongs_to_collection": {
             "id": 1313822,
@@ -6129,7 +5998,6 @@
         "vote_average": 6.7
     },
     {
-        "adult": false,
         "backdrop_path": "/a8Q2g0g7XzAF6gcB8qgn37ccb9Y.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -6174,7 +6042,6 @@
         "vote_average": 7.28
     },
     {
-        "adult": false,
         "backdrop_path": "/b6u42A4TkZzv3TNhZfmfu5bjuFK.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -6220,7 +6087,6 @@
         "vote_average": 7.319
     },
     {
-        "adult": false,
         "backdrop_path": "/4NyJEGke7B5bZcRaImkTFc5FcZE.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -6278,7 +6144,6 @@
         "vote_average": 6.952
     },
     {
-        "adult": false,
         "backdrop_path": "/qfi122rXUQRt3RmfBylt28Aqas0.jpg",
         "belongs_to_collection": {
             "id": 795482,
@@ -6329,7 +6194,6 @@
         "vote_average": 6.6
     },
     {
-        "adult": false,
         "backdrop_path": "/lyQCUSslaE8fe4CHHKwXvTeudQf.jpg",
         "belongs_to_collection": {
             "id": 1195799,
@@ -6387,7 +6251,6 @@
         "vote_average": 7.907
     },
     {
-        "adult": false,
         "backdrop_path": "/t9z8Wm8c0HnxfPN9YvXgmueG6De.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -6433,7 +6296,6 @@
         "vote_average": 7.528
     },
     {
-        "adult": false,
         "backdrop_path": "/cMXp028BZIdiA9OFfiK4gSYYtcr.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -6483,7 +6345,6 @@
         "vote_average": 7.5
     },
     {
-        "adult": false,
         "backdrop_path": "/efC1n5QU7newjfgqyOPmsnwSky3.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -6529,7 +6390,6 @@
         "vote_average": 6.887
     },
     {
-        "adult": false,
         "backdrop_path": "/wqpTrmGiqMJ6onAq3zrBhfomIJl.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -6570,7 +6430,6 @@
         "vote_average": 8.0
     },
     {
-        "adult": false,
         "backdrop_path": "/9pIRnrvWOCG62HmDWELopE1Ip3k.jpg",
         "belongs_to_collection": null,
         "budget": 15270000,
@@ -6611,7 +6470,6 @@
         "vote_average": 7.0
     },
     {
-        "adult": false,
         "backdrop_path": "/1C3Y8XqOxR9LLhKl4BxS5nTTr3C.jpg",
         "belongs_to_collection": {
             "id": 113592,
@@ -6661,7 +6519,6 @@
         "vote_average": 6.0
     },
     {
-        "adult": false,
         "backdrop_path": "/pzsVGcufDdBLmvagKyLFKaeA4O5.jpg",
         "belongs_to_collection": {
             "id": 210303,
@@ -6716,7 +6573,6 @@
         "vote_average": 7.8
     },
     {
-        "adult": false,
         "backdrop_path": "/97hGh5XNbUcfAJxBTaH6W2NQyLj.jpg",
         "belongs_to_collection": {
             "id": 122952,
@@ -6762,7 +6618,6 @@
         "vote_average": 6.6
     },
     {
-        "adult": false,
         "backdrop_path": "/bQl46uhGPTu9jnIRE9Ip2xOMc9M.jpg",
         "belongs_to_collection": {
             "id": 661029,
@@ -6816,7 +6671,6 @@
         "vote_average": 6.7
     },
     {
-        "adult": false,
         "backdrop_path": "/vkjsoMF86dJIv6Sgtd4CcuR8kzh.jpg",
         "belongs_to_collection": {
             "id": 703485,
@@ -6858,7 +6712,6 @@
         "vote_average": 7.7
     },
     {
-        "adult": false,
         "backdrop_path": "/y1jnN6Manj8qvGzujx825VeqERq.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -6908,7 +6761,6 @@
         "vote_average": 7.4
     },
     {
-        "adult": false,
         "backdrop_path": "/x5ufEAM7bS7DVXaovApamQh5BNE.jpg",
         "belongs_to_collection": null,
         "budget": 22000000,
@@ -6949,7 +6801,6 @@
         "vote_average": 6.532
     },
     {
-        "adult": false,
         "backdrop_path": "/1oaRUHv1zX4mZNX1zq4NcHIg50m.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -6995,7 +6846,6 @@
         "vote_average": 7.4
     },
     {
-        "adult": false,
         "backdrop_path": "/xfZ2u86Tui0aTKcPYcKGStzxWZv.jpg",
         "belongs_to_collection": {
             "id": 390636,
@@ -7049,7 +6899,6 @@
         "vote_average": 7.4
     },
     {
-        "adult": false,
         "backdrop_path": "/lesSOGpRuJwebgtL4vNkoRFnbil.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -7094,7 +6943,6 @@
         "vote_average": 6.818
     },
     {
-        "adult": false,
         "backdrop_path": "/xbjOkrAaT4CAIrNJ38oQSBomHvg.jpg",
         "belongs_to_collection": {
             "id": 133352,
@@ -7149,7 +6997,6 @@
         "vote_average": 6.893
     },
     {
-        "adult": false,
         "backdrop_path": "/pRsaXi05n7G2BQNS8urHPyMxJmk.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -7190,7 +7037,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/8NEvnVKeGMLEXG45MMNqxJLcM4y.jpg",
         "belongs_to_collection": {
             "id": 1565118,
@@ -7240,7 +7086,6 @@
         "vote_average": 7.878
     },
     {
-        "adult": false,
         "backdrop_path": "/q0PBB2RCrOAZrZjqJKhL3ibTV8b.jpg",
         "belongs_to_collection": {
             "id": 210303,
@@ -7290,7 +7135,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/cZD27c2H9wLAsIOeouzqiL4OaBr.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -7341,7 +7185,6 @@
         "vote_average": 6.5
     },
     {
-        "adult": false,
         "backdrop_path": "/7qzuPx3ukGxCyLR9j0Ahg3fFI7r.jpg",
         "belongs_to_collection": {
             "id": 661025,
@@ -7393,7 +7236,6 @@
         "vote_average": 7.0
     },
     {
-        "adult": false,
         "backdrop_path": "/74wyAwiWTGLpJGQIPMKjYjvSyl4.jpg",
         "belongs_to_collection": {
             "id": 96850,
@@ -7439,7 +7281,6 @@
         "vote_average": 7.403
     },
     {
-        "adult": false,
         "backdrop_path": "/fStC0dSCRQslE9NzXa36EyOom81.jpg",
         "belongs_to_collection": {
             "id": 728776,
@@ -7501,7 +7342,6 @@
         "vote_average": 7.765
     },
     {
-        "adult": false,
         "backdrop_path": "/3iMg59ZgBxm9Qm4fdRawnZLI4Vo.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -7551,7 +7391,6 @@
         "vote_average": 6.091
     },
     {
-        "adult": false,
         "backdrop_path": "/sIsABtZxFBm1IOVOGocd4iPySyg.jpg",
         "belongs_to_collection": {
             "id": 893713,
@@ -7601,7 +7440,6 @@
         "vote_average": 7.667
     },
     {
-        "adult": false,
         "backdrop_path": "/mrVUkTJHY8MeZRvBDxxmnAhRcxa.jpg",
         "belongs_to_collection": {
             "id": 118415,
@@ -7655,7 +7493,6 @@
         "vote_average": 7.6
     },
     {
-        "adult": false,
         "backdrop_path": "/h5RPSswlgc2KvvkvfW7pipBtPLo.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -7697,7 +7534,6 @@
         "vote_average": 6.533
     },
     {
-        "adult": false,
         "backdrop_path": "/xGJBLsiY0quc2pOcCH1MdnF5P8.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -7747,7 +7583,6 @@
         "vote_average": 7.19
     },
     {
-        "adult": false,
         "backdrop_path": "/60h5gBY9YLUBIRRBmXgnVt5Ywkt.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -7797,7 +7632,6 @@
         "vote_average": 6.504
     },
     {
-        "adult": false,
         "backdrop_path": "/6SFrBoiuioqljN42pbTmyRKccTp.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -7843,7 +7677,6 @@
         "vote_average": 6.9
     },
     {
-        "adult": false,
         "backdrop_path": "/6OnJoCqeRzoOdzXogm64OD3QGzn.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -7897,7 +7730,6 @@
         "vote_average": 7.1
     },
     {
-        "adult": false,
         "backdrop_path": "/ldOF0T4x0YuST0OeJr9ctWMXuTL.jpg",
         "belongs_to_collection": {
             "id": 1431054,
@@ -7943,7 +7775,6 @@
         "vote_average": 8.1
     },
     {
-        "adult": false,
         "backdrop_path": "/q4k9UDHE5foTcs48zpqJbpLUDNU.jpg",
         "belongs_to_collection": {
             "id": 109079,
@@ -7989,7 +7820,6 @@
         "vote_average": 7.095
     },
     {
-        "adult": false,
         "backdrop_path": "/z212lEwKZAxLjN7LqXCVxCb3kWc.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -8030,7 +7860,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/t9ifVuOtSZBvtieF9L83pnHnOcC.jpg",
         "belongs_to_collection": {
             "id": 689287,
@@ -8076,7 +7905,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/qO9gSwfWCQogiWMHZC7tEPunRJO.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -8126,7 +7954,6 @@
         "vote_average": 6.787
     },
     {
-        "adult": false,
         "backdrop_path": "/rBgzI1a126JWA7YJd7p1NBmC61z.jpg",
         "belongs_to_collection": {
             "id": 525026,
@@ -8172,7 +7999,6 @@
         "vote_average": 7.771
     },
     {
-        "adult": false,
         "backdrop_path": "/zmJtqKaByFqYrxipeXyoAUSTD1w.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -8221,7 +8047,6 @@
         "vote_average": 7.826
     },
     {
-        "adult": false,
         "backdrop_path": "/lnwNzJdU4gMlgoQlaT8HgSI2OpD.jpg",
         "belongs_to_collection": {
             "id": 34055,
@@ -8275,7 +8100,6 @@
         "vote_average": 6.5
     },
     {
-        "adult": false,
         "backdrop_path": "/zPm8ObX2rw5UYJpxxccZtYRL8eq.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -8325,7 +8149,6 @@
         "vote_average": 6.407
     },
     {
-        "adult": false,
         "backdrop_path": "/v7GQxa9ZmdMZjt4JwZF54mvAiTv.jpg",
         "belongs_to_collection": {
             "id": 118415,
@@ -8383,7 +8206,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/1WygXLVPO4wNYm6WUgUi7PNAvkU.jpg",
         "belongs_to_collection": {
             "id": 661026,
@@ -8433,7 +8255,6 @@
         "vote_average": 7.1
     },
     {
-        "adult": false,
         "backdrop_path": "/dLGQo5Xq6H18vPx00Czot8VHi3K.jpg",
         "belongs_to_collection": {
             "id": 34055,
@@ -8487,7 +8308,6 @@
         "vote_average": 6.5
     },
     {
-        "adult": false,
         "backdrop_path": "/m2qvBj43KuC67plFDTHbNWyxuew.jpg",
         "belongs_to_collection": {
             "id": 196753,
@@ -8529,7 +8349,6 @@
         "vote_average": 6.616
     },
     {
-        "adult": false,
         "backdrop_path": "/noPMcHv45ngiwAUd71s6FyDZoLW.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -8570,7 +8389,6 @@
         "vote_average": 7.585
     },
     {
-        "adult": false,
         "backdrop_path": "/lQpNbp6T8UFI3iPppm8MGDNcGbc.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -8616,7 +8434,6 @@
         "vote_average": 7.0
     },
     {
-        "adult": false,
         "backdrop_path": "/mnppPdfdtKPNoRemzIZDwOKpgfv.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -8667,7 +8484,6 @@
         "vote_average": 7.924
     },
     {
-        "adult": false,
         "backdrop_path": "/9AFWONBBVKyDiUtD89kXNnKnG4b.jpg",
         "belongs_to_collection": {
             "id": 661028,
@@ -8725,7 +8541,6 @@
         "vote_average": 6.4
     },
     {
-        "adult": false,
         "backdrop_path": "/1FBByew9RnXQ2HFqf7b6EWkyzTP.jpg",
         "belongs_to_collection": null,
         "budget": 15000000,
@@ -8762,7 +8577,6 @@
         "vote_average": 7.147
     },
     {
-        "adult": false,
         "backdrop_path": "/xHyX5zQIdu13w708J4lYhmwEqNp.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -8811,7 +8625,6 @@
         "vote_average": 6.7
     },
     {
-        "adult": false,
         "backdrop_path": "/3JgfNUCoN6pyXlO7wZOJ4PgQgW3.jpg",
         "belongs_to_collection": {
             "id": 133352,
@@ -8866,7 +8679,6 @@
         "vote_average": 6.81
     },
     {
-        "adult": false,
         "backdrop_path": "/2zFHwJ4sLEW4EHdwRaeaBzMQ3oX.jpg",
         "belongs_to_collection": {
             "id": 571270,
@@ -8916,7 +8728,6 @@
         "vote_average": 6.927
     },
     {
-        "adult": false,
         "backdrop_path": "/vmuvk8DSUyk6IUyrvgyxZAAITmP.jpg",
         "belongs_to_collection": {
             "id": 23497,
@@ -8962,7 +8773,6 @@
         "vote_average": 6.769
     },
     {
-        "adult": false,
         "backdrop_path": "/b1EKIjZWYAoC3WUk14012DX46Cb.jpg",
         "belongs_to_collection": {
             "id": 661031,
@@ -9012,7 +8822,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/1y4sTs4pAbilS9eyx8OZV4E66Qa.jpg",
         "belongs_to_collection": {
             "id": 824215,
@@ -9058,7 +8867,6 @@
         "vote_average": 7.89
     },
     {
-        "adult": false,
         "backdrop_path": "/ldwWnaWoW8ziEFflimoraZouyvB.jpg",
         "belongs_to_collection": {
             "id": 23616,
@@ -9104,7 +8912,6 @@
         "vote_average": 6.787
     },
     {
-        "adult": false,
         "backdrop_path": "/2vc5hXc4pMXcKOOsOuyI2MQ1AdK.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -9153,7 +8960,6 @@
         "vote_average": 7.3
     },
     {
-        "adult": false,
         "backdrop_path": "/nZn384qWYugXu6U1N8Ya0Iv0NXE.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -9194,7 +9000,6 @@
         "vote_average": 7.706
     },
     {
-        "adult": false,
         "backdrop_path": "/jsIxoKIuH6lLt4Y3NW7Tf1BwcIO.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -9235,7 +9040,6 @@
         "vote_average": 7.39
     },
     {
-        "adult": false,
         "backdrop_path": "/9mZGGJJP04RBmrzh9XVSfqRXl0d.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -9290,7 +9094,6 @@
         "vote_average": 6.5
     },
     {
-        "adult": false,
         "backdrop_path": "/f1MwrnVB8eQyeJc3wQV7k1sZsz1.jpg",
         "belongs_to_collection": {
             "id": 1183083,
@@ -9340,7 +9143,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/Amvdexp1W0uqqSEkWlYjM9nDJfa.jpg",
         "belongs_to_collection": {
             "id": 390636,
@@ -9394,7 +9196,6 @@
         "vote_average": 7.004
     },
     {
-        "adult": false,
         "backdrop_path": "/yFZG86Zvdy6JuIlMW9eHxlVkct5.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -9443,7 +9244,6 @@
         "vote_average": 7.69
     },
     {
-        "adult": false,
         "backdrop_path": "/tjWDJoTul5wn6BpnMH4ZWVcFWfx.jpg",
         "belongs_to_collection": {
             "id": 212166,
@@ -9494,7 +9294,6 @@
         "vote_average": 7.756
     },
     {
-        "adult": false,
         "backdrop_path": "/trUoQPnQy3cAXDx5TknzuBTFiWX.jpg",
         "belongs_to_collection": {
             "id": 386410,
@@ -9552,7 +9351,6 @@
         "vote_average": 6.9
     },
     {
-        "adult": false,
         "backdrop_path": "/yPRnoFEhj09i824pqmE2cwfedsN.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -9597,7 +9395,6 @@
         "vote_average": 7.147
     },
     {
-        "adult": false,
         "backdrop_path": "/1u3yIvWFZaNDSSXmWYCYaNpCBBu.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -9643,7 +9440,6 @@
         "vote_average": 6.9
     },
     {
-        "adult": false,
         "backdrop_path": "/7id7oE3gqZuO0piWN20Ev7V90wl.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -9684,7 +9480,6 @@
         "vote_average": 7.331
     },
     {
-        "adult": false,
         "backdrop_path": "/hk9nHD5SuV3iGbYBubgxx9ZC9jf.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -9733,7 +9528,6 @@
         "vote_average": 6.503
     },
     {
-        "adult": false,
         "backdrop_path": "/k1Tt4Pa6DM2PBt3Qr9TROqUzsH9.jpg",
         "belongs_to_collection": {
             "id": 661028,
@@ -9783,7 +9577,6 @@
         "vote_average": 6.3
     },
     {
-        "adult": false,
         "backdrop_path": "/86qE9M3TL5sb6kBhPnrmeHlj1gY.jpg",
         "belongs_to_collection": {
             "id": 661025,
@@ -9833,7 +9626,6 @@
         "vote_average": 6.628
     },
     {
-        "adult": false,
         "backdrop_path": "/fZL8BvRSgDrdpBHiEnJ8ROB0rgN.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -9879,7 +9671,6 @@
         "vote_average": 5.8
     },
     {
-        "adult": false,
         "backdrop_path": "/94x68VYBvHyrt6ewxMKu1UiI05Q.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -9924,7 +9715,6 @@
         "vote_average": 7.4
     },
     {
-        "adult": false,
         "backdrop_path": "/tLfQZkB4yBlO1h5WMIFLJgHYcZD.jpg",
         "belongs_to_collection": {
             "id": 390636,
@@ -9978,7 +9768,6 @@
         "vote_average": 7.718
     },
     {
-        "adult": false,
         "backdrop_path": "/sCPRp4j5YzLTCIG72PRZM8LLgHh.jpg",
         "belongs_to_collection": null,
         "budget": 8000000,
@@ -10015,7 +9804,6 @@
         "vote_average": 6.869
     },
     {
-        "adult": false,
         "backdrop_path": "/vMNdZ1IWSEVhCgA9Td7htExVMCr.jpg",
         "belongs_to_collection": {
             "id": 893713,
@@ -10065,7 +9853,6 @@
         "vote_average": 7.9
     },
     {
-        "adult": false,
         "backdrop_path": "/6NbqvhC6oPuvXN5jta9WbaQJD2E.jpg",
         "belongs_to_collection": {
             "id": 703485,
@@ -10115,7 +9902,6 @@
         "vote_average": 7.205
     },
     {
-        "adult": false,
         "backdrop_path": "/eTfik9sRZTcaWIMJGVhmUqrbL0Q.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -10156,7 +9942,6 @@
         "vote_average": 6.762
     },
     {
-        "adult": false,
         "backdrop_path": "/rY6w3b5Mn0LRIkD9lhhCei849NF.jpg",
         "belongs_to_collection": {
             "id": 713969,
@@ -10202,7 +9987,6 @@
         "vote_average": 7.4
     },
     {
-        "adult": false,
         "backdrop_path": "/geeAPcb9iBEWfft6uRnL8aCwBmF.jpg",
         "belongs_to_collection": {
             "id": 1313822,
@@ -10248,7 +10032,6 @@
         "vote_average": 5.9
     },
     {
-        "adult": false,
         "backdrop_path": "/5QAc8dsyOwJBGQ71mhOLMEivOsF.jpg",
         "belongs_to_collection": {
             "id": 535790,
@@ -10294,7 +10077,6 @@
         "vote_average": 6.375
     },
     {
-        "adult": false,
         "backdrop_path": "/77r5EvZ78Z7CHOHqaaKG1SPqocf.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -10343,7 +10125,6 @@
         "vote_average": 7.074
     },
     {
-        "adult": false,
         "backdrop_path": "/3tbyb1ZZAoFl7TiufWX15hQBYTs.jpg",
         "belongs_to_collection": {
             "id": 109079,
@@ -10385,7 +10166,6 @@
         "vote_average": 7.698
     },
     {
-        "adult": false,
         "backdrop_path": "/an8OJ9L1TkNB5pLkzbyf0LNfoXz.jpg",
         "belongs_to_collection": {
             "id": 1195799,
@@ -10443,7 +10223,6 @@
         "vote_average": 7.331
     },
     {
-        "adult": false,
         "backdrop_path": "/r2FXILO1vUKXGS9xnPva4kkjdHo.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -10492,7 +10271,6 @@
         "vote_average": 7.1
     },
     {
-        "adult": false,
         "backdrop_path": "/au3nAjeEjip1JWIzG8MdNtaGFF7.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -10533,7 +10311,6 @@
         "vote_average": 7.167
     },
     {
-        "adult": false,
         "backdrop_path": "/dMcaQp4XfPK11bDeUyj2JOqEY8I.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -10578,7 +10355,6 @@
         "vote_average": 8.05
     },
     {
-        "adult": false,
         "backdrop_path": "/k1jWHgAICsNGM5roYcIwaDpryYS.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -10615,7 +10391,6 @@
         "vote_average": 7.313
     },
     {
-        "adult": false,
         "backdrop_path": "/JeEKrJUUT29gTsueHrqibGarCr.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -10660,7 +10435,6 @@
         "vote_average": 7.3
     },
     {
-        "adult": false,
         "backdrop_path": "/u9K1AShm7AgQkLozGvG8VGFuh6r.jpg",
         "belongs_to_collection": {
             "id": 141252,
@@ -10706,7 +10480,6 @@
         "vote_average": 7.652
     },
     {
-        "adult": false,
         "backdrop_path": "/9K1zhrS8jZ3NFZwzc5RgtwxskLT.jpg",
         "belongs_to_collection": {
             "id": 689287,
@@ -10752,7 +10525,6 @@
         "vote_average": 7.328
     },
     {
-        "adult": false,
         "backdrop_path": "/aWg40fkUvghFwrCya2fHvAEvjud.jpg",
         "belongs_to_collection": {
             "id": 53154,
@@ -10802,7 +10574,6 @@
         "vote_average": 7.5
     },
     {
-        "adult": false,
         "backdrop_path": "/jznY4TwOaVWZJoXA3D5FkvX3cUc.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -10853,7 +10624,6 @@
         "vote_average": 6.5
     },
     {
-        "adult": false,
         "backdrop_path": "/7IMcSsxWfHkO0mdYMU2NcwLmgD1.jpg",
         "belongs_to_collection": {
             "id": 524143,
@@ -10907,7 +10677,6 @@
         "vote_average": 6.625
     },
     {
-        "adult": false,
         "backdrop_path": "/6ryHAHtpcNTExUVekeaNe0xmDbb.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -10948,7 +10717,6 @@
         "vote_average": 6.433
     },
     {
-        "adult": false,
         "backdrop_path": "/mSEG0pGyCEwAWh7qNgxnuPnd8jU.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -11002,7 +10770,6 @@
         "vote_average": 6.9
     },
     {
-        "adult": false,
         "backdrop_path": "/t0voVZuqvQ0VlM2m45rVWZO5R52.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -11043,7 +10810,6 @@
         "vote_average": 8.455
     },
     {
-        "adult": false,
         "backdrop_path": "/4YbVJmtXjRL3tmbVHbhZoHqCOka.jpg",
         "belongs_to_collection": {
             "id": 212166,
@@ -11089,7 +10855,6 @@
         "vote_average": 7.493
     },
     {
-        "adult": false,
         "backdrop_path": "/j2oX7UeZJJD6tUczrVECcJCdLaG.jpg",
         "belongs_to_collection": {
             "id": 23616,
@@ -11135,7 +10900,6 @@
         "vote_average": 7.1
     },
     {
-        "adult": false,
         "backdrop_path": "/s9q3uNEjqHnLDgPX78Yfaoy8p1I.jpg",
         "belongs_to_collection": {
             "id": 600207,
@@ -11177,7 +10941,6 @@
         "vote_average": 7.554
     },
     {
-        "adult": false,
         "backdrop_path": "/1Cs5jJDVpyBsp3NDPTGRwftFym.jpg",
         "belongs_to_collection": {
             "id": 374202,
@@ -11223,7 +10986,6 @@
         "vote_average": 8.011
     },
     {
-        "adult": false,
         "backdrop_path": "/4KpNHvQIjyg1YFovRAoUXoFrGnR.jpg",
         "belongs_to_collection": {
             "id": 661031,
@@ -11273,7 +11035,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/q3j4OQFFDKM6fdQt9gE56kfDBNG.jpg",
         "belongs_to_collection": {
             "id": 535790,
@@ -11317,7 +11078,6 @@
         "vote_average": 6.5
     },
     {
-        "adult": false,
         "backdrop_path": "/6nfEmbfWMuMBenYMOY6Vdho3Ycg.jpg",
         "belongs_to_collection": {
             "id": 34055,
@@ -11371,7 +11131,6 @@
         "vote_average": 6.694
     },
     {
-        "adult": false,
         "backdrop_path": "/bpKhwqXqQhDlvnQsxf4tNosQypE.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -11424,7 +11183,6 @@
         "vote_average": 6.776
     },
     {
-        "adult": false,
         "backdrop_path": "/4xzUhKxWHxPjJ6h1faVMTUBDquQ.jpg",
         "belongs_to_collection": {
             "id": 454520,
@@ -11466,7 +11224,6 @@
         "vote_average": 6.619
     },
     {
-        "adult": false,
         "backdrop_path": "/9Xz0bzUFTVgDZd4WZz1cJDQjLkB.jpg",
         "belongs_to_collection": {
             "id": 1389956,
@@ -11516,7 +11273,6 @@
         "vote_average": 8.227
     },
     {
-        "adult": false,
         "backdrop_path": "/8v5KpLhY5K70kuLnunwoZmQYFMJ.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -11554,7 +11310,6 @@
         "vote_average": 6.093
     },
     {
-        "adult": false,
         "backdrop_path": "/gB8eFFUw6UA97A7TzrNVrc3D08o.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -11599,7 +11354,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/xMsn2d2MfoMqtUrR2mMlfchKzOF.jpg",
         "belongs_to_collection": {
             "id": 702173,
@@ -11641,7 +11395,6 @@
         "vote_average": 7.637
     },
     {
-        "adult": false,
         "backdrop_path": "/dGulOAB9N4qJlafWxI4YczXDA4I.jpg",
         "belongs_to_collection": {
             "id": 661026,
@@ -11704,7 +11457,6 @@
         "vote_average": 6.9
     },
     {
-        "adult": false,
         "backdrop_path": "/dpwfPVCD2eQgEWY7GtCYAyRaVAP.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -11746,7 +11498,6 @@
         "vote_average": 6.731
     },
     {
-        "adult": false,
         "backdrop_path": "/dC69G4jSq3TkgPIrfgRqZDOxlh4.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -11787,7 +11538,6 @@
         "vote_average": 6.164
     },
     {
-        "adult": false,
         "backdrop_path": "/iAlJWcoEqKTmfxVMQ6pDyizPRsK.jpg",
         "belongs_to_collection": null,
         "budget": 4200000,
@@ -11828,7 +11578,6 @@
         "vote_average": 7.366
     },
     {
-        "adult": false,
         "backdrop_path": "/mfu8cTvpJwrnu3sm2vDqh7o4yXX.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -11874,7 +11623,6 @@
         "vote_average": 7.6
     },
     {
-        "adult": false,
         "backdrop_path": "/y9I6h1NrGdzX99QKcoqLhsFfVWO.jpg",
         "belongs_to_collection": {
             "id": 661025,
@@ -11932,7 +11680,6 @@
         "vote_average": 6.5
     },
     {
-        "adult": false,
         "backdrop_path": "/6HtIoLN8VQ5IQQo9VU9HmM4jSFc.jpg",
         "belongs_to_collection": {
             "id": 799462,
@@ -11983,7 +11730,6 @@
         "vote_average": 7.4
     },
     {
-        "adult": false,
         "backdrop_path": "/k5OFuW1NdI1Lt57nzXEjxwd8zGv.jpg",
         "belongs_to_collection": {
             "id": 661029,
@@ -12041,7 +11787,6 @@
         "vote_average": 6.7
     },
     {
-        "adult": false,
         "backdrop_path": "/c31SAQjVMeVGv7mZsrw5BKGXj2P.jpg",
         "belongs_to_collection": null,
         "budget": 26000000,
@@ -12082,7 +11827,6 @@
         "vote_average": 6.902
     },
     {
-        "adult": false,
         "backdrop_path": "/6PmpKyToUGRheNKfnRRHQToPxSm.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -12131,7 +11875,6 @@
         "vote_average": 6.683
     },
     {
-        "adult": false,
         "backdrop_path": "/hh0VUsnUlElvIJAlx6lW4fgdzqc.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -12180,7 +11923,6 @@
         "vote_average": 7.441
     },
     {
-        "adult": false,
         "backdrop_path": "/lgtg04cn0AZ89ua4S2CbQbajZRg.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -12226,7 +11968,6 @@
         "vote_average": 6.859
     },
     {
-        "adult": false,
         "backdrop_path": "/7BZiAmm3qPK7QQ2HmUnScv2EvBM.jpg",
         "belongs_to_collection": {
             "id": 211958,
@@ -12272,7 +12013,6 @@
         "vote_average": 6.937
     },
     {
-        "adult": false,
         "backdrop_path": "/9YRUkJkGAsxPhwtVdWpnwDeYbMF.jpg",
         "belongs_to_collection": {
             "id": 571270,
@@ -12322,7 +12062,6 @@
         "vote_average": 7.041
     },
     {
-        "adult": false,
         "backdrop_path": "/nuQSpGRKJkxnLOMWzZD8UZ6E92B.jpg",
         "belongs_to_collection": {
             "id": 23497,
@@ -12372,7 +12111,6 @@
         "vote_average": 7.554
     },
     {
-        "adult": false,
         "backdrop_path": "/o1G9i9BzY598fE5RNmSWXCz24d4.jpg",
         "belongs_to_collection": {
             "id": 109079,
@@ -12418,7 +12156,6 @@
         "vote_average": 7.6
     },
     {
-        "adult": false,
         "backdrop_path": "/f2KgbKxSgOUfHxH434pfpzWC0N1.jpg",
         "belongs_to_collection": {
             "id": 1420678,
@@ -12464,7 +12201,6 @@
         "vote_average": 7.1
     },
     {
-        "adult": false,
         "backdrop_path": "/bh5jnK2SeUw7iTbg9QHIi24S01Q.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -12513,7 +12249,6 @@
         "vote_average": 7.9
     },
     {
-        "adult": false,
         "backdrop_path": "/vooRKLGVvFRFmx9swcMh26uYZSf.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -12562,7 +12297,6 @@
         "vote_average": 7.571
     },
     {
-        "adult": false,
         "backdrop_path": "/pLuoFuzygOdWBRJhLQWSbKeoZ0s.jpg",
         "belongs_to_collection": {
             "id": 425164,
@@ -12613,7 +12347,6 @@
         "vote_average": 6.6
     },
     {
-        "adult": false,
         "backdrop_path": "/mG3CYBXgCPi0yYHSygKNtqGpEkd.jpg",
         "belongs_to_collection": {
             "id": 1173773,
@@ -12659,7 +12392,6 @@
         "vote_average": 7.5
     },
     {
-        "adult": false,
         "backdrop_path": "/A34inrFSAIQNatFGc8qP5kfwDmV.jpg",
         "belongs_to_collection": {
             "id": 118415,
@@ -12713,7 +12445,6 @@
         "vote_average": 7.302
     },
     {
-        "adult": false,
         "backdrop_path": "/pieDnLArEw43kZxYejn3XbrNZdg.jpg",
         "belongs_to_collection": {
             "id": 559564,
@@ -12759,7 +12490,6 @@
         "vote_average": 6.6
     },
     {
-        "adult": false,
         "backdrop_path": "/A1UxV47akI0LYiNcIwifTVGEqfV.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -12808,7 +12538,6 @@
         "vote_average": 7.264
     },
     {
-        "adult": false,
         "backdrop_path": "/u9S16gXvAO9QbeNu8Y81fUwgWm7.jpg",
         "belongs_to_collection": {
             "id": 148065,
@@ -12866,7 +12595,6 @@
         "vote_average": 6.193
     },
     {
-        "adult": false,
         "backdrop_path": "/yJetT9PknmMbgwPdhrpxVU8tDKk.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -12916,7 +12644,6 @@
         "vote_average": 7.1
     },
     {
-        "adult": false,
         "backdrop_path": "/6v7k5fT3B1t9IlQs7JpSE82EZrw.jpg",
         "belongs_to_collection": {
             "id": 713969,
@@ -12962,7 +12689,6 @@
         "vote_average": 8.0
     },
     {
-        "adult": false,
         "backdrop_path": "/hNf6J498veQVdq5FhHmL08ardwf.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -13003,7 +12729,6 @@
         "vote_average": 7.466
     },
     {
-        "adult": false,
         "backdrop_path": "/a7yu3kFNsKuDdXlpcElBvBvaoIk.jpg",
         "belongs_to_collection": {
             "id": 386410,
@@ -13053,7 +12778,6 @@
         "vote_average": 6.64
     },
     {
-        "adult": false,
         "backdrop_path": "/xbEmI681B0aeYkIXQ2Nlfj42GCF.jpg",
         "belongs_to_collection": {
             "id": 263101,
@@ -13099,7 +12823,6 @@
         "vote_average": 7.872
     },
     {
-        "adult": false,
         "backdrop_path": "/A4EYBTiUFUS1av5xb5GDjvouJJN.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -13144,7 +12867,6 @@
         "vote_average": 7.613
     },
     {
-        "adult": false,
         "backdrop_path": "/l4oOfCiMqIaaL0Vyx8dnu4FENra.jpg",
         "belongs_to_collection": {
             "id": 109079,
@@ -13190,7 +12912,6 @@
         "vote_average": 7.713
     },
     {
-        "adult": false,
         "backdrop_path": "/b34gFOKl4GjW3QtZ0H7SY5NYNan.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -13240,7 +12961,6 @@
         "vote_average": 6.191
     },
     {
-        "adult": false,
         "backdrop_path": "/5VhdliaIS5Y4QQRDT0jpxfJQdfM.jpg",
         "belongs_to_collection": {
             "id": 23497,
@@ -13286,7 +13006,6 @@
         "vote_average": 6.914
     },
     {
-        "adult": false,
         "backdrop_path": "/Z4FW54wpXHcYKpCOY0OGhYwQ1I.jpg",
         "belongs_to_collection": {
             "id": 263101,
@@ -13332,7 +13051,6 @@
         "vote_average": 7.571
     },
     {
-        "adult": false,
         "backdrop_path": "/4lGB2Iy7BruiRfvVc6MZ2UM0yNX.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -13373,7 +13091,6 @@
         "vote_average": 7.341
     },
     {
-        "adult": false,
         "backdrop_path": "/zlpKUEE4A5LjaTmEz37pw2VZQug.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -13426,7 +13143,6 @@
         "vote_average": 7.679
     },
     {
-        "adult": false,
         "backdrop_path": "/41e5H3UhT7D8VYBh4rdGy5fB0lv.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -13472,7 +13188,6 @@
         "vote_average": 7.0
     },
     {
-        "adult": false,
         "backdrop_path": "/uCCFMBNIc2IqX35dApGSMsLoNJF.jpg",
         "belongs_to_collection": {
             "id": 23453,
@@ -13518,7 +13233,6 @@
         "vote_average": 7.626
     },
     {
-        "adult": false,
         "backdrop_path": "/7fC65V10NQ2lhHHQ0KA1KNA1PvO.jpg",
         "belongs_to_collection": {
             "id": 661026,
@@ -13568,7 +13282,6 @@
         "vote_average": 6.7
     },
     {
-        "adult": false,
         "backdrop_path": "/xxXFQbB55KvRzlhnUES93tIT9z0.jpg",
         "belongs_to_collection": {
             "id": 1564492,
@@ -13614,7 +13327,6 @@
         "vote_average": 7.0
     },
     {
-        "adult": false,
         "backdrop_path": "/f7anbqCTDcZPWxJsqRPqemFwXCD.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -13667,7 +13379,6 @@
         "vote_average": 6.6
     },
     {
-        "adult": false,
         "backdrop_path": "/gpCfsRtAiOTG1H4sTVQpl6edZQV.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -13708,7 +13419,6 @@
         "vote_average": 7.364
     },
     {
-        "adult": false,
         "backdrop_path": "/cojOMQvTwcPTSUc0BnRZqfKU34y.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -13753,7 +13463,6 @@
         "vote_average": 7.563
     },
     {
-        "adult": false,
         "backdrop_path": "/4RnhZgXAwvPR1P3MYj3rLfW3kts.jpg",
         "belongs_to_collection": {
             "id": 23497,
@@ -13803,7 +13512,6 @@
         "vote_average": 7.131
     },
     {
-        "adult": false,
         "backdrop_path": "/bGU8DD03FfsEPtUpu8zgu4TTHNf.jpg",
         "belongs_to_collection": {
             "id": 661025,
@@ -13861,7 +13569,6 @@
         "vote_average": 6.6
     },
     {
-        "adult": false,
         "backdrop_path": "/zpD9VRmZ1Zv7ZMsrNmutRrt0LZU.jpg",
         "belongs_to_collection": {
             "id": 661028,
@@ -13915,7 +13622,6 @@
         "vote_average": 6.507
     },
     {
-        "adult": false,
         "backdrop_path": "/pQdZmXq0vvKP1RYUrDHQkzMlS4x.jpg",
         "belongs_to_collection": {
             "id": 39244,
@@ -13965,7 +13671,6 @@
         "vote_average": 8.12
     },
     {
-        "adult": false,
         "backdrop_path": "/fy51VW2GYTfvGJfBLkCNobE3HeL.jpg",
         "belongs_to_collection": {
             "id": 824215,
@@ -14015,7 +13720,6 @@
         "vote_average": 8.157
     },
     {
-        "adult": false,
         "backdrop_path": "/ySHlkHDbXztjdjRJ0pZN7FXRnaW.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -14060,7 +13764,6 @@
         "vote_average": 7.304
     },
     {
-        "adult": false,
         "backdrop_path": "/q62ZISQcYEQdiQkGCb20VpPljJO.jpg",
         "belongs_to_collection": {
             "id": 680435,
@@ -14114,7 +13817,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/cXEZWZSxiD7w96p1sCd23FL2O9y.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -14159,7 +13861,6 @@
         "vote_average": 7.311
     },
     {
-        "adult": false,
         "backdrop_path": "/iuEhCOiMjGM1acgWJ1bSJ93Tq2a.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -14196,7 +13897,6 @@
         "vote_average": 7.492
     },
     {
-        "adult": false,
         "backdrop_path": "/55NKqRgstL3u1Oxe2gAAJUtx3jM.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -14246,7 +13946,6 @@
         "vote_average": 7.771
     },
     {
-        "adult": false,
         "backdrop_path": "/41XzkXiiDZGSYF2uBegeS2qQ3NC.jpg",
         "belongs_to_collection": {
             "id": 374202,
@@ -14292,7 +13991,6 @@
         "vote_average": 7.969
     },
     {
-        "adult": false,
         "backdrop_path": "/2cpTYNwiC7RH5pLsZs7HIL6dBWB.jpg",
         "belongs_to_collection": {
             "id": 661028,
@@ -14346,7 +14044,6 @@
         "vote_average": 6.6
     },
     {
-        "adult": false,
         "backdrop_path": "/jW5YmMRjSCQRPZJ9r5Hf62bX604.jpg",
         "belongs_to_collection": {
             "id": 140612,
@@ -14400,7 +14097,6 @@
         "vote_average": 6.816
     },
     {
-        "adult": false,
         "backdrop_path": "/iKK6KVtXrg3XxEDnt8qxtkrdrWO.jpg",
         "belongs_to_collection": {
             "id": 165743,
@@ -14450,7 +14146,6 @@
         "vote_average": 7.954
     },
     {
-        "adult": false,
         "backdrop_path": "/8hwjzxg1XgLTWK3LENj7RVyGBkb.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -14495,7 +14190,6 @@
         "vote_average": 6.892
     },
     {
-        "adult": false,
         "backdrop_path": "/b5NH2rjQFATYfkd1XYbGQWeyevx.jpg",
         "belongs_to_collection": {
             "id": 661026,
@@ -14545,7 +14239,6 @@
         "vote_average": 6.8
     },
     {
-        "adult": false,
         "backdrop_path": "/xPdUja2zYYDr148tpmxs56dpvWw.jpg",
         "belongs_to_collection": {
             "id": 53154,
@@ -14591,7 +14284,6 @@
         "vote_average": 7.7
     },
     {
-        "adult": false,
         "backdrop_path": "/obDHA3z3M6IbacldHvdsrcQjn4o.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -14640,7 +14332,6 @@
         "vote_average": 6.699
     },
     {
-        "adult": false,
         "backdrop_path": "/wDbcEcTIfTp7yDBj0zVnqpQ24N7.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -14685,7 +14376,6 @@
         "vote_average": 7.1
     },
     {
-        "adult": false,
         "backdrop_path": "/9orgGrjh0Jivz0zZLn1Ufj4NRZP.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -14730,7 +14420,6 @@
         "vote_average": 6.534
     },
     {
-        "adult": false,
         "backdrop_path": "/b0wvlhQdnBMKjkxDDs3OqHVYgCW.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -14779,7 +14468,6 @@
         "vote_average": 7.3
     },
     {
-        "adult": false,
         "backdrop_path": "/cBL5ImXZKPzYoohKUGdrJEqKys1.jpg",
         "belongs_to_collection": {
             "id": 354164,
@@ -14829,7 +14517,6 @@
         "vote_average": 7.3
     },
     {
-        "adult": false,
         "backdrop_path": "/mhwqI7dKEjVwhTbILHM3tZyarTD.jpg",
         "belongs_to_collection": {
             "id": 386410,
@@ -14871,7 +14558,6 @@
         "vote_average": 6.7
     },
     {
-        "adult": false,
         "backdrop_path": "/fJmeyANTcpTRWUHPi5cGj5rpBJ4.jpg",
         "belongs_to_collection": null,
         "budget": 2000000,
@@ -14920,7 +14606,6 @@
         "vote_average": 7.836
     },
     {
-        "adult": false,
         "backdrop_path": "/xXliNn9WUSqv5MkjrwD3cp1xXNr.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -14965,7 +14650,6 @@
         "vote_average": 7.247
     },
     {
-        "adult": false,
         "backdrop_path": "/iBl3hhtHC7qQX7jGphIAYLpmpPC.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -15010,7 +14694,6 @@
         "vote_average": 7.5
     },
     {
-        "adult": false,
         "backdrop_path": "/5Wwi4rF7wmRXbU5mJD81nV6Pg4R.jpg",
         "belongs_to_collection": {
             "id": 212166,
@@ -15056,7 +14739,6 @@
         "vote_average": 7.5
     },
     {
-        "adult": false,
         "backdrop_path": "/vjnS4iu0SdwXm2LLqZGNCfpId9t.jpg",
         "belongs_to_collection": {
             "id": 1616714,
@@ -15106,7 +14788,6 @@
         "vote_average": 8.1
     },
     {
-        "adult": false,
         "backdrop_path": "/ynhivSPoG1Wh3zqT76YZ1R3VHz9.jpg",
         "belongs_to_collection": {
             "id": 1143843,
@@ -15160,7 +14841,6 @@
         "vote_average": 6.9
     },
     {
-        "adult": false,
         "backdrop_path": "/K7hP2K921lnIr7MPoviMY0LfNP.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -15215,7 +14895,6 @@
         "vote_average": 7.164
     },
     {
-        "adult": false,
         "backdrop_path": "/xl7yVV8WH71aOBfcTgnkoGOx2qz.jpg",
         "belongs_to_collection": {
             "id": 443996,
@@ -15269,7 +14948,6 @@
         "vote_average": 7.47
     },
     {
-        "adult": false,
         "backdrop_path": "/A9Yy4ZRJgTXlKa1KOV92YLTCppn.jpg",
         "belongs_to_collection": {
             "id": 23456,
@@ -15315,7 +14993,6 @@
         "vote_average": 6.73
     },
     {
-        "adult": false,
         "backdrop_path": "/tDM4UAaHxMrvODGIUj9ZixmyVmw.jpg",
         "belongs_to_collection": {
             "id": 374202,
@@ -15369,7 +15046,6 @@
         "vote_average": 7.7
     },
     {
-        "adult": false,
         "backdrop_path": "/qfTGzbtqTBhz1krD0Zh5bCg5xlf.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -15410,7 +15086,6 @@
         "vote_average": 6.88
     },
     {
-        "adult": false,
         "backdrop_path": "/1FdYcvnpyk8vxBbw583ZzwVQ5Ev.jpg",
         "belongs_to_collection": {
             "id": 109079,
@@ -15456,7 +15131,6 @@
         "vote_average": 7.361
     },
     {
-        "adult": false,
         "backdrop_path": "/8WCbSctYQbBxU3dsFlDAZgLDyDZ.jpg",
         "belongs_to_collection": {
             "id": 141252,
@@ -15506,7 +15180,6 @@
         "vote_average": 8.113
     },
     {
-        "adult": false,
         "backdrop_path": "/85PVdQ6rr9vDmwV8FhdhAqiOqDT.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -15547,7 +15220,6 @@
         "vote_average": 6.8
     },
     {
-        "adult": false,
         "backdrop_path": "/bWui2Vgxp4f3REKQZcwwWAA5Pd.jpg",
         "belongs_to_collection": {
             "id": 14095,
@@ -15597,7 +15269,6 @@
         "vote_average": 7.607
     },
     {
-        "adult": false,
         "backdrop_path": "/pdi38HgS48AZJ1d6aJJmkJ0y71.jpg",
         "belongs_to_collection": {
             "id": 23453,
@@ -15647,7 +15318,6 @@
         "vote_average": 7.9
     },
     {
-        "adult": false,
         "backdrop_path": "/eSsuO7T8Epurn2kGJsw2Gp9E8UE.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -15692,7 +15362,6 @@
         "vote_average": 6.6
     },
     {
-        "adult": false,
         "backdrop_path": "/aCtOsEn8XwksH7njSSAXJABk7bl.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -15737,7 +15406,6 @@
         "vote_average": 6.639
     },
     {
-        "adult": false,
         "backdrop_path": "/89z0QrU5Wepd9Je4klPq1uUzEC1.jpg",
         "belongs_to_collection": {
             "id": 600207,
@@ -15779,7 +15447,6 @@
         "vote_average": 6.567
     },
     {
-        "adult": false,
         "backdrop_path": "/cJ2CNxc1AQh5raZgxeQreGKxale.jpg",
         "belongs_to_collection": {
             "id": 386410,
@@ -15825,7 +15492,6 @@
         "vote_average": 7.368
     },
     {
-        "adult": false,
         "backdrop_path": "/hSlUh9cyqYKBetWWMF703i1Byem.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -15866,7 +15532,6 @@
         "vote_average": 6.616
     },
     {
-        "adult": false,
         "backdrop_path": "/24fe6ou97ammOg3O6ShCgaiolp4.jpg",
         "belongs_to_collection": {
             "id": 703485,
@@ -15916,7 +15581,6 @@
         "vote_average": 7.686
     },
     {
-        "adult": false,
         "backdrop_path": "/ujNMvDCrKVlVkDMzfaoBCaZJVuE.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -15961,7 +15625,6 @@
         "vote_average": 7.169
     },
     {
-        "adult": false,
         "backdrop_path": "/1POfVpdNPMURXomBDXbYuk4qV73.jpg",
         "belongs_to_collection": {
             "id": 330075,
@@ -16011,7 +15674,6 @@
         "vote_average": 7.191
     },
     {
-        "adult": false,
         "backdrop_path": "/yv7jikZJrSa6MbogIns6m1sYwUC.jpg",
         "belongs_to_collection": {
             "id": 535790,
@@ -16053,7 +15715,6 @@
         "vote_average": 6.56
     },
     {
-        "adult": false,
         "backdrop_path": "/3c4BQzT0sS09IA5gRtJFIgyh95b.jpg",
         "belongs_to_collection": {
             "id": 263101,
@@ -16099,7 +15760,6 @@
         "vote_average": 7.792
     },
     {
-        "adult": false,
         "backdrop_path": "/prs7S1Gp6UL2ByRaZdbmEGNwLOP.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -16140,7 +15800,6 @@
         "vote_average": 7.213
     },
     {
-        "adult": false,
         "backdrop_path": "/hf1huOYmOGlahJqGHSLpy4VetGo.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -16181,7 +15840,6 @@
         "vote_average": 6.852
     },
     {
-        "adult": false,
         "backdrop_path": "/y2E2lNUE2VQbHchKpvGV3rVXS8K.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -16222,7 +15880,6 @@
         "vote_average": 6.6
     },
     {
-        "adult": false,
         "backdrop_path": "/f7EQtjydqW0F76fUpBvxqxKskjd.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -16267,7 +15924,6 @@
         "vote_average": 7.399
     },
     {
-        "adult": false,
         "backdrop_path": "/rmhhTF2fr8w6iNh8KHNi6EqWLZv.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -16308,7 +15964,6 @@
         "vote_average": 6.7
     },
     {
-        "adult": false,
         "backdrop_path": "/qOqpRqFulhrOox5GTuh29MtQ3pU.jpg",
         "belongs_to_collection": {
             "id": 524143,
@@ -16362,7 +16017,6 @@
         "vote_average": 7.275
     },
     {
-        "adult": false,
         "backdrop_path": "/8t6l0IW0weM02S4NMCNcnLkzCM6.jpg",
         "belongs_to_collection": {
             "id": 143302,
@@ -16408,7 +16062,6 @@
         "vote_average": 6.8
     },
     {
-        "adult": false,
         "backdrop_path": "/upDUDOlpGBPGwV6A4vs0y2Whzg0.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -16453,7 +16106,6 @@
         "vote_average": 7.197
     },
     {
-        "adult": false,
         "backdrop_path": "/40XTRnRRDZ4TzbjcrfW3WvtSsKW.jpg",
         "belongs_to_collection": {
             "id": 53154,
@@ -16503,7 +16155,6 @@
         "vote_average": 7.7
     },
     {
-        "adult": false,
         "backdrop_path": "/2jlmBNJrsZnKoBWUtUVkil9iyXO.jpg",
         "belongs_to_collection": {
             "id": 165743,
@@ -16557,7 +16208,6 @@
         "vote_average": 7.239
     },
     {
-        "adult": false,
         "backdrop_path": "/lTbYegQ35QRWlWvDqYwS0okFiY4.jpg",
         "belongs_to_collection": {
             "id": 579253,
@@ -16607,7 +16257,6 @@
         "vote_average": 7.475
     },
     {
-        "adult": false,
         "backdrop_path": "/zyqfXxJVhPOTIKHDeFBQXx1IIXl.jpg",
         "belongs_to_collection": {
             "id": 579253,
@@ -16653,7 +16302,6 @@
         "vote_average": 7.43
     },
     {
-        "adult": false,
         "backdrop_path": "/mb4zYs2vcwETCusaBJqsvi1xilZ.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -16706,7 +16354,6 @@
         "vote_average": 7.7
     },
     {
-        "adult": false,
         "backdrop_path": "/dS1rOjnhgqTbEebLLAIQ7tG7hyB.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -16763,7 +16410,6 @@
         "vote_average": 6.969
     },
     {
-        "adult": false,
         "backdrop_path": "/Agt0eZRu9N7W17FJDNMOqYlqNDx.jpg",
         "belongs_to_collection": {
             "id": 499070,
@@ -16813,7 +16459,6 @@
         "vote_average": 6.219
     },
     {
-        "adult": false,
         "backdrop_path": "/gkhnCTG6IvmUVTUMfR1XXFh5fae.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -16858,7 +16503,6 @@
         "vote_average": 7.205
     },
     {
-        "adult": false,
         "backdrop_path": "/qMxpGzmmnY1jLd4p7EhhoW43wWF.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -16899,7 +16543,6 @@
         "vote_average": 5.909
     },
     {
-        "adult": false,
         "backdrop_path": "/50EWD1FDmTmQnq90iqDuZNLrZQJ.jpg",
         "belongs_to_collection": {
             "id": 754601,
@@ -16949,7 +16592,6 @@
         "vote_average": 7.1
     },
     {
-        "adult": false,
         "backdrop_path": "/sxgIHRBgmJgSt7jByEM1WUk2bJt.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -16994,7 +16636,6 @@
         "vote_average": 7.1
     },
     {
-        "adult": false,
         "backdrop_path": "/3AQf7ne7L6FsXbphdNDIczC8Bfd.jpg",
         "belongs_to_collection": {
             "id": 1185967,
@@ -17048,7 +16689,6 @@
         "vote_average": 7.305
     },
     {
-        "adult": false,
         "backdrop_path": "/oPaDTUGaqIfUo40LangGZgeZBmY.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -17089,7 +16729,6 @@
         "vote_average": 7.2
     },
     {
-        "adult": false,
         "backdrop_path": "/9ahTjsTLJAxbkCQ49J1zzsIzQrP.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -17134,7 +16773,6 @@
         "vote_average": 6.654
     },
     {
-        "adult": false,
         "backdrop_path": "/6s1ONEuRCcMTvptATfA5Y5WVHEw.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -17183,7 +16821,6 @@
         "vote_average": 7.0
     },
     {
-        "adult": false,
         "backdrop_path": "/p1nXKEZAzGuFNNSVD1WM1uVrk1F.jpg",
         "belongs_to_collection": {
             "id": 688209,
@@ -17237,7 +16874,6 @@
         "vote_average": 8.27
     },
     {
-        "adult": false,
         "backdrop_path": "/dQmxPgx2ymhGNnF9YjGBeilYEw2.jpg",
         "belongs_to_collection": {
             "id": 23240,
@@ -17295,7 +16931,6 @@
         "vote_average": 7.7
     },
     {
-        "adult": false,
         "backdrop_path": "/zw38XzfM7AGBrKQCJDnPU3mz9WC.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -17340,7 +16975,6 @@
         "vote_average": 6.7
     },
     {
-        "adult": false,
         "backdrop_path": "/Dnk4iSqqNkZBJBPeFdAegTaxD5.jpg",
         "belongs_to_collection": {
             "id": 620873,
@@ -17386,7 +17020,6 @@
         "vote_average": 7.923
     },
     {
-        "adult": false,
         "backdrop_path": "/1lRLUzmdhmM3mrnMgTDfzKllE8u.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -17427,7 +17060,6 @@
         "vote_average": 7.062
     },
     {
-        "adult": false,
         "backdrop_path": "/dEeclgUEcAOhBRwLjW58Qk6lRvi.jpg",
         "belongs_to_collection": {
             "id": 53154,
@@ -17473,7 +17105,6 @@
         "vote_average": 7.6
     },
     {
-        "adult": false,
         "backdrop_path": "/3igN3WJmYEBNl68BbgcRpKflUVK.jpg",
         "belongs_to_collection": {
             "id": 196753,
@@ -17523,7 +17154,6 @@
         "vote_average": 6.938
     },
     {
-        "adult": false,
         "backdrop_path": "/x6Dxc9Z17Yt9gtq7Dq6uCPbPcxD.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -17560,7 +17190,6 @@
         "vote_average": 6.6
     },
     {
-        "adult": false,
         "backdrop_path": "/AkyvSlL1XASeZolYjJRvzWjaTOF.jpg",
         "belongs_to_collection": {
             "id": 98435,
@@ -17610,7 +17239,6 @@
         "vote_average": 7.446
     },
     {
-        "adult": false,
         "backdrop_path": "/clFQR5zwzDrayMVVe7axo0YLFfh.jpg",
         "belongs_to_collection": {
             "id": 511109,
@@ -17664,7 +17292,6 @@
         "vote_average": 7.5
     },
     {
-        "adult": false,
         "backdrop_path": "/5qUOt27ZEZ2AtmMcnNgcuBijPPJ.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -17701,7 +17328,6 @@
         "vote_average": 5.4
     },
     {
-        "adult": false,
         "backdrop_path": "/fZxQc2xBqxOJt6q0R8bwq5oe7C9.jpg",
         "belongs_to_collection": {
             "id": 96850,
@@ -17751,7 +17377,6 @@
         "vote_average": 6.711
     },
     {
-        "adult": false,
         "backdrop_path": "/3LVz65LojUy53qGSbuUWZWCJXXD.jpg",
         "belongs_to_collection": {
             "id": 196753,
@@ -17801,7 +17426,6 @@
         "vote_average": 7.0
     },
     {
-        "adult": false,
         "backdrop_path": "/i7oKytMBPC0uJwPFDpfr3DsDxkL.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -17838,7 +17462,6 @@
         "vote_average": 6.7
     },
     {
-        "adult": false,
         "backdrop_path": "/x4pfbhYvn0Nr5mYqBkJAD9LwLoD.jpg",
         "belongs_to_collection": {
             "id": 23240,
@@ -17892,7 +17515,6 @@
         "vote_average": 6.734
     },
     {
-        "adult": false,
         "backdrop_path": "/pJszL2mPl084IDSzLDPH8NqIq0r.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -17945,7 +17567,6 @@
         "vote_average": 6.8
     },
     {
-        "adult": false,
         "backdrop_path": "/ydhtzzLouUZsMSnCiswAkaPQrB6.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -17994,7 +17615,6 @@
         "vote_average": 7.932
     },
     {
-        "adult": false,
         "backdrop_path": "/aB80Rzlz0R9D1FzguFgwwnzZJqL.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18035,7 +17655,6 @@
         "vote_average": 7.473
     },
     {
-        "adult": false,
         "backdrop_path": "/6MT2Ub0qdXP8ZzKuRZoJEa639H5.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18080,7 +17699,6 @@
         "vote_average": 7.8
     },
     {
-        "adult": false,
         "backdrop_path": "/9R2YxSFjA3JEYFVYXfc4X7PAK8S.jpg",
         "belongs_to_collection": {
             "id": 196753,
@@ -18126,7 +17744,6 @@
         "vote_average": 6.768
     },
     {
-        "adult": false,
         "backdrop_path": "/bOlXLkgFb01lPkdwYWUqWKrfXLH.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18171,7 +17788,6 @@
         "vote_average": 6.8
     },
     {
-        "adult": false,
         "backdrop_path": "/uPgY2vL5rOSF3DtcLHC0WP06XS9.jpg",
         "belongs_to_collection": {
             "id": 443996,
@@ -18213,7 +17829,6 @@
         "vote_average": 7.561
     },
     {
-        "adult": false,
         "backdrop_path": "/kWT9hKpbd0MhvQ38Dga1KAVMrqU.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18254,7 +17869,6 @@
         "vote_average": 6.7
     },
     {
-        "adult": false,
         "backdrop_path": "/19SRSM2ybfVpCBxBFLXwyD18WkM.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18307,7 +17921,6 @@
         "vote_average": 7.484
     },
     {
-        "adult": false,
         "backdrop_path": "/z85BQhs5WIQDnRVZC62b6zLsGIZ.jpg",
         "belongs_to_collection": {
             "id": 87800,
@@ -18353,7 +17966,6 @@
         "vote_average": 6.717
     },
     {
-        "adult": false,
         "backdrop_path": "/7YFdTx2os9Nx5oNRjtZutRNWmus.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18390,7 +18002,6 @@
         "vote_average": 7.236
     },
     {
-        "adult": false,
         "backdrop_path": "/bt3hh1kbNJhntZT5hQCWImKBJzj.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18435,7 +18046,6 @@
         "vote_average": 6.018
     },
     {
-        "adult": false,
         "backdrop_path": "/gxEsfgJxgqYL3hlg9yKNU8Qsycq.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18476,7 +18086,6 @@
         "vote_average": 6.6
     },
     {
-        "adult": false,
         "backdrop_path": "/xWoQPSqJxB8P6Non8kyMSvtna9Y.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18517,7 +18126,6 @@
         "vote_average": 6.759
     },
     {
-        "adult": false,
         "backdrop_path": "/tHXVS60sI0jeU2RcMb3ry9aHrG1.jpg",
         "belongs_to_collection": {
             "id": 122661,
@@ -18567,7 +18175,6 @@
         "vote_average": 6.9
     },
     {
-        "adult": false,
         "backdrop_path": "/jKGC5KoRza6IX5aKBnovBXH4Vey.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18604,7 +18211,6 @@
         "vote_average": 6.953
     },
     {
-        "adult": false,
         "backdrop_path": "/viu7bXs0coL7c1B7J0izS6Xs5wT.jpg",
         "belongs_to_collection": {
             "id": 754601,
@@ -18654,7 +18260,6 @@
         "vote_average": 7.8
     },
     {
-        "adult": false,
         "backdrop_path": "/h1iPLE2jTWFPKdM8YIDiTgEgbAf.jpg",
         "belongs_to_collection": {
             "id": 98435,
@@ -18704,7 +18309,6 @@
         "vote_average": 6.97
     },
     {
-        "adult": false,
         "backdrop_path": "/9CxwriuI30YxGhKqLnr5A8FgP9r.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18750,7 +18354,6 @@
         "vote_average": 7.058
     },
     {
-        "adult": false,
         "backdrop_path": "/j2ExXeaolTgJzWPgX1n3jfy3KBH.jpg",
         "belongs_to_collection": {
             "id": 196753,
@@ -18800,7 +18403,6 @@
         "vote_average": 7.022
     },
     {
-        "adult": false,
         "backdrop_path": "/17s9ojb8j8QnBGCfqDUJraXLlFi.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18846,7 +18448,6 @@
         "vote_average": 6.862
     },
     {
-        "adult": false,
         "backdrop_path": "/5YqRkuIrq7ze7i58XTPCuSY2tnz.jpg",
         "belongs_to_collection": {
             "id": 1185967,
@@ -18900,7 +18501,6 @@
         "vote_average": 7.0
     },
     {
-        "adult": false,
         "backdrop_path": "/uf3Y6AoO7jBfdFfFjGe3BhLNgbj.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18941,7 +18541,6 @@
         "vote_average": 7.198
     },
     {
-        "adult": false,
         "backdrop_path": "/fMzTeudMs25huf4gRxvlnrcPvbv.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -18994,7 +18593,6 @@
         "vote_average": 7.824
     },
     {
-        "adult": false,
         "backdrop_path": "/wf6VDSi4aFCZfuD8sX8JAKLfJ5m.jpg",
         "belongs_to_collection": {
             "id": 39199,
@@ -19048,7 +18646,6 @@
         "vote_average": 6.2
     },
     {
-        "adult": false,
         "backdrop_path": "/ot1qNzXY5DAcTGbDdIWUS4Lahpo.jpg",
         "belongs_to_collection": {
             "id": 797672,
@@ -19094,7 +18691,6 @@
         "vote_average": 7.3
     },
     {
-        "adult": false,
         "backdrop_path": "/js0PWQpaYp708MQs3rPtUvsPSL2.jpg",
         "belongs_to_collection": {
             "id": 1185967,
@@ -19148,7 +18744,6 @@
         "vote_average": 6.8
     },
     {
-        "adult": false,
         "backdrop_path": "/7PzpnGL4W0oy1NAd0toIZeuDt0G.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -19189,7 +18784,6 @@
         "vote_average": 6.2
     },
     {
-        "adult": false,
         "backdrop_path": "/gTecjgfB8UEQwDKyEA56IhnLM9X.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -19230,7 +18824,6 @@
         "vote_average": 6.1
     },
     {
-        "adult": false,
         "backdrop_path": "/1MWwdzZAdEac2VRkvNWRAWx340s.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -19275,7 +18868,6 @@
         "vote_average": 7.513
     },
     {
-        "adult": false,
         "backdrop_path": "/hNbMcDipWnMMmWzkOa0cuw7ZoSy.jpg",
         "belongs_to_collection": {
             "id": 1646397,
@@ -19321,7 +18913,6 @@
         "vote_average": 6.431
     },
     {
-        "adult": false,
         "backdrop_path": "/9yDEQpI0wMjVZwnFeOFRQD03RmF.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -19366,7 +18957,6 @@
         "vote_average": 6.3
     },
     {
-        "adult": false,
         "backdrop_path": "/3r9Oi2pzvhGCH3XLQT03Tf9Biyp.jpg",
         "belongs_to_collection": {
             "id": 23240,
@@ -19424,7 +19014,6 @@
         "vote_average": 7.0
     },
     {
-        "adult": false,
         "backdrop_path": "/i5De1yRYk2F8BwrqEaVZamNKc26.jpg",
         "belongs_to_collection": {
             "id": 207415,
@@ -19470,7 +19059,6 @@
         "vote_average": 7.307
     },
     {
-        "adult": false,
         "backdrop_path": "/c9oXEsq8XekEMBoHsrwnWXRFJ9S.jpg",
         "belongs_to_collection": {
             "id": 1159908,
@@ -19521,7 +19109,6 @@
         "vote_average": 6.744
     },
     {
-        "adult": false,
         "backdrop_path": "/m5DxRZhJO7aluDyHW40M8cEBZAv.jpg",
         "belongs_to_collection": {
             "id": 1192656,
@@ -19567,7 +19154,6 @@
         "vote_average": 7.76
     },
     {
-        "adult": false,
         "backdrop_path": "/poTFhNtA1kZa3Qb6ulCwa5HPEKb.jpg",
         "belongs_to_collection": {
             "id": 1236871,
@@ -19617,7 +19203,6 @@
         "vote_average": 6.441
     },
     {
-        "adult": false,
         "backdrop_path": "/2VtpkzTFLJHdGQK4TM7cwXztA6i.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -19658,7 +19243,6 @@
         "vote_average": 7.025
     },
     {
-        "adult": false,
         "backdrop_path": "/2c72ElZ8UkgwVp2w8TJ1AbIGCO2.jpg",
         "belongs_to_collection": {
             "id": 754601,
@@ -19708,7 +19292,6 @@
         "vote_average": 7.4
     },
     {
-        "adult": false,
         "backdrop_path": "/ofWKjiaChi2wpIaGZrUi39douFQ.jpg",
         "belongs_to_collection": {
             "id": 1443836,
@@ -19759,7 +19342,6 @@
         "vote_average": 7.174
     },
     {
-        "adult": false,
         "backdrop_path": "/dW6NGJrgeBjBB4TK6RDG9sXpJCA.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -19805,7 +19387,6 @@
         "vote_average": 7.486
     },
     {
-        "adult": false,
         "backdrop_path": "/lSR1VbHmKMeJte0NWcIKudO0NEt.jpg",
         "belongs_to_collection": {
             "id": 23240,
@@ -19859,7 +19440,6 @@
         "vote_average": 6.7
     },
     {
-        "adult": false,
         "backdrop_path": "/pfdCuGOx2mJuDDtRoUMxNle4R5M.jpg",
         "belongs_to_collection": {
             "id": 286936,
@@ -19905,7 +19485,6 @@
         "vote_average": 7.0
     },
     {
-        "adult": false,
         "backdrop_path": "/g08t3r6oesgg2Js0bQgWY4ZnHY1.jpg",
         "belongs_to_collection": {
             "id": 1300055,
@@ -19947,7 +19526,6 @@
         "vote_average": 7.605
     },
     {
-        "adult": false,
         "backdrop_path": "/5jbIVp6dwGoVovMSXqJfCOGfryP.jpg",
         "belongs_to_collection": {
             "id": 87800,
@@ -19997,7 +19575,6 @@
         "vote_average": 6.479
     },
     {
-        "adult": false,
         "backdrop_path": "/uUqvPLW2hcKi3zIUoFA7CG61Az6.jpg",
         "belongs_to_collection": {
             "id": 23240,
@@ -20047,7 +19624,6 @@
         "vote_average": 6.9
     },
     {
-        "adult": false,
         "backdrop_path": "/1SeydkGlChbUrYJeV95TNSLQsFt.jpg",
         "belongs_to_collection": {
             "id": 145553,
@@ -20093,7 +19669,6 @@
         "vote_average": 6.5
     },
     {
-        "adult": false,
         "backdrop_path": "/7yI5snbydDIB9VTgrSUYXSt7lT1.jpg",
         "belongs_to_collection": {
             "id": 330075,
@@ -20143,7 +19718,6 @@
         "vote_average": 7.142
     },
     {
-        "adult": false,
         "backdrop_path": "/rNSQoUBzW8qXHniyYxN2OrwlKI7.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -20184,7 +19758,6 @@
         "vote_average": 7.25
     },
     {
-        "adult": false,
         "backdrop_path": "/cyL9OsDazviewaDbXtJJBynrRTw.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -20225,7 +19798,6 @@
         "vote_average": 7.0
     },
     {
-        "adult": false,
         "backdrop_path": "/7RIzZ8QisnJiYUodS1F8iUpWA68.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -20266,7 +19838,6 @@
         "vote_average": 7.113
     },
     {
-        "adult": false,
         "backdrop_path": "/etYJwcURiuFK12zqoi9n1lQuQuS.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -20307,7 +19878,6 @@
         "vote_average": 6.614
     },
     {
-        "adult": false,
         "backdrop_path": "/6Jy5KuVULJg45vaBH7HEOdTYPVf.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -20348,7 +19918,6 @@
         "vote_average": 7.123
     },
     {
-        "adult": false,
         "backdrop_path": "/myxbgobjPN13kdKBrVneiyc3tmM.jpg",
         "belongs_to_collection": {
             "id": 87800,
@@ -20394,7 +19963,6 @@
         "vote_average": 6.733
     },
     {
-        "adult": false,
         "backdrop_path": "/irZR9ItAY1UckSDk6nJUPhv9cQn.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -20435,7 +20003,6 @@
         "vote_average": 7.077
     },
     {
-        "adult": false,
         "backdrop_path": "/6DJElbEDPa6iTy9QgH0Hy6t7Vz1.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -20476,7 +20043,6 @@
         "vote_average": 8.1
     },
     {
-        "adult": false,
         "backdrop_path": "/1EfLDlkrcgSUgxVT56T9PGUGs5N.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -20513,7 +20079,6 @@
         "vote_average": 7.907
     },
     {
-        "adult": false,
         "backdrop_path": "/4eifGTQNH0Gk4JemP6r1vlQ6iOS.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -20558,7 +20123,6 @@
         "vote_average": 7.441
     },
     {
-        "adult": false,
         "backdrop_path": "/m7gw5jZrzyA6n81iOPxilPOYjNg.jpg",
         "belongs_to_collection": {
             "id": 1309496,
@@ -20596,7 +20160,6 @@
         "vote_average": 6.701
     },
     {
-        "adult": false,
         "backdrop_path": "/h1QkiaDhNm12zyESO51AvA3AXYR.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -20637,7 +20200,6 @@
         "vote_average": 7.8
     },
     {
-        "adult": false,
         "backdrop_path": "/e6CnfsN7wnhZEMqh5EnCfTDXQ7g.jpg",
         "belongs_to_collection": {
             "id": 703485,
@@ -20687,7 +20249,6 @@
         "vote_average": 7.53
     },
     {
-        "adult": false,
         "backdrop_path": "/xyrhnScvUOuqUDoeRbZ9pmXHaUQ.jpg",
         "belongs_to_collection": null,
         "budget": 0,
@@ -20724,7 +20285,6 @@
         "vote_average": 7.93
     },
     {
-        "adult": false,
         "backdrop_path": "/aHaqZpOL7UyVu0nKqp3SMz0o2E1.jpg",
         "belongs_to_collection": null,
         "budget": 3700000,
@@ -20765,7 +20325,6 @@
         "vote_average": 8.442
     },
     {
-        "adult": false,
         "backdrop_path": "/qknxyRgP6UTmwJ4B9tDAmzHMq7u.jpg",
         "belongs_to_collection": null,
         "budget": 0,
