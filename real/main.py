@@ -503,7 +503,7 @@ class SearchFrame(ctk.CTkFrame):
     def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text="Search", font=TITLE_FONT)
         self.filter_sort_frame = FilterSortFrame(self)
-        self.a_button = ctk.CTkButton(self, text="Search button", command=self.button_callback)
+        self.a_button = ctk.CTkButton(self, text="Search button", command=self.button_callback, font=TEXT_FONT)
 
         self.title_label.grid(row=0, column=0, sticky="nsew")
         self.filter_sort_frame.grid(row=1, column=0)

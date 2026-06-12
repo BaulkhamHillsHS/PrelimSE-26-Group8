@@ -92,3 +92,5 @@ decide how to config settings, account, subscription, viewing history, subscript
 add ctrl+ ctrl- zoom hotkeys
 
 watching media and writing time + duration to a json or csv entry
+
+tv show and anime movies and tv shows support for search and home (only includes movies rn)
