@@ -3,6 +3,29 @@ from PIL import Image as im
 from PIL import ImageTk, ImageEnhance
 import random
 import math
+from pathlib import Path
+import os
+
+base = Path(__file__).resolve().parent
+resources = {}
+image_list = [
+    "blind",
+    "eye",
+    "icon0",
+    "icon1",
+    "lock",
+    "person"
+]
+for image in image_list:
+    image_path = os.path.join(base, image+".png")
+    resources[image] = image_path
+
+font_list = [
+    "Inter-VariableFont_opsz,wght",
+    "Poppins-Regular"
+]
+for font in font_list:
+    resources[font] = os.path.join(base, font+".ttf")
 
 def pos(x: int, y: int, x_offset: int = 0, y_offset: int = 0) -> str:
     return f"{x}x{y}+{x_offset-8}+{y_offset}"
@@ -118,10 +141,10 @@ class Login(ctk.CTkFrame):
         self.images_count = 9
         self.row_count = 7
         
-        pil_image = im.open("icon0.png")
-        pil_image_dark = ImageEnhance.Brightness(im.open("icon0.png")).enhance(0.6)
+        pil_image = im.open(resources["icon0"])
+        pil_image_dark = ImageEnhance.Brightness(im.open(resources["icon0"])).enhance(0.6)
 
-        # ctk.FontManager.load_font("Poppins-Regular.ttf")
+        # ctk.FontManager.load_font(resources["Poppins-Regular"])
         
         main_font = ctk.CTkFont(family="Inter Regular", size=16)
 
@@ -144,10 +167,10 @@ class Login(ctk.CTkFrame):
                 image = Image(self.canvas, self.image if j % 2 == 0 else self.image_dark, (SCREEN_WIDTH / self.images_count * i - self.image_sizes[j % 2][0] / 2 + x_offset, y_pos), speed)
                 self.images.append(image)
         
-        login_panel = Panel(self.canvas, (w:=400), (f := 0.85)*SCREEN_HEIGHT, 40, ((self.SCREEN_WIDTH - w) / 2, (1 - f)*self.SCREEN_HEIGHT / 2), "#36363B", (30, 30, 30, 30))
+        login_panel = Panel(self.canvas, (w:=400), (f := 0.85)*SCREEN_HEIGHT, 40, ((SCREEN_WIDTH - w) / 2, (1 - f)*SCREEN_HEIGHT / 2), "#36363B", (30, 30, 30, 30))
         
         # Content goes here
-        title = im.open("netty.png")
+        title = im.open(resources["netty"])
         title_pad = 30
         
         self.asdf = ImageTk.PhotoImage(title.resize(((w_x:=login_panel.get_udim()[0] - 2 * title_pad), int(title.size[1] / title.size[0] * w_x))))
@@ -161,7 +184,7 @@ class Login(ctk.CTkFrame):
         
         self.email = ctk.CTkEntry(self.email_frame, font=main_font, placeholder_text="Email or mobile number", border_width=0, fg_color="#4C4C53", text_color="#98989B")
         self.email.grid(row=0, column=1, sticky="nesw", pady=2, padx=(0, 15))
-        self.person_icon = ctk.CTkLabel(self.email_frame, image=ctk.CTkImage(light_image=(p:=im.open("person.png")), size=p.size), text="")
+        self.person_icon = ctk.CTkLabel(self.email_frame, image=ctk.CTkImage(light_image=(p:=im.open(resources["person"])), size=p.size), text="")
         self.person_icon.grid(row=0, column=0, padx=(12, 10))
         
         self.password_frame = ctk.CTkFrame(self, login_panel.get_udim()[0], 56, 10, bg_color="#36363B", fg_color="#4C4C53", border_width=2, border_color="#6F6F70")
@@ -172,10 +195,10 @@ class Login(ctk.CTkFrame):
         
         self.password = ctk.CTkEntry(self.password_frame, font=main_font, placeholder_text="Password", border_width=0, fg_color="#4C4C53", show="•", text_color="#98989B")
         self.password.grid(row=0, column=1, sticky="nesw", pady=2, padx=(0, 15))
-        self.lock_icon = ctk.CTkLabel(self.password_frame, image=ctk.CTkImage(light_image=(p:=im.open("lock.png")), size=p.size), text="")
+        self.lock_icon = ctk.CTkLabel(self.password_frame, image=ctk.CTkImage(light_image=(p:=im.open(resources["lock"])), size=p.size), text="")
         self.lock_icon.grid(row=0, column=0, padx=(12, 10))
         
-        self.visibility = [im.open("eye.png"), im.open("blind.png")]
+        self.visibility = [im.open(resources["eye"]), im.open(resources["blind"])]
         self.hide = ctk.CTkButton(self.password_frame, width=0, height=40, text="", fg_color="#4C4C53", image=ctk.CTkImage(light_image=(p:=self.visibility[1]), size=p.size), command=lambda: self.toggle_show(self.password, self.hide), anchor="center", hover_color="#4C4C53")
         self.hide.grid(row=0, column=2, padx=(0, 5), pady=(3, 0))
         
