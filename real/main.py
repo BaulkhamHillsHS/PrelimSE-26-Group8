@@ -156,22 +156,20 @@ class Media():
     def get_poster(self):
         return self.poster
     
-    def get_data(self, key=None):
-        if key in self.media_data:
-            return self.media_data[key]
-        return self.media_data
+    def get_data(self, key: str, default):
+        return self.media_data.get(key, default)
     
     def get_runtime(self):
-        return self.get_data("runtime")
+        return self.get_data("runtime", 0)
     
     def __str__(self) -> str:
         return "Base Media"
     
     def get_title(self) -> str:
-        return str(self.get_data("title"))
+        return str(self.get_data("title", ""))
 
     def get_id(self) -> int:
-        movie_id = self.get_data("id")
+        movie_id = self.get_data("id", 0)
         assert type(movie_id) == int
         return movie_id
     
@@ -189,12 +187,12 @@ class Movie(Media):
 class Show(Media):
     def __init__(self, media_data, dimensions: tuple[int, int]=(500, 750)):
         super().__init__(media_data, dimensions=dimensions)
-        season_data = self.get_data("seasons")
+        season_data = self.get_data("seasons", [])
         self.season_count = len(season_data)
         self.seasons = [Season(season_data[i]) for i in range(self.season_count)]
 
     def __str__(self) -> str:
-        return str(self.get_data("name"))
+        return str(self.get_data("name", ""))
     
     def get_seasons(self):
         return self.seasons
@@ -205,46 +203,53 @@ class Show(Media):
         return self.get_seasons()[n]
     
     def set_poster(self):
-        self.pillow_image = Image.open(os.path.join(posters_path, f"tv_{self.get_id()}"))
+        self.pillow_image = Image.open(os.path.join(posters_path, f"t_{self.get_id()}.jpg"))
         self.poster = ctk.CTkImage(self.pillow_image, size=self.dimensions)
+
+class Episode():
+    def __init__(self, episode_number: int):
+        self.episode_number = episode_number
+    
+    def __str__(self) -> str:
+        return str(self.episode_number)
 
 class Season():
     def __init__(self, media_data: dict, dimensions=(500, 750)):
         self.media_data = media_data
-        self.season_number = self.get_data("season_number")
-        self.pillow_image = Image.open(os.path.join(posters_path, f"s_{self.get_id()}")) # FIXME: incomplete imp
-        self.poster = ctk.CTkImage(self.pillow_image, size=dimensions)
+        self.season_number = self.get_data("season_number", 0)
+        #self.pillow_image = Image.open(os.path.join(posters_path, f"s_{self.get_id()}.jpg")) # FIXME: incomplete imp
+        #self.poster = ctk.CTkImage(self.pillow_image, size=dimensions)
+        self.episode_count = int(self.get_data("episode_count", 0)) # 
+        #self.episodes = [Episode(i) for i in range(1, self.episode_count+1)] FIXME: lag
     
-    def get_data(self, key=None):
-        if key in self.media_data:
-            return self.media_data[key]
-        return self.media_data
+    def get_data(self, key: str, default):
+        return self.media_data.get(key, default)
 
     def get_episode_count(self):
-        return str(self.get_data("episode_count"))
+        return str(self.episode_count)
 
     def __str__(self) -> str:
-        return str(self.get_data("name"))
+        return str(self.get_data("name", ""))
 
     def get_id(self) -> int:
-        movie_id = self.get_data("id")
+        movie_id = self.get_data("id", 0)
         assert type(movie_id) == int
         return movie_id
     
-
-def movie_get_attribute(movie_data, attribute) -> Union[str, int, float]:
+def media_get_attribute(data, attribute, default) -> Union[str, int, float]:
     match attribute:
         case "score_rating":
-            return movie_data["vote_average"]
+            return data["vote_average"]
         case "age rating":
             raise ValueError() # FIXME:
         case "length":
-            return movie_data["runtime"]
+            return data["runtime"]
         case "genre":
-            return movie_data["genres"]
+            return data["genres"]
         case "popularity":
-            return movie_data["popularity"]
-    raise ValueError() # FIXME:
+            return data["popularity"]
+        case _:
+            return data.get(attribute, default)
 
 def restriction_check(filter: str, restriction: str, movie_data: dict):
     assert filter in FILTER_SORT_OPTIONS
@@ -299,7 +304,7 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
             out.append(movie)
     if sort_by=="any":
         return out[:count]
-    out.sort(key=lambda x: movie_get_attribute(x, sort_by), reverse=decreasing) # FIXME: tv show anime support
+    out.sort(key=lambda x: media_get_attribute(x, sort_by, 0), reverse=decreasing) # FIXME: tv show anime support
     out_movies = [Movie(x) for x in out[:count]]
     return out_movies
 
@@ -396,29 +401,29 @@ class Sidebar(ctk.CTkFrame):
     def handle_button_press(self, button):
         self.handle_function(button)
 
-class Moviebar(ctk.CTkScrollableFrame):
-    def __init__(self, master, movies):
+class Mediabar(ctk.CTkScrollableFrame):
+    def __init__(self, master, media):
         super().__init__(master, orientation="horizontal")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
-        self.movies = movies
-        self.movie_images = []
+        self.media = media
+        self.images = []
         self.build_ui()
 
     def build_ui(self):
-        for i, movie in enumerate(self.movies):
-            assert type(movie)==Movie
-            movie_image = movie.get_poster()
-            movie_label = ctk.CTkLabel(self, image=movie_image, text="", fg_color="transparent")
-            self.movie_images.append(movie_image)
-            movie_label.grid(row=0, column=i, sticky="ew", pady=0, padx=(10, 10))
+        for i, media in enumerate(self.media):
+            assert type(media) in [Movie, Show]
+            media_image = media.get_poster()
+            media_label = ctk.CTkLabel(self, image=media_image, text="", fg_color="transparent")
+            self.images.append(media_image)
+            media_label.grid(row=0, column=i, sticky="ew", pady=0, padx=(10, 10))
 
 class LabelledMoviebar(ctk.CTkFrame):
     def __init__(self, master, name, movies):
         super().__init__(master)
         self.name = name
         self.movies = movies
-        self.movie_bar = Moviebar(self, self.movies)
+        self.movie_bar = Mediabar(self, self.movies)
         self.rowconfigure((0, 1), weight=1)
         self.columnconfigure(0, weight=1)
         self.build_ui()
@@ -437,7 +442,7 @@ class HomeFrame(ctk.CTkScrollableFrame):
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure((1, 2, 3, 4, 5), weight=1)
         self.movie_bar_1 = LabelledMoviebar(self, name="Recommended movies", movies=[Movie(random.choice(jsons["movie"]), POSTER_SIZE) for x in range(20)])
-        self.movie_bar_2 = LabelledMoviebar(self, name="TV shows", movies=[Movie(random.choice(jsons["movie"]), POSTER_SIZE) for x in range(5)])
+        self.movie_bar_2 = LabelledMoviebar(self, name="TV shows", movies=[Show(random.choice(jsons["tv"]), POSTER_SIZE) for x in range(5)])
         self.movie_bar_3 = LabelledMoviebar(self, name="placeholder 3", movies=[])
         self.movie_bar_4 = LabelledMoviebar(self, name="Explore(random)", movies=[Movie(random.choice(jsons["movie"]), POSTER_SIZE) for x in range(5)]) # FIXME: Hack
         self.movie_bar_5 = LabelledMoviebar(self, name="Explore(not random)", movies=[Movie(jsons["movie"][i], POSTER_SIZE) for i in range(5)]) # FIXME: Hack
@@ -512,6 +517,7 @@ class SearchFrame(ctk.CTkFrame):
     def button_callback(self):
         print(self.filter_sort_frame.get_filter())
         print(self.filter_sort_frame.get_sort())
+        
 
 class StarredFrame(ctk.CTkFrame):
     def __init__(self, master):

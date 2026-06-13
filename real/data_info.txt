@@ -1,6 +1,6 @@
 resource/posters/
-m_{id}.jpeg
-t_{id}.jpeg
+m_{id}.jpg
+t_{id}.jpg
 
 jsons are lists
 
