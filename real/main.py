@@ -435,8 +435,8 @@ class Sidebar(ctk.CTkFrame):
 class Mediabar(ctk.CTkScrollableFrame):
     def __init__(self, master, name,  media):
         super().__init__(master, orientation="horizontal")
-        self.columnconfigure(0, weight=1)
-        self.rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
         self.name = name
         self.media = media
         self.images = []
@@ -467,8 +467,8 @@ class LabelledMediabar(ctk.CTkFrame):
         self.name = name
         self.media = media
         self.media_bar = Mediabar(self, name, self.media)
-        self.rowconfigure((0, 1), weight=1)
-        self.columnconfigure(0, weight=1)
+        self.grid_rowconfigure((0, 1), weight=1)
+        self.grid_columnconfigure(0, weight=1)
         self.build_ui()
 
     def build_ui(self):
@@ -511,8 +511,8 @@ class HomeFrame(ctk.CTkScrollableFrame):
 class FilterSortFrame(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
-        self.columnconfigure((0, 1, 2), weight=1)
-        self.rowconfigure((0, 1), weight=1)
+        self.grid_columnconfigure((0, 1, 2), weight=1)
+        self.grid_rowconfigure((0, 1), weight=1)
         self.restrictions_map = RESTRICTIONS_MAP
 
         self.build_ui()
@@ -570,41 +570,98 @@ class SearchFrame(ctk.CTkScrollableFrame):
 class StarredFrame(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
-        self.columnconfigure(0, weight=1)
-        self.rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_rowconfigure((1), weight=1)
         self.build_ui()
 
     def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text="Starred movies and TV shows", font=TITLE_FONT)
-        self.title_label.grid(row=0, column=0, sticky="nsew")
+        self.title_label.grid(row=0, column=0, sticky="nsew", pady=(10, 10))
+
+class PlaybackSettingsFrame(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master, fg_color="transparent")
+        self.grid_columnconfigure((0, 1), weight=0)
+        self.grid_rowconfigure((0, 1, 2), weight=1)
+        self.build_ui()
+
+    def build_ui(self):
+        self.resolution_label = ctk.CTkLabel(self, text="Default resolution", font=TEXT_FONT)
+        self.resolution_combo = ctk.CTkComboBox(self, values=["Auto", "480p", "720p", "1080p"], font=TEXT_FONT)
+        self.autoplay_var = tk.BooleanVar(value=True)
+        self.autoplay_switch = ctk.CTkSwitch(self, text="Enable autoplay", variable=self.autoplay_var, font=TEXT_FONT)
+        
+        self.resolution_label.grid(row=0, column=0, pady=(10, 10), padx=(10, 10))
+        self.resolution_combo.grid(row=0, column=1, pady=(10, 10), padx=(10, 10))
+        self.autoplay_switch.grid(row=1, column=0, pady=(10, 10), padx=(10, 10))
+
+class AppearanceSettingsFrame(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master, fg_color="transparent")
+        self.grid_columnconfigure((0, 1), weight=0)
+        self.grid_rowconfigure((0, 1, 2), weight=1)
+        self.build_ui()
+
+    def build_ui(self):
+        self.resolution_label = ctk.CTkLabel(self, text="idk, choose something", font=TEXT_FONT)
+        self.resolution_combo = ctk.CTkComboBox(self, values=["you must choose me or else"], font=TEXT_FONT)
+        self.unnecessary_var = tk.BooleanVar(value=True)
+        self.necessary_var = tk.BooleanVar(value=True)
+        self.unnecessary_switch = ctk.CTkSwitch(self, text="Allow unnecessary cookies", variable=self.unnecessary_var, font=TEXT_FONT, command=self.cookie_command)
+        self.necessary_switch = ctk.CTkSwitch(self, text="Allow necessary cookies", variable=self.necessary_var, font=TEXT_FONT, state="disabled")
+        
+        self.resolution_label.grid(row=0, column=0, pady=(10, 10), padx=(10, 10))
+        self.resolution_combo.grid(row=0, column=1, pady=(10, 10), padx=(10, 10))
+        self.unnecessary_switch.grid(row=1, column=0, pady=(10, 10), padx=(10, 10))
+        self.necessary_switch.grid(row=2, column=0, pady=(10, 10), padx=(10, 10))
+    
+    def cookie_command(self):
+        if self.unnecessary_switch.get() == 0:
+            self.after(300, lambda: self.unnecessary_switch.toggle())
 
 class SettingsFrame(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
-        self.columnconfigure(0, weight=1)
-        self.rowconfigure((0, 1), weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_rowconfigure((1), weight=1)
         self.build_ui()
 
     def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text="Settings", font=TITLE_FONT)
-        self.title_label.grid(row=0, column=0, sticky="nsew")
+        self.title_label.grid(row=0, column=0, sticky="nsew", pady=(10, 10))
 
         self.tabs= ctk.CTkTabview(self)
-        self.tabs.add("Settings1")
-        self.tabs.add("Settings2")
+
+        self.tabs.add("Playback")
+        self.playback_tab = self.tabs.tab("Playback")
+        self.playback_frame = PlaybackSettingsFrame(self.playback_tab)
+        self.playback_frame.grid(row=0, column=0)
+
+        self.tabs.add("Appearance")
+        self.appearance_tab = self.tabs.tab("Appearance")
+        self.appearance_frame = AppearanceSettingsFrame(self.appearance_tab)
+        self.appearance_frame.grid(row=0, column=0)
+
         self.tabs.grid(row=1, column=0, sticky="nsew")
 
 class AccountFrame(ctk.CTkFrame):
     def __init__(self, master, name):
         super().__init__(master, fg_color="transparent")
-        self.columnconfigure(0, weight=1)
-        self.rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_rowconfigure((1), weight=1)
         self.name = name
         self.build_ui()
 
     def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text="Account", font=TITLE_FONT)
-        self.title_label.grid(row=0, column=0, sticky="nsew")
+        self.title_label.grid(row=0, column=0, sticky="nsew", pady=(10, 10))
+        self.tabs= ctk.CTkTabview(self)
+        self.tabs.add("Account")
+        self.tabs.add("Profile")
+        self.tabs.grid(row=1, column=0, sticky="nsew")
 
     def change_name(self, new_name):
         self.name = new_name
@@ -615,8 +672,8 @@ class MovieBrowser(ctk.CTkFrame):
         super().__init__(master)
         self.grid_columnconfigure(0, minsize=100)
         self.grid_columnconfigure(1, weight=1)
-        self.rowconfigure(0, weight=0)
-        self.rowconfigure(1, weight=1)
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_rowconfigure(1, weight=1)
 
         self.quit = quit
         self.name = name
