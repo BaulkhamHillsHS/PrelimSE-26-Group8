@@ -98,3 +98,5 @@ tv show and anime movies in home (only includes movies rn)
 search should include tv show and anime stuff
 
 on movie pressed on home screen make it show info like overview, episode count, voting average, age rating, movie length, genres, tag
+
+also the search and home title labels are slightly higher or lower than the other ones because its a scrollable frame. either make all of them inherit from the same base class or fix this manually.
