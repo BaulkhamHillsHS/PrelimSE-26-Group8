@@ -13,8 +13,11 @@ import os
 
 TITLE_FONT = ("Inter", 35, "bold")
 TEXT_FONT = ("Arial", 20)
-IDK_FONT = ("Courier New", 14)
+SMALL_FONT = ("Arial", 17)
+TYPEWRITER_FONT = ("Courier New", 14)
 POSTER_SIZE = (96, 144)
+MEDIUM_POSTER_SIZE = (160, 240)
+BIG_POSTER_SIZE = (320, 480)
 FILTER_SORT_OPTIONS = ["any", "score rating", "age rating", "length", "genre", "popularity"]
 RESTRICTIONS_MAP = {
             "any": [""],
@@ -143,17 +146,18 @@ class AccountManager:
 class Media():
     def __init__(self, media_data: dict, dimensions: tuple[int, int]):
         self.media_data = media_data
-        self.dimensions=dimensions
-        self.set_poster()
+        self.set_poster(dimensions)
 
-    def set_poster(self):
+    def set_poster(self, dimensions):
         self.pillow_image = Image.open(os.path.join(posters_path, f"m_{self.get_id()}.jpg"))
-        self.poster = ctk.CTkImage(self.pillow_image, size=self.dimensions) # FIXME: # type: ignore
+        self.poster = ctk.CTkImage(self.pillow_image, size=dimensions)
 
-    def change_image_size(self, width, height):
-        self.poster.configure(size=(width, height))
+    def get_overview(self):
+        return self.get_data("overview", "")
 
-    def get_poster(self):
+    def get_poster(self, size=None):
+        if size:
+            return ctk.CTkImage(self.pillow_image, size=size)
         return self.poster
     
     def get_data(self, key: str, default):
@@ -174,14 +178,14 @@ class Media():
         return movie_id
     
 class Movie(Media):
-    def __init__(self, media_data: dict, dimensions: tuple[int, int]=(500, 750)):
+    def __init__(self, media_data: dict, dimensions: tuple[int, int]=POSTER_SIZE):
         super().__init__(media_data, dimensions)
 
     def __str__(self) -> str:
         return f"{self.get_title()}({self.get_runtime()})"
 
 class Anime(Media):
-    def __init__(self, media_data, dimensions: tuple[int, int]=(500, 750)):
+    def __init__(self, media_data, dimensions: tuple[int, int]=POSTER_SIZE):
         super().__init__(media_data, dimensions=dimensions)
         season_data = self.get_data("seasons", [])
         self.season_count = len(season_data)
@@ -198,9 +202,12 @@ class Anime(Media):
             return {}
         return self.get_seasons()[n]
     
-    def set_poster(self):
+    def set_poster(self, dimensions):
         self.pillow_image = Image.open(os.path.join(posters_path, f"t_{self.get_id()}.jpg"))
-        self.poster = ctk.CTkImage(self.pillow_image, size=self.dimensions)
+        self.poster = ctk.CTkImage(self.pillow_image, size=dimensions)
+
+    def get_title(self):
+        return self.get_data("name", "")
 
 class AnimeMovie(Media):
     def __init__(self, media_data: dict, dimensions: tuple[int, int]=(500, 750)):
@@ -210,7 +217,7 @@ class AnimeMovie(Media):
         return f"{self.get_title()}({self.get_runtime()})"
 
 class Show(Media):
-    def __init__(self, media_data, dimensions: tuple[int, int]=(500, 750)):
+    def __init__(self, media_data, dimensions: tuple[int, int]=POSTER_SIZE):
         super().__init__(media_data, dimensions=dimensions)
         season_data = self.get_data("seasons", [])
         self.season_count = len(season_data)
@@ -227,9 +234,12 @@ class Show(Media):
             return {}
         return self.get_seasons()[n]
     
-    def set_poster(self):
+    def set_poster(self, dimensions):
         self.pillow_image = Image.open(os.path.join(posters_path, f"t_{self.get_id()}.jpg"))
-        self.poster = ctk.CTkImage(self.pillow_image, size=self.dimensions)
+        self.poster = ctk.CTkImage(self.pillow_image, size=dimensions)
+
+    def get_title(self):
+        return self.get_data("name", "")
 
 class Episode():
     def __init__(self, episode_number: int):
@@ -239,9 +249,10 @@ class Episode():
         return str(self.episode_number)
 
 class Season():
-    def __init__(self, media_data: dict, dimensions=(500, 750)):
+    def __init__(self, media_data: dict, dimensions=POSTER_SIZE):
         self.media_data = media_data
         self.season_number = self.get_data("season_number", 0)
+        self.dimensions = dimensions
         #self.pillow_image = Image.open(os.path.join(posters_path, f"s_{self.get_id()}.jpg")) # FIXME: incomplete imp
         #self.poster = ctk.CTkImage(self.pillow_image, size=dimensions)
         self.episode_count = int(self.get_data("episode_count", 0)) # 
@@ -306,7 +317,6 @@ def restriction_check(filter: str, restriction: str, movie_data: dict):
             required = int(restriction[1:])
             return movie_popularity>=required
     raise ValueError()  # FIXME: debug, delete later
-    return False
 
 def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int, decreasing: bool=False):
     match media_type:
@@ -337,14 +347,12 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
         case "tv_show":
             return [Show(x) for x in out[:count]]
         case "anime_movie":
-            return [Movie(x) for x in out[:count]]
+            return [AnimeMovie(x) for x in out[:count]]
         case "anime":
-            return [Show(x) for x in out[:count]]
+            return [Anime(x) for x in out[:count]]
 
 #print(*get_media("movie", "score rating", ">8.5", "length", 10, decreasing=True), sep="\n")
 # FIXME: debug command
-
-
 
 class LoadingScreen(ctk.CTkFrame):
     def __init__(self, master, loading_text: str):
@@ -432,14 +440,45 @@ class Sidebar(ctk.CTkFrame):
     def handle_button_press(self, button):
         self.handle_function(button)
 
+class WatchFrame(ctk.CTkFrame):
+    def __init__(self, master, media: Union[Movie, Anime, Show, AnimeMovie]):
+        super().__init__(master, fg_color="transparent")
+        self.media = media
+        
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure((0, 1), weight=0)
+        self.grid_rowconfigure(1, weight=0)
+        self.grid_rowconfigure(2, weight=3)
+        self.build_ui()
+    
+    def build_ui(self):
+        self.title_label = ctk.CTkLabel(self, text=self.media.get_title(), font=TITLE_FONT)
+        self.poster_label = ctk.CTkLabel(self, image=self.media.get_poster(BIG_POSTER_SIZE), text="")
+        overview = self.media.get_overview()[:300]
+        if(len(self.media.get_overview())>=300):
+            overview+="..."
+        self.overview_label = ctk.CTkLabel(self, text=overview, wraplength=500, font=SMALL_FONT)
+
+        self.title_label.grid(row=0, column=0, pady=(10, 10), padx=0)
+        self.poster_label.grid(row=1, column=0, pady=(10, 10), padx=(10, 10), sticky="nsew")
+        self.overview_label.grid(row=2, column=0, pady=(10, 10), padx=(10, 10), sticky="nsew")
+
+    def switch_media(self, new_media):
+        self.media = new_media
+        self.title_label.grid_forget()
+        self.poster_label.grid_forget()
+
+        self.build_ui()
+
 class Mediabar(ctk.CTkScrollableFrame):
-    def __init__(self, master, name,  media):
+    def __init__(self, master, name,  media, watch_function):
         super().__init__(master, orientation="horizontal")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         self.name = name
         self.media = media
         self.images = []
+        self.watch_function = watch_function
         self.build_ui()
 
     def build_ui(self):
@@ -453,7 +492,8 @@ class Mediabar(ctk.CTkScrollableFrame):
             media_button.grid(row=0, column=i, sticky="ew", pady=0, padx=(10, 10))
     
     def button_callback(self, index):
-        print(index+1, "th media of mediabar", self.name, "was pressed. make it zoom in and show details or something")
+        print(self.media[index], "pressed.")
+        self.watch_function(self.media[index])
 
     def update_media(self, new_media):
         self.media = new_media
@@ -462,12 +502,13 @@ class Mediabar(ctk.CTkScrollableFrame):
         self.build_ui()
 
 class LabelledMediabar(ctk.CTkFrame):
-    def __init__(self, master, name, media):
+    def __init__(self, master, name, media, watch_function):
         super().__init__(master)
         self.name = name
         self.media = media
-        self.media_bar = Mediabar(self, name, self.media)
-        self.grid_rowconfigure((0, 1), weight=1)
+        self.media_bar = Mediabar(self, name, self.media, watch_function)
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_rowconfigure((1), weight=1)
         self.grid_columnconfigure(0, weight=1)
         self.build_ui()
 
@@ -480,18 +521,18 @@ class LabelledMediabar(ctk.CTkFrame):
         self.media_bar.update_media(new_media)
 
 class HomeFrame(ctk.CTkScrollableFrame):
-    def __init__(self, master, name):
+    def __init__(self, master, name, watch_function):
         super().__init__(master, fg_color="transparent")
         self.name = name
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure((1, 2, 3, 4, 5), weight=1)
-        self.movie_bar_1 = LabelledMediabar(self, name="Recommended movies", media=[Movie(random.choice(jsons["movie"]), POSTER_SIZE) for x in range(20)])
-        self.movie_bar_2 = LabelledMediabar(self, name="TV shows", media=[Show(random.choice(jsons["tv"]), POSTER_SIZE) for x in range(5)])
-        self.movie_bar_3 = LabelledMediabar(self, name="Anime", media=[Anime(random.choice(jsons["anime"]), POSTER_SIZE) for i in range(5)])
-        self.movie_bar_4 = LabelledMediabar(self, name="Anime movies", media=[AnimeMovie(random.choice(jsons["anime_movie"]), POSTER_SIZE) for x in range(5)]) 
-        self.movie_bar_5 = LabelledMediabar(self, name="Explore(not random)", media=[Movie(jsons["movie"][i], POSTER_SIZE) for i in range(5)])
+        self.movie_bar_1 = LabelledMediabar(self, "Recommended movies", [Movie(random.choice(jsons["movie"]), POSTER_SIZE) for x in range(20)], watch_function)
+        self.movie_bar_2 = LabelledMediabar(self, "TV shows", [Show(random.choice(jsons["tv"]), POSTER_SIZE) for x in range(5)], watch_function)
+        self.movie_bar_3 = LabelledMediabar(self, "Anime", [Anime(random.choice(jsons["anime"]), POSTER_SIZE) for i in range(5)], watch_function)
+        self.movie_bar_4 = LabelledMediabar(self, "Anime movies", [AnimeMovie(random.choice(jsons["anime_movie"]), POSTER_SIZE) for x in range(5)], watch_function) 
+        self.movie_bar_5 = LabelledMediabar(self, "Explore(not random)", [Movie(jsons["movie"][i], POSTER_SIZE) for i in range(5)], watch_function)
 
         self.build_ui()
 
@@ -514,13 +555,13 @@ class FilterSortFrame(ctk.CTkFrame):
         self.grid_columnconfigure((0, 1, 2), weight=1)
         self.grid_rowconfigure((0, 1), weight=1)
         self.restrictions_map = RESTRICTIONS_MAP
-
         self.build_ui()
 
     def build_ui(self):
         self.filter_by = ctk.CTkOptionMenu(self, values=FILTER_SORT_OPTIONS, command=self.filter_change)
         self.filter_by_restriction_menu = ctk.CTkOptionMenu(self, values=self.restrictions_map["any"])
         self.sort_by = ctk.CTkOptionMenu(self, values=FILTER_SORT_OPTIONS)
+        self.type = ctk.CTkOptionMenu(self, values=["Movie", "TV Show", "Anime", "Anime movie"])
 
         self.filter_label = ctk.CTkLabel(self, text="Filter by...", font=TEXT_FONT)
         self.sort_label = ctk.CTkLabel(self, text="Sort by...", font=TEXT_FONT)
@@ -544,18 +585,18 @@ class FilterSortFrame(ctk.CTkFrame):
         return (self.sort_by.get())
 
 class SearchFrame(ctk.CTkScrollableFrame):
-    def __init__(self, master):
+    def __init__(self, master, watch_function):
         super().__init__(master, fg_color="transparent", orientation="vertical")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure((1, 2, 3), weight=1)
+        self.results_bar = LabelledMediabar(self, "Results", [Movie({}, POSTER_SIZE) for _ in range(10)], watch_function)
         self.build_ui()
 
     def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text="Search", font=TITLE_FONT)
         self.filter_sort_frame = FilterSortFrame(self)
         self.a_button = ctk.CTkButton(self, text="Search button", command=self.button_callback, font=TEXT_FONT)
-        self.results_bar = LabelledMediabar(self, "Results", [Movie({}) for _ in range(10)])
 
         self.title_label.grid(row=0, column=0, sticky="nsew")
         self.filter_sort_frame.grid(row=1, column=0)
@@ -564,7 +605,6 @@ class SearchFrame(ctk.CTkScrollableFrame):
 
     def button_callback(self):
         new_movies = get_media("movie", *self.filter_sort_frame.get_filter(), self.filter_sort_frame.get_sort(), count=10)
-        print(*new_movies, sep="\n")
         self.results_bar.update_media(new_movies)
 
 class StarredFrame(ctk.CTkFrame):
@@ -677,11 +717,12 @@ class MovieBrowser(ctk.CTkFrame):
 
         self.quit = quit
         self.name = name
-        self.home_frame = HomeFrame(self, self.name)
-        self.search_frame = SearchFrame(self)
+        self.home_frame = HomeFrame(self, self.name, self.watch_media)
+        self.search_frame = SearchFrame(self, self.watch_media)
         self.star_frame = StarredFrame(self)
         self.settings_frame = SettingsFrame(self)
         self.account_frame = AccountFrame(self, self.name)
+        self.watch_frame = WatchFrame(self, Movie({}))
 
         self.current_frame = self.home_frame
 
@@ -713,6 +754,10 @@ class MovieBrowser(ctk.CTkFrame):
                 case "account":
                     self.switch_frame(self.account_frame)
 
+    def watch_media(self, media: Union[Movie, Anime, Show, AnimeMovie]):
+        self.watch_frame.switch_media(media)
+        self.switch_frame(self.watch_frame)
+
     def change_name(self, new_name: str):
         self.home_frame.change_name(new_name)
         self.account_frame.change_name(new_name)
@@ -721,6 +766,7 @@ class MovieBrowser(ctk.CTkFrame):
         self.current_frame.grid_forget()
         new_frame.grid(row=0, column=1, rowspan=2, sticky="nsew", pady=(10, 10), padx=(10, 10))
         self.current_frame = new_frame
+
 
 class StreamingApp(ctk.CTk):
     def __init__(self):
