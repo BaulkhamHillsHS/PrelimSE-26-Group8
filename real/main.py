@@ -1,8 +1,9 @@
 from datetime import datetime
 from typing import Union
+from PIL import Image
+from PIL import ImageTk, ImageEnhance
 import json
 import csv
-import time
 import random
 from PIL import Image
 import customtkinter as ctk
@@ -15,9 +16,11 @@ TITLE_FONT = ("Inter", 35, "bold")
 TEXT_FONT = ("Arial", 20)
 SMALL_FONT = ("Arial", 17)
 TYPEWRITER_FONT = ("Courier New", 14)
+
 POSTER_SIZE = (96, 144)
 MEDIUM_POSTER_SIZE = (160, 240)
 BIG_POSTER_SIZE = (320, 480)
+
 FILTER_SORT_OPTIONS = ["any", "score rating", "age rating", "length", "genre", "popularity"]
 RESTRICTIONS_MAP = {
             "any": [""],
@@ -33,6 +36,7 @@ resource_path = os.path.join(root, "resource")
 posters_path = os.path.join(resource_path, "posters")
 
 image_names = [
+          # HENRY STUFF
           "settings_icon",
           "home_icon",
           "search_icon",
@@ -40,6 +44,14 @@ image_names = [
           "quit_icon",
           "account_icon",
           "logo",
+          # BEN STUFF
+          "blind",
+          "eye",
+          "logo_dark",
+          "logo_light",
+          "lock",
+          "person",
+          "main_logo"
           ]
 
 images = {}
@@ -83,30 +95,42 @@ for name in json_names:
     data = read_json(json_path)
     jsons[name] = data
 
+accounts_path = os.path.join(resource_path, "accounts.csv")
+
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme(os.path.join(resource_path, "theme.json"))
 
-
 class SubscriptionPlan(Enum):
-    BRONZE = "Bronze"
-    SILVER = "Silver"
-    GOLD = "Gold"
-    PLATINUM = "Platinum"
+    FREE = "FreePlan"
+    STANDARD = "StandardPlan"
+    PREMIUM = "PremiumPlan"
 
 class Profile:
-    def __init__(self, name, age_rating):
+    def __init__(self, name, is_adult: bool, watchlist=None, watch_history=None):
         self.name = name
-        self.age_rating = age_rating
-        self.watchlist = []
-        self.watch_history = []
+        self.is_adult = is_adult
+        self.watchlist = watchlist if watchlist is not None else []
+        self.watch_history = watch_history if watch_history is not None else []
 
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "is_adult": self.is_adult,
+            "watchlist": self.watchlist,
+            "watch_history": self.watch_history
+        }
+    
 class Account:
-    def __init__(self, name, email, password, subscription_plan: SubscriptionPlan, payment_info):
-        self.name = name
+    def __init__(self, username, email, password, subscription_plan: SubscriptionPlan, payment_info):
+        self.username = username
         self.email = email
+        self.subscription_plan = subscription_plan
+
+        # ENCAPSULATION
         self.__password = password
         self.__payment_info = payment_info
-        self.subscription_plan = subscription_plan
+
+        # COMPOSITION
         self.profiles = []
 
     def check_password(self, attempt):
@@ -118,29 +142,61 @@ class Account:
     def get_payment_info(self):
         return self.__payment_info
     
+    def add_profile(self, profile: Profile):
+        self.profiles.append(profile)
+    
 class AccountManager:
     def __init__(self, filepath):
         self.filepath = filepath
-        self.fields = ["name", "email", "password", "subscription_plan", "payment_info", "profiles"]
+        self.fields = ["username", "email", "password", "subscription_plan", "payment_info", "profiles"]
     
     def load_accounts(self):
         accounts = []
-        with open(self.filepath, "r", newline="") as f:
+        if not os.path.exists(self.filepath):
+            return accounts
+        
+        with open(self.filepath, "r", newline="", encoding="utf-8") as f:
             reader=csv.DictReader(f)
             for row in reader:
-                accounts.append(Account(row["name"], row["email"], row["password"], SubscriptionPlan(row["subscription_plan"]), row["payment_info"]))
+                plan_value = row["subscription_plan"].strip()
+                plan = ([plan for plan in SubscriptionPlan if plan.value == plan_value]+[SubscriptionPlan.FREE])[0]
+                account = Account(row["username"], row["email"], row["password"], plan, row["payment_info"])
+                profiles = json.loads(row["profiles"])
+                for profile_data in profiles:
+                    profile = Profile(profile_data["name"], profile_data["is_adult"], profile_data.get("watchlist", []), profile_data.get("watch_history", []))
+                    account.add_profile(profile)
+
+                accounts.append(account)
+
         return accounts
     
     def save_account(self, account: Account):
-        with open(self.filepath, "a", newline="") as f:
+        file_exists = os.path.exists(self.filepath)
+        with open(self.filepath, "a", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=self.fields)
+            if not file_exists:
+                writer.writeheader()
             writer.writerow({
-                "name": account.name, 
+                "username": account.username, 
                 "email": account.email, 
                 "password": account.get_password(), 
                 "subscription_plan": account.subscription_plan.value, 
                 "payment_info": account.get_payment_info(),
-                "profiles": str(account.profiles)
+                "profiles": json.dumps([p.to_dict() for p in account.profiles])
+                })
+            
+    def update_accounts(self, accounts: list[Account]):
+        with open(self.filepath, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=self.fields)
+            writer.writeheader()
+            for account in accounts:
+                writer.writerow({
+                    "username": account.username, 
+                    "email": account.email, 
+                    "password": account.get_password(), 
+                    "subscription_plan": account.subscription_plan.value, 
+                    "payment_info": account.get_payment_info(),
+                    "profiles": json.dumps([p.to_dict() for p in account.profiles])
                 })
 
 class Media():
@@ -351,9 +407,6 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
         case "anime":
             return [Anime(x) for x in out[:count]]
 
-#print(*get_media("movie", "score rating", ">8.5", "length", 10, decreasing=True), sep="\n")
-# FIXME: debug command
-
 class LoadingScreen(ctk.CTkFrame):
     def __init__(self, master, loading_text: str):
         super().__init__(master)
@@ -370,37 +423,179 @@ class LoadingScreen(ctk.CTkFrame):
         self.loading_bar.configure(mode="indeterminate")
         self.loading_bar.start()
 
-class LoginScreen(ctk.CTkFrame):
-    def __init__(self, master, switch_function):
-        super().__init__(master)
-        self.grid_columnconfigure((1), weight=1)
-        self.switch_function = switch_function
-        self.show_password_state = tk.BooleanVar(value=False)
-        self.build_ui()
-
-    def build_ui(self):
-        self.title_label = ctk.CTkLabel(self, text="HBflix login", font=TITLE_FONT)
-        self.name_entry = ctk.CTkEntry(self, placeholder_text="Enter your username...", width=300)
-        self.login_button = ctk.CTkButton(self, text="Login", command=self.login_submit, hover_color="#3e8a7e", font=TITLE_FONT)
-        self.password_entry = ctk.CTkEntry(self, show="*", placeholder_text="Enter your password...", width=300)
-        self.show_password = ctk.CTkCheckBox(self, text="Show password", variable=self.show_password_state, command=self.toggle_show_password)
-        self.title_label.grid(row=0, column=1, pady=(50,30))
-        self.name_entry.grid(row=1, column=1, pady=(25,10))
-        self.password_entry.grid(row=2, column=1, pady=(0,10))
-        self.show_password.grid(row=3, column=1, pady=(20, 20))
-        self.login_button.grid(row=4, column=1, pady=(10,0))
+def create_rrect(canvas: ctk.CTkCanvas, width, height, pos, r, fill):
+    x1, y1 = pos
+    x2 = x1 + width
+    y2 = y1 + height
+    points = [
+        # corner 1
+        x1, y1 + r, x1, y1 + r,
+        x1, y1,
+        x1 + r, y1, x1 + r, y1,
         
-    def login_submit(self):
-        if self.name_entry.get() == "":
-            self.switch_function(("Guest", ""))
-        else:
-            self.switch_function((self.name_entry.get(), self.password_entry.get()))
+        # corner 2
+        x2 - r, y1, x2 - r, y1,
+        x2, y1,
+        x2, y1 + r, x2, y1 + r,
+        
+        # corner 3
+        x2, y2 - r, x2, y2 - r,
+        x2, y2,
+        x2 - r, y2, x2 - r, y2,
+        
+        # corner 4
+        x1 + r, y2, x1 + r, y2,
+        x1, y2,
+        x1, y2 - r, x1, y2 - r
+    ]
+    return canvas.create_polygon(points, smooth=True, fill=fill)
 
-    def toggle_show_password(self):
-        if self.show_password_state.get():
-            self.password_entry.configure(show="")
+class ImageCell():
+    def __init__(self, canvas: ctk.CTkCanvas, image, pos, speed = 1.0):
+        self.canvas = canvas
+        self.id = self.canvas.create_image(*pos, image=image, anchor="nw")
+        self.speed = speed
+    
+    def move(self, x, y):
+        self.canvas.move(self.id, x, y)
+    
+    def goto(self, x, y):
+        self.canvas.moveto(self.id, x, y)
+    
+    def slide(self):
+        self.canvas.move(self.id, self.speed, 0)
+    
+    def get_pos(self):
+        return self.canvas.tk.call(self.canvas._w, "coords", self.id) # FIXME: # type: ignore
+    
+    def get_size(self):
+        bbox = self.canvas.bbox(self.id)
+        x = bbox[2] - bbox[0]
+        y = bbox[3] - bbox[1]
+        return (x, y)
+    
+class Panel():
+    def __init__(self, canvas: ctk.CTkCanvas, width, height, r, pos, fill, padding):
+        self.canvas = canvas
+        self.width = width
+        self.height = height
+        self.pos = pos
+        self.padding = padding
+        create_rrect(canvas, width, height, pos, r, fill)
+    
+    def get_pos(self):
+        return (self.pos[0] - 2, self.pos[1])
+    
+    def get_dim(self):
+        return (self.width, self.height)
+    
+    def get_udim(self):
+        return (self.width - self.padding[0] - self.padding[1], self.height - self.padding[2] - self.padding[3])
+
+class LoginFrame(ctk.CTkFrame):
+    def __init__(
+        self,
+        master,
+        login_switch
+    ):
+        super().__init__(master=master, width=1280, height=720, fg_color="transparent")
+        self.width = 1280
+        self.height = 720 
+        self.login_switch = login_switch
+
+        self.update()
+        self.build_ui()
+        
+    def build_ui(self):
+        self.images_count = 9
+        self.row_count = 7
+        
+        pil_image = images["logo_light"]
+        pil_image_dark = ImageEnhance.Brightness(images["logo_light"]).enhance(0.6)
+
+        main_font = ctk.CTkFont(family="Inter Regular", size=16)
+
+        self.image_sizes = [(90, 90), (60, 60)]
+        self.image = ImageTk.PhotoImage(pil_image.resize(self.image_sizes[0]))
+        self.image_dark = ImageTk.PhotoImage(pil_image_dark.resize(self.image_sizes[1]))
+        
+        self.canvas = ctk.CTkCanvas(self, width=1280, height=720, bg="black", highlightthickness=0)
+        self.canvas.place(x=0, y=0)
+
+        self.images = []
+        for j in range(self.row_count):
+            y_pos = self.height / (self.row_count - 1) * j - self.image_sizes[j % 2][0] / 2
+            x_offset = (j // 2) % 2 * self.width / self.images_count / 2
+            # speed = random.randint(40, 100) / 50
+            speed = (1 + j % 2) / 3
+            for i in range(self.images_count + 1):
+                image = ImageCell(self.canvas, self.image if j % 2 == 0 else self.image_dark, (self.width / self.images_count * i - self.image_sizes[j % 2][0] / 2 + x_offset, y_pos), speed)
+                self.images.append(image)
+        
+        login_panel = Panel(self.canvas, (w:=400), (f := 0.85)*self.height, 40, ((self.width - w) / 2, (1 - f)*self.height / 2), "#36363B", (30, 30, 30, 30))
+        
+        title = images["main_logo"]
+        title_pad = 30
+        
+        self.asdf = ImageTk.PhotoImage(title.resize(((w_x:=login_panel.get_udim()[0] - 2 * title_pad), int(title.size[1] / title.size[0] * w_x))))
+        self.netflix = self.canvas.create_image(login_panel.pos[0] + login_panel.padding[0] + title_pad, login_panel.pos[1] + login_panel.padding[2] + title_pad, image=self.asdf, anchor="nw")
+        
+        self.email_frame = ctk.CTkFrame(self, login_panel.get_udim()[0], 56, 10, bg_color="#36363B", fg_color="#4C4C53", border_width=2, border_color="#6F6F70")
+        self.email_frame.place(x=login_panel.get_pos()[0] + login_panel.padding[0], y=self.canvas.bbox(self.netflix)[3] + 40)
+        self.email_frame.rowconfigure(0, weight=1)
+        self.email_frame.columnconfigure(1, weight=1)
+        self.email_frame.grid_propagate(False)
+        
+        self.email = ctk.CTkEntry(self.email_frame, font=main_font, placeholder_text="Email or mobile number", border_width=0, fg_color="#4C4C53", text_color="#98989B")
+        self.email.grid(row=0, column=1, sticky="nesw", pady=2, padx=(0, 15))
+        self.person_icon = ctk.CTkLabel(self.email_frame, image=ctk.CTkImage(light_image=(p:=images["person"]), size=p.size), text="")
+        self.person_icon.grid(row=0, column=0, padx=(12, 10))
+        
+        self.password_frame = ctk.CTkFrame(self, login_panel.get_udim()[0], 56, 10, bg_color="#36363B", fg_color="#4C4C53", border_width=2, border_color="#6F6F70")
+        self.password_frame.place(x=login_panel.get_pos()[0] + login_panel.padding[0], y=self.canvas.bbox(self.netflix)[3] + 40 + 56 + 24)
+        self.password_frame.rowconfigure(0, weight=1)
+        self.password_frame.columnconfigure(1, weight=1)
+        self.password_frame.grid_propagate(False)
+        
+        self.password = ctk.CTkEntry(self.password_frame, font=main_font, placeholder_text="Password", border_width=0, fg_color="#4C4C53", show="•", text_color="#98989B")
+        self.password.grid(row=0, column=1, sticky="nesw", pady=2, padx=(0, 15))
+        self.lock_icon = ctk.CTkLabel(self.password_frame, image=ctk.CTkImage(light_image=(p:=images["lock"]), size=p.size), text="")
+        self.lock_icon.grid(row=0, column=0, padx=(12, 10))
+        
+        self.visibility = [images["eye"], images["blind"]]
+        self.hide = ctk.CTkButton(self.password_frame, width=0, height=40, text="", fg_color="#4C4C53", image=ctk.CTkImage(light_image=(p:=self.visibility[1]), size=p.size), command=lambda: self.toggle_show(self.password, self.hide), anchor="center", hover_color="#4C4C53")
+        self.hide.grid(row=0, column=2, padx=(0, 5), pady=(3, 0))
+        
+        button_width = 56
+        self.login_button = ctk.CTkButton(self, login_panel.get_dim()[0] - login_panel.padding[0] - login_panel.padding[1], button_width, 10, bg_color="#36363B", fg_color="#d81f26", text="Login", font=("Inter Black", 20), text_color="white", hover_color="#b41f24", command=self.button_callback)
+        self.login_button.place(x=login_panel.get_pos()[0] + login_panel.padding[0], y=login_panel.get_pos()[1] + login_panel.get_dim()[1] - login_panel.padding[3] - button_width)
+        
+        self.animate()
+    
+    def animate(self):
+        for x in self.images:
+            x.slide()
+            if x.get_pos()[0] >= self.width / self.images_count + self.width - x.get_size()[0]:
+                x.goto(-x.get_size()[0], "")
+        
+        self.after(16, self.animate)
+        
+    def toggle_show(self, entry: ctk.CTkEntry, button: ctk.CTkButton):
+        current = entry.cget("show")
+        if current != "":
+            entry.configure(show="")
+            button.configure(image=ctk.CTkImage(light_image=(p:=self.visibility[1])))
         else:
-            self.password_entry.configure(show="*")
+            entry.configure(show="•")
+            button.configure(image=ctk.CTkImage(light_image=(p:=self.visibility[0])))
+
+    def button_callback(self):
+        user = self.email.get()
+        password = self.password.get()
+        success = self.login_switch((user, password))
+        if not success:
+            print("Incorrect username, email or password. Please try again.")
+
 
 class Sidebar(ctk.CTkFrame):
     def __init__(self, master, handle_function):
@@ -459,12 +654,14 @@ class WatchFrame(ctk.CTkFrame):
         overview = self.media.get_overview()[:300]
         if(len(self.media.get_overview())>=300):
             overview+="..."
-        self.overview_label = ctk.CTkLabel(self, text=overview, wraplength=500, font=SMALL_FONT)
-        self.star_button = ctk.CTkButton(self, text="[unstarred] Add to favourites", command=self.toggle_favourite, font=TEXT_FONT)
+        self.overview_textbox = ctk.CTkTextbox(self, wrap="word", fg_color="transparent", font=SMALL_FONT)
+        self.overview_textbox.insert("0.0", self.media.get_overview())
+        self.overview_textbox.configure(state="disabled")
+        self.star_button = ctk.CTkButton(self, text="☆ Add to favourites", command=self.toggle_favourite, font=TEXT_FONT)
 
         self.title_label.grid(row=0, column=0, pady=(10, 10), padx=0)
         self.poster_label.grid(row=1, column=0, pady=(10, 10), padx=(10, 10), sticky="nsew")
-        self.overview_label.grid(row=2, column=0, pady=(10, 10), padx=(10, 10), sticky="nsew")
+        self.overview_textbox.grid(row=2, column=0, pady=(10, 10), padx=(10, 10), sticky="nsew")
         self.star_button.grid(row=3, column=0, pady=(10, 10))
 
     def switch_media(self, new_media):
@@ -475,16 +672,19 @@ class WatchFrame(ctk.CTkFrame):
         overview = self.media.get_overview()[:300]
         if(len(self.media.get_overview())>=300):
             overview+="..."
-        self.overview_label.configure(text=overview)
+        self.overview_textbox.configure(state="normal")
+        self.overview_textbox.delete("0.0", "end")
+        self.overview_textbox.insert("0.0", self.media.get_overview())
+        self.overview_textbox.configure(state="disabled")
 
     def toggle_favourite(self):
         self.favourite_callback(self.media)
 
     def set_starred_state(self, starred):
         if starred:
-            self.star_button.configure(text="[starred] Remove from favourites")
+            self.star_button.configure(text="[★] Remove from favourites")
         else:
-            self.star_button.configure(text="[unstarred] Add to favourites")
+            self.star_button.configure(text="[☆] Add to favourites")
 
 class Mediabar(ctk.CTkScrollableFrame):
     def __init__(self, master, name,  media, watch_function):
@@ -508,7 +708,6 @@ class Mediabar(ctk.CTkScrollableFrame):
             media_button.grid(row=0, column=i, sticky="ew", pady=0, padx=(10, 10))
     
     def button_callback(self, index):
-        print(self.media[index], "pressed.")
         self.watch_function(self.media[index])
 
     def update_media(self, new_media):
@@ -663,8 +862,9 @@ class PlaybackSettingsFrame(ctk.CTkFrame):
 class AppearanceSettingsFrame(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
-        self.grid_columnconfigure((0, 1), weight=0)
+        self.grid_columnconfigure(0, weight=0)
         self.grid_rowconfigure((0, 1, 2), weight=1)
+        self.grid_columnconfigure(1, minsize=500)
         self.build_ui()
 
     def build_ui(self):
@@ -676,7 +876,7 @@ class AppearanceSettingsFrame(ctk.CTkFrame):
         self.necessary_switch = ctk.CTkSwitch(self, text="Allow necessary cookies", variable=self.necessary_var, font=TEXT_FONT, state="disabled")
         
         self.resolution_label.grid(row=0, column=0, pady=(10, 10), padx=(10, 10))
-        self.resolution_combo.grid(row=0, column=1, pady=(10, 10), padx=(10, 10))
+        self.resolution_combo.grid(row=0, column=1, pady=(10, 10), padx=(10, 10), sticky="ew")
         self.unnecessary_switch.grid(row=1, column=0, pady=(10, 10), padx=(10, 10))
         self.necessary_switch.grid(row=2, column=0, pady=(10, 10), padx=(10, 10))
     
@@ -806,7 +1006,6 @@ class MovieBrowser(ctk.CTkFrame):
         self.star_frame.update_media(self.starred_media)
         self.watch_frame.set_starred_state(self.is_starred(media))
 
-
 class StreamingApp(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -814,11 +1013,14 @@ class StreamingApp(ctk.CTk):
         self.geometry("1280x720")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
+
         self.user = ""
+        self.account_manager = AccountManager(accounts_path)
+        
         self.build_ui()
 
     def build_ui(self):
-        self.login_frame = LoginScreen(self, switch_function=self.handle_login)
+        self.login_frame = LoginFrame(self, self.handle_login)
         self.login_frame.grid(row=0, column=0, sticky="nsew")
         self.loading_frame = LoadingScreen(self, loading_text="Loading...")
         self.browse_frame = MovieBrowser(self, self.user, quit=self.quit)
@@ -827,10 +1029,27 @@ class StreamingApp(ctk.CTk):
         frame1.grid_forget()
         frame2.grid(row=0, column=0, sticky="nsew")
 
-    def handle_login(self, userdata: tuple[str, str]):
-        user, password = userdata
-        print(f"Logging in as {user} with password {password}")
-        self.login_switch(user)
+    def handle_login(self, userdata: tuple[str, str]) -> bool:
+        username_email, password = userdata
+
+        accounts = self.account_manager.load_accounts()
+        logged_in_user = None
+        for account in accounts:
+            if account.email.strip().lower() == username_email.lower() or account.username == username_email:
+                if account.check_password(password):
+                    logged_in_user = account
+                    break
+
+        if logged_in_user:
+            username = logged_in_user.username
+            password = logged_in_user.get_password() # FIXME: encapsulation leak
+            print(f"Logging in as {username} with password {password}")
+            self.login_switch(username)
+            return True
+        else:
+            # FIXME: 
+            print("Incorrect details.")
+            return False
 
     def login_switch(self, user):
         self.switch_frame(self.login_frame, self.loading_frame)
