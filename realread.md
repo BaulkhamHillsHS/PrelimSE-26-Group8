@@ -104,3 +104,5 @@ also the search and home title labels are slightly higher or lower than the othe
 sort increasing/decreasing switch, movies/anime_movies/anime/tv shows combo box
 
 allow starring movies soon tm
+
+add back button maybe

@@ -441,14 +441,16 @@ class Sidebar(ctk.CTkFrame):
         self.handle_function(button)
 
 class WatchFrame(ctk.CTkFrame):
-    def __init__(self, master, media: Union[Movie, Anime, Show, AnimeMovie]):
+    def __init__(self, master, media: Union[Movie, Anime, Show, AnimeMovie], favourite_callback):
         super().__init__(master, fg_color="transparent")
         self.media = media
+        self.favourite_callback = favourite_callback
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure((0, 1), weight=0)
         self.grid_rowconfigure(1, weight=0)
         self.grid_rowconfigure(2, weight=3)
+        self.grid_rowconfigure(3, weight=0)
         self.build_ui()
     
     def build_ui(self):
@@ -458,17 +460,31 @@ class WatchFrame(ctk.CTkFrame):
         if(len(self.media.get_overview())>=300):
             overview+="..."
         self.overview_label = ctk.CTkLabel(self, text=overview, wraplength=500, font=SMALL_FONT)
+        self.star_button = ctk.CTkButton(self, text="[unstarred] Add to favourites", command=self.toggle_favourite, font=TEXT_FONT)
 
         self.title_label.grid(row=0, column=0, pady=(10, 10), padx=0)
         self.poster_label.grid(row=1, column=0, pady=(10, 10), padx=(10, 10), sticky="nsew")
         self.overview_label.grid(row=2, column=0, pady=(10, 10), padx=(10, 10), sticky="nsew")
+        self.star_button.grid(row=3, column=0, pady=(10, 10))
 
     def switch_media(self, new_media):
         self.media = new_media
-        self.title_label.grid_forget()
-        self.poster_label.grid_forget()
 
-        self.build_ui()
+        self.title_label.configure(text=self.media.get_title())
+        self.poster_label.configure(image=self.media.get_poster(BIG_POSTER_SIZE))
+        overview = self.media.get_overview()[:300]
+        if(len(self.media.get_overview())>=300):
+            overview+="..."
+        self.overview_label.configure(text=overview)
+
+    def toggle_favourite(self):
+        self.favourite_callback(self.media)
+
+    def set_starred_state(self, starred):
+        if starred:
+            self.star_button.configure(text="[starred] Remove from favourites")
+        else:
+            self.star_button.configure(text="[unstarred] Add to favourites")
 
 class Mediabar(ctk.CTkScrollableFrame):
     def __init__(self, master, name,  media, watch_function):
@@ -608,16 +624,24 @@ class SearchFrame(ctk.CTkScrollableFrame):
         self.results_bar.update_media(new_movies)
 
 class StarredFrame(ctk.CTkFrame):
-    def __init__(self, master):
+    def __init__(self, master, watch_function):
         super().__init__(master, fg_color="transparent")
+        self.watch_function = watch_function
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure((1), weight=1)
+
+        self.media_bar = LabelledMediabar(self, "Favourites", [], self.watch_function)
         self.build_ui()
 
     def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text="Starred movies and TV shows", font=TITLE_FONT)
+
+        self.media_bar.grid(row=1, column=0, sticky="nsew")
         self.title_label.grid(row=0, column=0, sticky="nsew", pady=(10, 10))
+
+    def update_media(self, media):
+        self.media_bar.update_media(media)
 
 class PlaybackSettingsFrame(ctk.CTkFrame):
     def __init__(self, master):
@@ -717,12 +741,14 @@ class MovieBrowser(ctk.CTkFrame):
 
         self.quit = quit
         self.name = name
+        self.starred_media = []
+
         self.home_frame = HomeFrame(self, self.name, self.watch_media)
         self.search_frame = SearchFrame(self, self.watch_media)
-        self.star_frame = StarredFrame(self)
+        self.star_frame = StarredFrame(self, self.watch_media)
         self.settings_frame = SettingsFrame(self)
         self.account_frame = AccountFrame(self, self.name)
-        self.watch_frame = WatchFrame(self, Movie({}))
+        self.watch_frame = WatchFrame(self, Movie({}), self.toggle_favourite)
 
         self.current_frame = self.home_frame
 
@@ -756,6 +782,7 @@ class MovieBrowser(ctk.CTkFrame):
 
     def watch_media(self, media: Union[Movie, Anime, Show, AnimeMovie]):
         self.watch_frame.switch_media(media)
+        self.watch_frame.set_starred_state(self.is_starred(media))
         self.switch_frame(self.watch_frame)
 
     def change_name(self, new_name: str):
@@ -766,6 +793,18 @@ class MovieBrowser(ctk.CTkFrame):
         self.current_frame.grid_forget()
         new_frame.grid(row=0, column=1, rowspan=2, sticky="nsew", pady=(10, 10), padx=(10, 10))
         self.current_frame = new_frame
+
+    def is_starred(self, media):
+        return any([m.get_id() == media.get_id() for m in self.starred_media])
+    
+    def toggle_favourite(self, media):
+        if self.is_starred(media):
+            self.starred_media = [m for m in self.starred_media if m.get_id() != media.get_id()]
+        else:
+            self.starred_media.append(media)
+
+        self.star_frame.update_media(self.starred_media)
+        self.watch_frame.set_starred_state(self.is_starred(media))
 
 
 class StreamingApp(ctk.CTk):
