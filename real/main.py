@@ -16,9 +16,11 @@ TITLE_FONT = ("Inter", 35, "bold")
 TEXT_FONT = ("Arial", 20)
 SMALL_FONT = ("Arial", 17)
 TYPEWRITER_FONT = ("Courier New", 14)
+
 POSTER_SIZE = (96, 144)
 MEDIUM_POSTER_SIZE = (160, 240)
 BIG_POSTER_SIZE = (320, 480)
+
 FILTER_SORT_OPTIONS = ["any", "score rating", "age rating", "length", "genre", "popularity"]
 RESTRICTIONS_MAP = {
             "any": [""],
@@ -93,29 +95,42 @@ for name in json_names:
     data = read_json(json_path)
     jsons[name] = data
 
+accounts_path = os.path.join(resource_path, "accounts.csv")
+
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme(os.path.join(resource_path, "theme.json"))
 
 class SubscriptionPlan(Enum):
-    BRONZE = "Bronze"
-    SILVER = "Silver"
-    GOLD = "Gold"
-    PLATINUM = "Platinum"
+    FREE = "FreePlan"
+    STANDARD = "StandardPlan"
+    PREMIUM = "PremiumPlan"
 
 class Profile:
-    def __init__(self, name, age_rating):
+    def __init__(self, name, is_adult: bool, watchlist=None, watch_history=None):
         self.name = name
-        self.age_rating = age_rating
-        self.watchlist = []
-        self.watch_history = []
+        self.is_adult = is_adult
+        self.watchlist = watchlist if watchlist is not None else []
+        self.watch_history = watch_history if watch_history is not None else []
 
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "is_adult": self.is_adult,
+            "watchlist": self.watchlist,
+            "watch_history": self.watch_history
+        }
+    
 class Account:
-    def __init__(self, name, email, password, subscription_plan: SubscriptionPlan, payment_info):
-        self.name = name
+    def __init__(self, username, email, password, subscription_plan: SubscriptionPlan, payment_info):
+        self.username = username
         self.email = email
+        self.subscription_plan = subscription_plan
+
+        # ENCAPSULATION
         self.__password = password
         self.__payment_info = payment_info
-        self.subscription_plan = subscription_plan
+
+        # COMPOSITION
         self.profiles = []
 
     def check_password(self, attempt):
@@ -127,29 +142,61 @@ class Account:
     def get_payment_info(self):
         return self.__payment_info
     
+    def add_profile(self, profile: Profile):
+        self.profiles.append(profile)
+    
 class AccountManager:
     def __init__(self, filepath):
         self.filepath = filepath
-        self.fields = ["name", "email", "password", "subscription_plan", "payment_info", "profiles"]
+        self.fields = ["username", "email", "password", "subscription_plan", "payment_info", "profiles"]
     
     def load_accounts(self):
         accounts = []
-        with open(self.filepath, "r", newline="") as f:
+        if not os.path.exists(self.filepath):
+            return accounts
+        
+        with open(self.filepath, "r", newline="", encoding="utf-8") as f:
             reader=csv.DictReader(f)
             for row in reader:
-                accounts.append(Account(row["name"], row["email"], row["password"], SubscriptionPlan(row["subscription_plan"]), row["payment_info"]))
+                plan_value = row["subscription_plan"].strip()
+                plan = ([plan for plan in SubscriptionPlan if plan.value == plan_value]+[SubscriptionPlan.FREE])[0]
+                account = Account(row["username"], row["email"], row["password"], plan, row["payment_info"])
+                profiles = json.loads(row["profiles"])
+                for profile_data in profiles:
+                    profile = Profile(profile_data["name"], profile_data["is_adult"], profile_data.get("watchlist", []), profile_data.get("watch_history", []))
+                    account.add_profile(profile)
+
+                accounts.append(account)
+
         return accounts
     
     def save_account(self, account: Account):
-        with open(self.filepath, "a", newline="") as f:
+        file_exists = os.path.exists(self.filepath)
+        with open(self.filepath, "a", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=self.fields)
+            if not file_exists:
+                writer.writeheader()
             writer.writerow({
-                "name": account.name, 
+                "username": account.username, 
                 "email": account.email, 
                 "password": account.get_password(), 
                 "subscription_plan": account.subscription_plan.value, 
                 "payment_info": account.get_payment_info(),
-                "profiles": str(account.profiles)
+                "profiles": json.dumps([p.to_dict() for p in account.profiles])
+                })
+            
+    def update_accounts(self, accounts: list[Account]):
+        with open(self.filepath, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=self.fields)
+            writer.writeheader()
+            for account in accounts:
+                writer.writerow({
+                    "username": account.username, 
+                    "email": account.email, 
+                    "password": account.get_password(), 
+                    "subscription_plan": account.subscription_plan.value, 
+                    "payment_info": account.get_payment_info(),
+                    "profiles": json.dumps([p.to_dict() for p in account.profiles])
                 })
 
 class Media():
@@ -404,7 +451,7 @@ def create_rrect(canvas: ctk.CTkCanvas, width, height, pos, r, fill):
     return canvas.create_polygon(points, smooth=True, fill=fill)
 
 class ImageCell():
-    def __init__(self, canvas: ctk.CTkCanvas, image, pos, speed = 1):
+    def __init__(self, canvas: ctk.CTkCanvas, image, pos, speed = 1.0):
         self.canvas = canvas
         self.id = self.canvas.create_image(*pos, image=image, anchor="nw")
         self.speed = speed
@@ -482,7 +529,7 @@ class LoginFrame(ctk.CTkFrame):
             # speed = random.randint(40, 100) / 50
             speed = (1 + j % 2) / 3
             for i in range(self.images_count + 1):
-                image = ImageCell(self.canvas, self.image if j % 2 == 0 else self.image_dark, (self.width / self.images_count * i - self.image_sizes[j % 2][0] / 2 + x_offset, y_pos), int(speed))
+                image = ImageCell(self.canvas, self.image if j % 2 == 0 else self.image_dark, (self.width / self.images_count * i - self.image_sizes[j % 2][0] / 2 + x_offset, y_pos), speed)
                 self.images.append(image)
         
         login_panel = Panel(self.canvas, (w:=400), (f := 0.85)*self.height, 40, ((self.width - w) / 2, (1 - f)*self.height / 2), "#36363B", (30, 30, 30, 30))
@@ -545,7 +592,10 @@ class LoginFrame(ctk.CTkFrame):
     def button_callback(self):
         user = self.email.get()
         password = self.password.get()
-        self.login_switch((user, password))
+        success = self.login_switch((user, password))
+        if not success:
+            print("Incorrect username, email or password. Please try again.")
+
 
 class Sidebar(ctk.CTkFrame):
     def __init__(self, master, handle_function):
@@ -963,7 +1013,10 @@ class StreamingApp(ctk.CTk):
         self.geometry("1280x720")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
+
         self.user = ""
+        self.account_manager = AccountManager(accounts_path)
+        
         self.build_ui()
 
     def build_ui(self):
@@ -976,10 +1029,27 @@ class StreamingApp(ctk.CTk):
         frame1.grid_forget()
         frame2.grid(row=0, column=0, sticky="nsew")
 
-    def handle_login(self, userdata: tuple[str, str]):
-        user, password = userdata
-        print(f"Logging in as {user} with password {password}")
-        self.login_switch(user)
+    def handle_login(self, userdata: tuple[str, str]) -> bool:
+        username_email, password = userdata
+
+        accounts = self.account_manager.load_accounts()
+        logged_in_user = None
+        for account in accounts:
+            if account.email.strip().lower() == username_email.lower() or account.username == username_email:
+                if account.check_password(password):
+                    logged_in_user = account
+                    break
+
+        if logged_in_user:
+            username = logged_in_user.username
+            password = logged_in_user.get_password() # FIXME: encapsulation leak
+            print(f"Logging in as {username} with password {password}")
+            self.login_switch(username)
+            return True
+        else:
+            # FIXME: 
+            print("Incorrect details.")
+            return False
 
     def login_switch(self, user):
         self.switch_frame(self.login_frame, self.loading_frame)
