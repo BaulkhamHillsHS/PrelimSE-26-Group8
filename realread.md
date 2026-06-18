@@ -106,3 +106,11 @@ sort increasing/decreasing switch, movies/anime_movies/anime/tv shows combo box
 allow starring movies soon tm
 
 add back button maybe
+
+just need profiles, account, child profiles, "watching the movies", watch history, search history (maybe), search by title
+
+real icons
+
+make the background better
+
+look through realread and delete things you've done

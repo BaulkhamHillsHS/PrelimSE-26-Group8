@@ -96,7 +96,6 @@ for name in json_names:
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme(os.path.join(resource_path, "theme.json"))
 
-
 class SubscriptionPlan(Enum):
     BRONZE = "Bronze"
     SILVER = "Silver"
@@ -475,7 +474,6 @@ class LoginFrame(ctk.CTkFrame):
         
         self.canvas = ctk.CTkCanvas(self, width=1280, height=720, bg="black", highlightthickness=0)
         self.canvas.place(x=0, y=0)
-        # self.images = self.canvas.create_image(0, 0, image=self.photo, anchor="center")
 
         self.images = []
         for j in range(self.row_count):
@@ -484,7 +482,6 @@ class LoginFrame(ctk.CTkFrame):
             # speed = random.randint(40, 100) / 50
             speed = (1 + j % 2) / 3
             for i in range(self.images_count + 1):
-                # image = self.canvas.create_image(self.self.width / self.images_count * i - 60 + x_offset, y_pos, image=self.photo, anchor="nw")
                 image = ImageCell(self.canvas, self.image if j % 2 == 0 else self.image_dark, (self.width / self.images_count * i - self.image_sizes[j % 2][0] / 2 + x_offset, y_pos), int(speed))
                 self.images.append(image)
         
@@ -550,38 +547,6 @@ class LoginFrame(ctk.CTkFrame):
         password = self.password.get()
         self.login_switch((user, password))
 
-class LoginScreen(ctk.CTkFrame):
-    def __init__(self, master, switch_function):
-        super().__init__(master)
-        self.grid_columnconfigure((1), weight=1)
-        self.switch_function = switch_function
-        self.show_password_state = tk.BooleanVar(value=False)
-        self.build_ui()
-
-    def build_ui(self):
-        self.title_label = ctk.CTkLabel(self, text="HBflix login", font=TITLE_FONT)
-        self.name_entry = ctk.CTkEntry(self, placeholder_text="Enter your username...", width=300)
-        self.login_button = ctk.CTkButton(self, text="Login", command=self.login_submit, hover_color="#3e8a7e", font=TITLE_FONT)
-        self.password_entry = ctk.CTkEntry(self, show="*", placeholder_text="Enter your password...", width=300)
-        self.show_password = ctk.CTkCheckBox(self, text="Show password", variable=self.show_password_state, command=self.toggle_show_password)
-        self.title_label.grid(row=0, column=1, pady=(50,30))
-        self.name_entry.grid(row=1, column=1, pady=(25,10))
-        self.password_entry.grid(row=2, column=1, pady=(0,10))
-        self.show_password.grid(row=3, column=1, pady=(20, 20))
-        self.login_button.grid(row=4, column=1, pady=(10,0))
-        
-    def login_submit(self):
-        if self.name_entry.get() == "":
-            self.switch_function(("Guest", ""))
-        else:
-            self.switch_function((self.name_entry.get(), self.password_entry.get()))
-
-    def toggle_show_password(self):
-        if self.show_password_state.get():
-            self.password_entry.configure(show="")
-        else:
-            self.password_entry.configure(show="*")
-
 class Sidebar(ctk.CTkFrame):
     def __init__(self, master, handle_function):
         super().__init__(master, fg_color="transparent")
@@ -639,12 +604,14 @@ class WatchFrame(ctk.CTkFrame):
         overview = self.media.get_overview()[:300]
         if(len(self.media.get_overview())>=300):
             overview+="..."
-        self.overview_label = ctk.CTkLabel(self, text=overview, wraplength=500, font=SMALL_FONT)
-        self.star_button = ctk.CTkButton(self, text="[unstarred] Add to favourites", command=self.toggle_favourite, font=TEXT_FONT)
+        self.overview_textbox = ctk.CTkTextbox(self, wrap="word", fg_color="transparent", font=SMALL_FONT)
+        self.overview_textbox.insert("0.0", self.media.get_overview())
+        self.overview_textbox.configure(state="disabled")
+        self.star_button = ctk.CTkButton(self, text="☆ Add to favourites", command=self.toggle_favourite, font=TEXT_FONT)
 
         self.title_label.grid(row=0, column=0, pady=(10, 10), padx=0)
         self.poster_label.grid(row=1, column=0, pady=(10, 10), padx=(10, 10), sticky="nsew")
-        self.overview_label.grid(row=2, column=0, pady=(10, 10), padx=(10, 10), sticky="nsew")
+        self.overview_textbox.grid(row=2, column=0, pady=(10, 10), padx=(10, 10), sticky="nsew")
         self.star_button.grid(row=3, column=0, pady=(10, 10))
 
     def switch_media(self, new_media):
@@ -655,16 +622,19 @@ class WatchFrame(ctk.CTkFrame):
         overview = self.media.get_overview()[:300]
         if(len(self.media.get_overview())>=300):
             overview+="..."
-        self.overview_label.configure(text=overview)
+        self.overview_textbox.configure(state="normal")
+        self.overview_textbox.delete("0.0", "end")
+        self.overview_textbox.insert("0.0", self.media.get_overview())
+        self.overview_textbox.configure(state="disabled")
 
     def toggle_favourite(self):
         self.favourite_callback(self.media)
 
     def set_starred_state(self, starred):
         if starred:
-            self.star_button.configure(text="[starred] Remove from favourites")
+            self.star_button.configure(text="[★] Remove from favourites")
         else:
-            self.star_button.configure(text="[unstarred] Add to favourites")
+            self.star_button.configure(text="[☆] Add to favourites")
 
 class Mediabar(ctk.CTkScrollableFrame):
     def __init__(self, master, name,  media, watch_function):
@@ -842,8 +812,9 @@ class PlaybackSettingsFrame(ctk.CTkFrame):
 class AppearanceSettingsFrame(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
-        self.grid_columnconfigure((0, 1), weight=0)
+        self.grid_columnconfigure(0, weight=0)
         self.grid_rowconfigure((0, 1, 2), weight=1)
+        self.grid_columnconfigure(1, minsize=500)
         self.build_ui()
 
     def build_ui(self):
@@ -855,7 +826,7 @@ class AppearanceSettingsFrame(ctk.CTkFrame):
         self.necessary_switch = ctk.CTkSwitch(self, text="Allow necessary cookies", variable=self.necessary_var, font=TEXT_FONT, state="disabled")
         
         self.resolution_label.grid(row=0, column=0, pady=(10, 10), padx=(10, 10))
-        self.resolution_combo.grid(row=0, column=1, pady=(10, 10), padx=(10, 10))
+        self.resolution_combo.grid(row=0, column=1, pady=(10, 10), padx=(10, 10), sticky="ew")
         self.unnecessary_switch.grid(row=1, column=0, pady=(10, 10), padx=(10, 10))
         self.necessary_switch.grid(row=2, column=0, pady=(10, 10), padx=(10, 10))
     
