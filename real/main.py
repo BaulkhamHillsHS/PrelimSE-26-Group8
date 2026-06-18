@@ -31,6 +31,9 @@ RESTRICTIONS_MAP = {
             "popularity": [">200", ">175", ">150", ">100", ">50"]
         }
 
+PRIMARY_COLOUR = "#ecb050"
+SECONDARY_COLOUR = "#f5e35e"
+
 root = Path(__file__).resolve().parent
 resource_path = os.path.join(root, "resource")
 posters_path = os.path.join(resource_path, "posters")
@@ -43,15 +46,13 @@ image_names = [
           "star_icon",
           "quit_icon",
           "account_icon",
-          "logo",
+          "small_logo",
           # BEN STUFF
           "blind",
           "eye",
-          "logo_dark",
-          "logo_light",
           "lock",
           "person",
-          "main_logo"
+          "wide_logo"
           ]
 
 images = {}
@@ -407,7 +408,7 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
         case "anime":
             return [Anime(x) for x in out[:count]]
 
-class LoadingScreen(ctk.CTkFrame):
+class LoadingFrame(ctk.CTkFrame):
     def __init__(self, master, loading_text: str):
         super().__init__(master)
         self.grid_columnconfigure((0, 1, 2), weight=1)
@@ -510,8 +511,8 @@ class LoginFrame(ctk.CTkFrame):
         self.images_count = 9
         self.row_count = 7
         
-        pil_image = images["logo_light"]
-        pil_image_dark = ImageEnhance.Brightness(images["logo_light"]).enhance(0.6)
+        pil_image = images["small_logo"]
+        pil_image_dark = ImageEnhance.Brightness(images["small_logo"]).enhance(0.6)#.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
 
         main_font = ctk.CTkFont(family="Inter Regular", size=16)
 
@@ -534,7 +535,7 @@ class LoginFrame(ctk.CTkFrame):
         
         login_panel = Panel(self.canvas, (w:=400), (f := 0.85)*self.height, 40, ((self.width - w) / 2, (1 - f)*self.height / 2), "#36363B", (30, 30, 30, 30))
         
-        title = images["main_logo"]
+        title = images["wide_logo"]
         title_pad = 30
         
         self.asdf = ImageTk.PhotoImage(title.resize(((w_x:=login_panel.get_udim()[0] - 2 * title_pad), int(title.size[1] / title.size[0] * w_x))))
@@ -559,17 +560,22 @@ class LoginFrame(ctk.CTkFrame):
         
         self.password = ctk.CTkEntry(self.password_frame, font=main_font, placeholder_text="Password", border_width=0, fg_color="#4C4C53", show="•", text_color="#98989B")
         self.password.grid(row=0, column=1, sticky="nesw", pady=2, padx=(0, 15))
+
         self.lock_icon = ctk.CTkLabel(self.password_frame, image=ctk.CTkImage(light_image=(p:=images["lock"]), size=p.size), text="")
         self.lock_icon.grid(row=0, column=0, padx=(12, 10))
+
+        self.password_visible = False
         
-        self.visibility = [images["eye"], images["blind"]]
-        self.hide = ctk.CTkButton(self.password_frame, width=0, height=40, text="", fg_color="#4C4C53", image=ctk.CTkImage(light_image=(p:=self.visibility[1]), size=p.size), command=lambda: self.toggle_show(self.password, self.hide), anchor="center", hover_color="#4C4C53")
+        self.eye_icon = ctk.CTkImage(images["eye"], size=images["eye"].size)
+        self.blind_icon = ctk.CTkImage(images["blind"], size=images["blind"].size)
+        self.hide = ctk.CTkButton(self.password_frame, width=0, height=40, text="", fg_color="#4C4C53", image=self.blind_icon, command=lambda: self.toggle_show(self.password, self.hide), anchor="center", hover_color="#4C4C53")
         self.hide.grid(row=0, column=2, padx=(0, 5), pady=(3, 0))
         
         button_width = 56
-        self.login_button = ctk.CTkButton(self, login_panel.get_dim()[0] - login_panel.padding[0] - login_panel.padding[1], button_width, 10, bg_color="#36363B", fg_color="#d81f26", text="Login", font=("Inter Black", 20), text_color="white", hover_color="#b41f24", command=self.button_callback)
+        self.login_button = ctk.CTkButton(self, login_panel.get_dim()[0] - login_panel.padding[0] - login_panel.padding[1], button_width, 10, bg_color="#36363B", fg_color=PRIMARY_COLOUR, text="Login", font=("Inter Black", 20), text_color="white", hover_color=SECONDARY_COLOUR, command=self.button_callback)
         self.login_button.place(x=login_panel.get_pos()[0] + login_panel.padding[0], y=login_panel.get_pos()[1] + login_panel.get_dim()[1] - login_panel.padding[3] - button_width)
         
+        self.incorrect_password_label = self.canvas.create_text(self.width*0.5, self.height*0.65, text="Incorrect username, \nemail, or password.\nPlease try again", fill="#FF0000", state="hidden", font=SMALL_FONT, justify="center")
         self.animate()
     
     def animate(self):
@@ -581,19 +587,20 @@ class LoginFrame(ctk.CTkFrame):
         self.after(16, self.animate)
         
     def toggle_show(self, entry: ctk.CTkEntry, button: ctk.CTkButton):
-        current = entry.cget("show")
-        if current != "":
+        if not self.password_visible:
             entry.configure(show="")
-            button.configure(image=ctk.CTkImage(light_image=(p:=self.visibility[1])))
+            button.configure(image=self.eye_icon)
         else:
             entry.configure(show="•")
-            button.configure(image=ctk.CTkImage(light_image=(p:=self.visibility[0])))
+            button.configure(image=self.blind_icon)
+        self.password_visible = not self.password_visible
 
     def button_callback(self):
         user = self.email.get()
         password = self.password.get()
         success = self.login_switch((user, password))
         if not success:
+            self.canvas.itemconfigure(self.incorrect_password_label, state="normal")
             print("Incorrect username, email or password. Please try again.")
 
 
@@ -955,7 +962,7 @@ class MovieBrowser(ctk.CTkFrame):
         self.build_ui()
     
     def build_ui(self):
-        self.logo = ctk.CTkImage(images["logo"], size=(100,100))
+        self.logo = ctk.CTkImage(images["small_logo"].resize((100, 100), resample=Image.Resampling.LANCZOS), size=(100,100))
         self.logo_label = ctk.CTkLabel(self, image=self.logo, text="")
         self.logo_label.grid(row=0,column=0,padx=10,pady=10,sticky="nsew")
 
@@ -1022,7 +1029,7 @@ class StreamingApp(ctk.CTk):
     def build_ui(self):
         self.login_frame = LoginFrame(self, self.handle_login)
         self.login_frame.grid(row=0, column=0, sticky="nsew")
-        self.loading_frame = LoadingScreen(self, loading_text="Loading...")
+        self.loading_frame = LoadingFrame(self, loading_text="Loading...")
         self.browse_frame = MovieBrowser(self, self.user, quit=self.quit)
 
     def switch_frame(self, frame1: ctk.CTkFrame, frame2: ctk.CTkFrame):

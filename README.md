@@ -39,18 +39,15 @@
 - search should include tv show and anime stuff movies/anime_movies/anime/tvshows combo box
 - watchframe should show episode count, voting average, age rating, movie length, genres, tag
 - "watching" the media
-- profiles, account, child profiles
+- restrict content if you're on child profile
 - watch history
-- account and profile in csv
-- proper logging in like check if account exists
-- subscriptions
+- subscriptions upgrading
 - payment info
-
+- while in login frame press enter while in password field to submit 
 
 # BEN
 - real icons
 - improve background
-
 
 # Non-code
 - uml class diagram
