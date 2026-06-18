@@ -818,7 +818,7 @@ class StreamingApp(ctk.CTk):
         self.build_ui()
 
     def build_ui(self):
-        self.login_frame = LoginScreen(self, switch_function=self.log_in_switch)
+        self.login_frame = LoginScreen(self, switch_function=self.handle_login)
         self.login_frame.grid(row=0, column=0, sticky="nsew")
         self.loading_frame = LoadingScreen(self, loading_text="Loading...")
         self.browse_frame = MovieBrowser(self, self.user, quit=self.quit)
@@ -827,9 +827,12 @@ class StreamingApp(ctk.CTk):
         frame1.grid_forget()
         frame2.grid(row=0, column=0, sticky="nsew")
 
-    def log_in_switch(self, userdata):
+    def handle_login(self, userdata: tuple[str, str]):
         user, password = userdata
         print(f"Logging in as {user} with password {password}")
+        self.login_switch(user)
+
+    def login_switch(self, user):
         self.switch_frame(self.login_frame, self.loading_frame)
         self.user = user
         self.browse_frame.change_name(user)

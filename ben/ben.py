@@ -1,8 +1,6 @@
 import customtkinter as ctk
 from PIL import Image as im
 from PIL import ImageTk, ImageEnhance
-import random
-import math
 from pathlib import Path
 import os
 
@@ -14,7 +12,8 @@ image_list = [
     "icon0",
     "icon1",
     "lock",
-    "person"
+    "person",
+    "netty"
 ]
 for image in image_list:
     image_path = os.path.join(base, image+".png")
@@ -29,30 +28,6 @@ for font in font_list:
 
 def pos(x: int, y: int, x_offset: int = 0, y_offset: int = 0) -> str:
     return f"{x}x{y}+{x_offset-8}+{y_offset}"
-
-# rounded rect canvas element
-# def create_rrect(canvas: ctk.CTkCanvas, x1, y1, x2, y2, r, fill):
-#     points = [
-#         # corner 1
-#         x1, y1 + r, x1, y1 + r,
-#         x1, y1,
-#         x1 + r, y1, x1 + r, y1,
-        
-#         # corner 2
-#         x2 - r, y1, x2 - r, y1,
-#         x2, y1,
-#         x2, y1 + r, x2, y1 + r,
-        
-#         # corner 3
-#         x2, y2 - r, x2, y2 - r,
-#         x2, y2,
-#         x2 - r, y2, x2 - r, y2,
-        
-#         # corner 4
-#         x1 + r, y2, x1 + r, y2,
-#         x1, y2,
-#     ]
-#     return canvas.create_polygon(points, smooth=True, fill=fill)
 
 def create_rrect(canvas: ctk.CTkCanvas, width, height, pos, r, fill):
     x1, y1 = pos
@@ -80,8 +55,6 @@ def create_rrect(canvas: ctk.CTkCanvas, width, height, pos, r, fill):
         x1, y2 - r, x1, y2 - r
     ]
     return canvas.create_polygon(points, smooth=True, fill=fill)
-
-
 
 class Image():
     def __init__(self, canvas: ctk.CTkCanvas, image, pos, speed = 1):
@@ -131,10 +104,13 @@ class Login(ctk.CTkFrame):
         master,
         width,
         height,
-        fg_color: tuple[str, str] | str = "black"
+        login_switch
     ):
-        super().__init__(master=master, width=width, height=height, fg_color=fg_color)
-        
+        super().__init__(master=master, width=width, height=height, fg_color="transparent")
+        self.width = width
+        self.height = height 
+        self.login_switch = login_switch
+
         self.update()
         self.build_ui()
     def build_ui(self):
@@ -152,24 +128,23 @@ class Login(ctk.CTkFrame):
         self.image = ImageTk.PhotoImage(pil_image.resize(self.image_sizes[0]))
         self.image_dark = ImageTk.PhotoImage(pil_image_dark.resize(self.image_sizes[1]))
         
-        self.canvas = ctk.CTkCanvas(self, width=1280, height=720, bg="black")
-        self.canvas.place(x=-2, y=0)
+        self.canvas = ctk.CTkCanvas(self, width=1280, height=720, bg="black", highlightthickness=0)
+        self.canvas.place(x=0, y=0)
         # self.images = self.canvas.create_image(0, 0, image=self.photo, anchor="center")
 
         self.images = []
         for j in range(self.row_count):
-            y_pos = SCREEN_HEIGHT / (self.row_count - 1) * j - self.image_sizes[j % 2][0] / 2
-            x_offset = (j // 2) % 2 * SCREEN_WIDTH / self.images_count / 2
+            y_pos = self.height / (self.row_count - 1) * j - self.image_sizes[j % 2][0] / 2
+            x_offset = (j // 2) % 2 * self.width / self.images_count / 2
             # speed = random.randint(40, 100) / 50
             speed = (1 + j % 2) / 3
             for i in range(self.images_count + 1):
-                # image = self.canvas.create_image(self.SCREEN_WIDTH / self.images_count * i - 60 + x_offset, y_pos, image=self.photo, anchor="nw")
-                image = Image(self.canvas, self.image if j % 2 == 0 else self.image_dark, (SCREEN_WIDTH / self.images_count * i - self.image_sizes[j % 2][0] / 2 + x_offset, y_pos), speed)
+                # image = self.canvas.create_image(self.self.width / self.images_count * i - 60 + x_offset, y_pos, image=self.photo, anchor="nw")
+                image = Image(self.canvas, self.image if j % 2 == 0 else self.image_dark, (self.width / self.images_count * i - self.image_sizes[j % 2][0] / 2 + x_offset, y_pos), speed)
                 self.images.append(image)
         
-        login_panel = Panel(self.canvas, (w:=400), (f := 0.85)*SCREEN_HEIGHT, 40, ((SCREEN_WIDTH - w) / 2, (1 - f)*SCREEN_HEIGHT / 2), "#36363B", (30, 30, 30, 30))
+        login_panel = Panel(self.canvas, (w:=400), (f := 0.85)*self.height, 40, ((self.width - w) / 2, (1 - f)*self.height / 2), "#36363B", (30, 30, 30, 30))
         
-        # Content goes here
         title = im.open(resources["netty"])
         title_pad = 30
         
@@ -203,7 +178,7 @@ class Login(ctk.CTkFrame):
         self.hide.grid(row=0, column=2, padx=(0, 5), pady=(3, 0))
         
         button_width = 56
-        self.login_button = ctk.CTkButton(self, login_panel.get_dim()[0] - login_panel.padding[0] - login_panel.padding[1], button_width, 10, bg_color="#36363B", fg_color="#d81f26", text="Login", font=("Inter Black", 20), text_color="white", hover_color="#b41f24")
+        self.login_button = ctk.CTkButton(self, login_panel.get_dim()[0] - login_panel.padding[0] - login_panel.padding[1], button_width, 10, bg_color="#36363B", fg_color="#d81f26", text="Login", font=("Inter Black", 20), text_color="white", hover_color="#b41f24", command=self.button_callback)
         self.login_button.place(x=login_panel.get_pos()[0] + login_panel.padding[0], y=login_panel.get_pos()[1] + login_panel.get_dim()[1] - login_panel.padding[3] - button_width)
         
         self.animate()
@@ -211,7 +186,7 @@ class Login(ctk.CTkFrame):
     def animate(self):
         for x in self.images:
             x.slide()
-            if x.get_pos()[0] >= self.SCREEN_WIDTH / self.images_count + self.SCREEN_WIDTH - x.get_size()[0]:
+            if x.get_pos()[0] >= self.width / self.images_count + self.width - x.get_size()[0]:
                 x.goto(-x.get_size()[0], "")
         
         self.after(16, self.animate)
@@ -225,9 +200,15 @@ class Login(ctk.CTkFrame):
             entry.configure(show="•")
             button.configure(image=ctk.CTkImage(light_image=(p:=self.visibility[0])))
 
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
+    def button_callback(self):
+        user = self.email.get()
+        password = self.password.get()
+        self.login_switch((user, password))
 
 if __name__ == "__main__":
-    app = ctk.CTk(fg_color="black", geometry=pos(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0), title="Use this as the background of a login screen or something", resizable=(False, False))
+
+    app = ctk.CTk()
+    app.geometry("1280x720")
+    login = Login(app, width=1280, height=720, login_switch=lambda x: print(x))
+    login.grid(row=0, column=0, sticky="nsew")
     app.mainloop()
