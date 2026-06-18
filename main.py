@@ -79,7 +79,7 @@ class ImageCell():
         self.canvas.move(self.id, self.speed, 0)
     
     def get_pos(self):
-        return self.canvas.tk.call(self.canvas._w, "coords", self.id) # FIXME: # type: ignore
+        return self.canvas.tk.call(self.canvas._w, "coords", self.id) # type: ignore
     
     def get_size(self):
         bbox = self.canvas.bbox(self.id)
@@ -188,6 +188,10 @@ class LoginFrame(ctk.CTkFrame):
         self.login_button.place(x=login_panel.get_pos()[0] + login_panel.padding[0], y=login_panel.get_pos()[1] + login_panel.get_dim()[1] - login_panel.padding[3] - button_width)
         
         self.incorrect_password_label = self.canvas.create_text(self.width*0.5, self.height*0.65, text="Incorrect username, \nemail, or password.\nPlease try again", fill="#FF0000", state="hidden", font=SMALL_FONT, justify="center")
+        
+        self.email.bind("<Return>", lambda a: self.button_callback())
+        self.password.bind("<Return>", lambda a: self.button_callback())
+
         self.animate()
     
     def animate(self):
@@ -428,7 +432,7 @@ class SearchFrame(ctk.CTkScrollableFrame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure((1, 2, 3), weight=1)
-        self.results_bar = LabelledMediabar(self, "Results", [Movie({}, POSTER_SIZE) for _ in range(10)], watch_function) # FIXME: FIXME: FIXME:FIXME: FIXME: FIXME: FIXME: FIXME: movie only workes for movie this only works for movie 
+        self.results_bar = LabelledMediabar(self, "Results", [Movie({}, POSTER_SIZE) for _ in range(10)], watch_function)
         self.build_ui()
 
     def build_ui(self):
