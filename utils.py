@@ -309,9 +309,9 @@ class Season():
     
 def media_get_attribute(data, attribute, default) -> Union[str, int, float]:
     match attribute:
-        case "score_rating":
+        case "score_rating" | "score rating":
             return data["vote_average"]
-        case "age rating":
+        case "age_rating" | "age rating":
             raise ValueError() # FIXME:
         case "length":
             return data["runtime"]
@@ -322,44 +322,45 @@ def media_get_attribute(data, attribute, default) -> Union[str, int, float]:
         case _:
             return data.get(attribute, default)
 
-def restriction_check(filter: str, restriction: str, movie_data: dict):
+def restriction_check(filter: str, restriction: str, media_data: dict):
     assert filter in FILTER_SORT_OPTIONS
     assert restriction in RESTRICTIONS_MAP[filter]
     match filter:
         case "any":
             return True
         case "score rating":
-            movie_score = movie_data["vote_average"] #FIXME: why hardcode movie? also, use the movie_get_attribute function or similar
+            media_score = media_get_attribute(media_data, filter, 0) #FIXME: why hardcode movie? also, use the media_get_attribute function or similar
             required = float(restriction[1:])
-            return movie_score>=required
+            return media_score>=required
         case "age rating":
             raise ValueError() # No age ratings yet... FIXME:
         case "length":
-            movie_length = movie_data["runtime"]
+            media_length = media_get_attribute(media_data, filter, 0) #FIXME: why hardcode movie? also, use the media_get_attribute function or similar
+            required = float(restriction[1:])
             required = int(restriction[1:-1])
             if restriction[0]=="<":
-                return movie_length<required
+                return media_length<required
             else:
-                return movie_length>required
+                return media_length>required
         case "genre":
-            movie_genres = movie_data["genres"]
-            for genre in movie_genres:
+            media_genres = media_get_attribute(media_data, filter, [])
+            for genre in media_genres:
                 if genre["name"]==restriction:
                     return True
             return False
         case "popularity":
-            movie_popularity = movie_data["popularity"]
+            media_popularity = media_get_attribute(media_data, "popularity", 0)
             required = int(restriction[1:])
-            return movie_popularity>=required
+            return media_popularity>=required
     raise ValueError()  # FIXME: debug, delete later
 
 def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int, decreasing: bool=False):
     match media_type:
         case "movie":
             media_dict = jsons["movie"]
-        case "tv_show":
+        case "tv_show" | "tv show":
             media_dict = jsons["tv"]
-        case "anime_movie":
+        case "anime_movie" | "anime movie":
             media_dict = jsons["anime_movie"]
         case "anime":
             media_dict = jsons["anime"]
@@ -369,9 +370,9 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
     assert filter_by, sort_by in FILTER_SORT_OPTIONS
     assert restriction in RESTRICTIONS_MAP[filter_by]
     out = []
-    for movie in media_dict:
-        if restriction_check(filter_by, restriction, movie):
-            out.append(movie)
+    for media in media_dict:
+        if restriction_check(filter_by, restriction, media):
+            out.append(media)
 
     if sort_by!="any":
         if sort_by=="genre":

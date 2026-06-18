@@ -160,7 +160,7 @@ class LoginFrame(ctk.CTkFrame):
         self.email_frame.grid_propagate(False)
         
         self.email = ctk.CTkEntry(self.email_frame, font=main_font, placeholder_text="Email or mobile number", border_width=0, fg_color="#4C4C53", text_color="#98989B")
-        self.email.grid(row=0, column=1, sticky="nesw", pady=2, padx=(0, 15))
+        self.email.grid(row=0, column=1, sticky="nsew", pady=2, padx=(0, 15))
         self.person_icon = ctk.CTkLabel(self.email_frame, image=ctk.CTkImage(light_image=(p:=images["person"]), size=p.size), text="")
         self.person_icon.grid(row=0, column=0, padx=(12, 10))
         
@@ -171,7 +171,7 @@ class LoginFrame(ctk.CTkFrame):
         self.password_frame.grid_propagate(False)
         
         self.password = ctk.CTkEntry(self.password_frame, font=main_font, placeholder_text="Password", border_width=0, fg_color="#4C4C53", show="•", text_color="#98989B")
-        self.password.grid(row=0, column=1, sticky="nesw", pady=2, padx=(0, 15))
+        self.password.grid(row=0, column=1, sticky="nsew", pady=2, padx=(0, 15))
 
         self.lock_icon = ctk.CTkLabel(self.password_frame, image=ctk.CTkImage(light_image=(p:=images["lock"]), size=p.size), text="")
         self.lock_icon.grid(row=0, column=0, padx=(12, 10))
@@ -213,7 +213,6 @@ class LoginFrame(ctk.CTkFrame):
         success = self.login_switch((user, password))
         if not success:
             self.canvas.itemconfigure(self.incorrect_password_label, state="normal")
-            print("Incorrect username, email or password. Please try again.")
 
 class Sidebar(ctk.CTkFrame):
     def __init__(self, master, handle_function):
@@ -385,7 +384,7 @@ class HomeFrame(ctk.CTkScrollableFrame):
 class FilterSortFrame(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
-        self.grid_columnconfigure((0, 1, 2), weight=1)
+        self.grid_columnconfigure((0, 1, 2, 3), weight=1)
         self.grid_rowconfigure((0, 1), weight=1)
         self.restrictions_map = RESTRICTIONS_MAP
         self.build_ui()
@@ -394,17 +393,20 @@ class FilterSortFrame(ctk.CTkFrame):
         self.filter_by = ctk.CTkOptionMenu(self, values=FILTER_SORT_OPTIONS, command=self.filter_change)
         self.filter_by_restriction_menu = ctk.CTkOptionMenu(self, values=self.restrictions_map["any"])
         self.sort_by = ctk.CTkOptionMenu(self, values=FILTER_SORT_OPTIONS)
-        self.type = ctk.CTkOptionMenu(self, values=["Movie", "TV Show", "Anime", "Anime movie"])
+        self.media_type = ctk.CTkOptionMenu(self, values=["Movie", "TV Show", "Anime", "Anime movie"])
 
         self.filter_label = ctk.CTkLabel(self, text="Filter by...", font=TEXT_FONT)
         self.sort_label = ctk.CTkLabel(self, text="Sort by...", font=TEXT_FONT)
+        self.media_label = ctk.CTkLabel(self, text="Media type...", font=TEXT_FONT)
 
         self.filter_label.grid(row=0, column=0, columnspan=2, pady=10, padx=10)
         self.sort_label.grid(row=0, column=2, padx=10, pady=10)
+        self.media_label.grid(row=0, column=3, padx=10, pady=10)
 
         self.filter_by.grid(row=1, column=0, padx=10, pady=10)
         self.filter_by_restriction_menu.grid(row=1, column=1, padx=10, pady=10)
         self.sort_by.grid(row=1, column=2, padx=10, pady=10)
+        self.media_type.grid(row=1, column=3, padx=10, pady=10)
 
     def filter_change(self, new: str):
         if new in self.restrictions_map:
@@ -416,6 +418,9 @@ class FilterSortFrame(ctk.CTkFrame):
     
     def get_sort(self):
         return (self.sort_by.get())
+    
+    def get_media_type(self):
+        return (self.media_type.get())
 
 class SearchFrame(ctk.CTkScrollableFrame):
     def __init__(self, master, watch_function):
@@ -423,7 +428,7 @@ class SearchFrame(ctk.CTkScrollableFrame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure((1, 2, 3), weight=1)
-        self.results_bar = LabelledMediabar(self, "Results", [Movie({}, POSTER_SIZE) for _ in range(10)], watch_function)
+        self.results_bar = LabelledMediabar(self, "Results", [Movie({}, POSTER_SIZE) for _ in range(10)], watch_function) # FIXME: FIXME: FIXME:FIXME: FIXME: FIXME: FIXME: FIXME: movie only workes for movie this only works for movie 
         self.build_ui()
 
     def build_ui(self):
@@ -437,7 +442,7 @@ class SearchFrame(ctk.CTkScrollableFrame):
         self.results_bar.grid(row=3, column=0, sticky="nsew")
 
     def button_callback(self):
-        new_movies = get_media("movie", *self.filter_sort_frame.get_filter(), self.filter_sort_frame.get_sort(), count=10)
+        new_movies = get_media(self.filter_sort_frame.get_media_type().lower(), *self.filter_sort_frame.get_filter(), self.filter_sort_frame.get_sort(), count=10)
         self.results_bar.update_media(new_movies)
 
 class StarredFrame(ctk.CTkFrame):
@@ -660,13 +665,11 @@ class StreamingApp(ctk.CTk):
 
         if logged_in_user:
             username = logged_in_user.username
-            password = logged_in_user.get_password() # FIXME: encapsulation leak
+            password = logged_in_user.get_password() # FIXME: insecure maybe idk
             print(f"Logging in as {username} with password {password}")
             self.login_switch(username)
             return True
         else:
-            # FIXME: 
-            print("Incorrect details.")
             return False
 
     def login_switch(self, user):
