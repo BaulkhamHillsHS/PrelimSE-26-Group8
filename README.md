@@ -50,6 +50,7 @@ Note: in the database/csv, accounts are pulled using username because usernames 
 - real icons
 - improve background
 - GET AGE RATINGS OR AT LEAST A BOOL FOR CHILD APPROPRIATE
+- make the login work when resized. Fix canvas weird glitch with zooming.
 
 # Non-code
 - uml class diagram
