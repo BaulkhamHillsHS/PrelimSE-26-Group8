@@ -1,412 +1,24 @@
-from datetime import datetime
 from typing import Union
 from PIL import Image
 from PIL import ImageTk, ImageEnhance
-import json
-import csv
 import random
 from PIL import Image
 import customtkinter as ctk
 import tkinter as tk
-from pathlib import Path
-from enum import Enum
-import os
 
-TITLE_FONT = ("Inter", 35, "bold")
-TEXT_FONT = ("Arial", 20)
-SMALL_FONT = ("Arial", 17)
-TYPEWRITER_FONT = ("Courier New", 14)
+from utils import TITLE_FONT, TEXT_FONT, SMALL_FONT, TYPEWRITER_FONT
+from utils import POSTER_SIZE, MEDIUM_POSTER_SIZE, BIG_POSTER_SIZE
+from utils import FILTER_SORT_OPTIONS, RESTRICTIONS_MAP
+from utils import PRIMARY_COLOUR, SECONDARY_COLOUR
 
-POSTER_SIZE = (96, 144)
-MEDIUM_POSTER_SIZE = (160, 240)
-BIG_POSTER_SIZE = (320, 480)
-
-FILTER_SORT_OPTIONS = ["any", "score rating", "age rating", "length", "genre", "popularity"]
-RESTRICTIONS_MAP = {
-            "any": [""],
-            "score rating": [">8.5", ">8", ">7.5", ">7"],
-            "age rating": ["PG", "PG13", "MA15+", "M", "R"],
-            "length": ["<75m", "<90m", "<120m", ">75m", ">90m", ">120m"],
-            "genre": ["Science Fiction", "Action", "Fantasy", "Comedy", "Adventure"],
-            "popularity": [">200", ">175", ">150", ">100", ">50"]
-        }
-
-PRIMARY_COLOUR = "#ecb050"
-SECONDARY_COLOUR = "#f5e35e"
-
-root = Path(__file__).resolve().parent
-resource_path = os.path.join(root, "resource")
-posters_path = os.path.join(resource_path, "posters")
-
-image_names = [
-          # HENRY STUFF
-          "settings_icon",
-          "home_icon",
-          "search_icon",
-          "star_icon",
-          "quit_icon",
-          "account_icon",
-          "small_logo",
-          # BEN STUFF
-          "blind",
-          "eye",
-          "lock",
-          "person",
-          "wide_logo"
-          ]
-
-images = {}
-
-for name in image_names:
-    image_path = os.path.join(resource_path, name+".png")
-    image = Image.open(image_path)
-    images[name] = image
-
-def pretty_time(minutes: int, clock=False):
-    if clock:
-        return f"{minutes//60}:{minutes%60}"
-    else:
-        return f"{minutes//60}h{minutes%60}m"
-    
-def get_current():
-    return datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-
-def read_json(filepath: str):
-    assert os.path.exists(filepath)
-    with open(filepath, "r") as f:
-        data = json.load(f)
-    return data
-
-def write_json(obj, filepath: str):
-    assert os.path.exists(filepath)
-    with open(filepath, "w") as f:
-        json.dump(obj, f)
-
-json_names = [
-    "movie",
-    "tv",
-    "anime_movie",
-    "anime",
-]
-
-jsons = {}
-
-for name in json_names:
-    json_path = os.path.join(resource_path, name+".json")
-    data = read_json(json_path)
-    jsons[name] = data
-
-accounts_path = os.path.join(resource_path, "accounts.csv")
+from utils import accounts_path, theme_path
+from utils import images, jsons
+from utils import Movie, Show, Anime, AnimeMovie, AccountManager
+from utils import get_media
+from utils import pretty_time, get_current_time
 
 ctk.set_appearance_mode("Dark")
-ctk.set_default_color_theme(os.path.join(resource_path, "theme.json"))
-
-class SubscriptionPlan(Enum):
-    FREE = "FreePlan"
-    STANDARD = "StandardPlan"
-    PREMIUM = "PremiumPlan"
-
-class Profile:
-    def __init__(self, name, is_adult: bool, watchlist=None, watch_history=None):
-        self.name = name
-        self.is_adult = is_adult
-        self.watchlist = watchlist if watchlist is not None else []
-        self.watch_history = watch_history if watch_history is not None else []
-
-    def to_dict(self):
-        return {
-            "name": self.name,
-            "is_adult": self.is_adult,
-            "watchlist": self.watchlist,
-            "watch_history": self.watch_history
-        }
-    
-class Account:
-    def __init__(self, username, email, password, subscription_plan: SubscriptionPlan, payment_info):
-        self.username = username
-        self.email = email
-        self.subscription_plan = subscription_plan
-
-        # ENCAPSULATION
-        self.__password = password
-        self.__payment_info = payment_info
-
-        # COMPOSITION
-        self.profiles = []
-
-    def check_password(self, attempt):
-        return attempt==self.__password
-    
-    def get_password(self):
-        return self.__password
-    
-    def get_payment_info(self):
-        return self.__payment_info
-    
-    def add_profile(self, profile: Profile):
-        self.profiles.append(profile)
-    
-class AccountManager:
-    def __init__(self, filepath):
-        self.filepath = filepath
-        self.fields = ["username", "email", "password", "subscription_plan", "payment_info", "profiles"]
-    
-    def load_accounts(self):
-        accounts = []
-        if not os.path.exists(self.filepath):
-            return accounts
-        
-        with open(self.filepath, "r", newline="", encoding="utf-8") as f:
-            reader=csv.DictReader(f)
-            for row in reader:
-                plan_value = row["subscription_plan"].strip()
-                plan = ([plan for plan in SubscriptionPlan if plan.value == plan_value]+[SubscriptionPlan.FREE])[0]
-                account = Account(row["username"], row["email"], row["password"], plan, row["payment_info"])
-                profiles = json.loads(row["profiles"])
-                for profile_data in profiles:
-                    profile = Profile(profile_data["name"], profile_data["is_adult"], profile_data.get("watchlist", []), profile_data.get("watch_history", []))
-                    account.add_profile(profile)
-
-                accounts.append(account)
-
-        return accounts
-    
-    def save_account(self, account: Account):
-        file_exists = os.path.exists(self.filepath)
-        with open(self.filepath, "a", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=self.fields)
-            if not file_exists:
-                writer.writeheader()
-            writer.writerow({
-                "username": account.username, 
-                "email": account.email, 
-                "password": account.get_password(), 
-                "subscription_plan": account.subscription_plan.value, 
-                "payment_info": account.get_payment_info(),
-                "profiles": json.dumps([p.to_dict() for p in account.profiles])
-                })
-            
-    def update_accounts(self, accounts: list[Account]):
-        with open(self.filepath, "w", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=self.fields)
-            writer.writeheader()
-            for account in accounts:
-                writer.writerow({
-                    "username": account.username, 
-                    "email": account.email, 
-                    "password": account.get_password(), 
-                    "subscription_plan": account.subscription_plan.value, 
-                    "payment_info": account.get_payment_info(),
-                    "profiles": json.dumps([p.to_dict() for p in account.profiles])
-                })
-
-class Media():
-    def __init__(self, media_data: dict, dimensions: tuple[int, int]):
-        self.media_data = media_data
-        self.set_poster(dimensions)
-
-    def set_poster(self, dimensions):
-        self.pillow_image = Image.open(os.path.join(posters_path, f"m_{self.get_id()}.jpg"))
-        self.poster = ctk.CTkImage(self.pillow_image, size=dimensions)
-
-    def get_overview(self):
-        return self.get_data("overview", "")
-
-    def get_poster(self, size=None):
-        if size:
-            return ctk.CTkImage(self.pillow_image, size=size)
-        return self.poster
-    
-    def get_data(self, key: str, default):
-        return self.media_data.get(key, default)
-    
-    def get_runtime(self):
-        return self.get_data("runtime", 0)
-    
-    def __str__(self) -> str:
-        return "Base Media"
-    
-    def get_title(self) -> str:
-        return str(self.get_data("title", ""))
-
-    def get_id(self) -> int:
-        movie_id = self.get_data("id", 0)
-        assert type(movie_id) == int
-        return movie_id
-    
-class Movie(Media):
-    def __init__(self, media_data: dict, dimensions: tuple[int, int]=POSTER_SIZE):
-        super().__init__(media_data, dimensions)
-
-    def __str__(self) -> str:
-        return f"{self.get_title()}({self.get_runtime()})"
-
-class Anime(Media):
-    def __init__(self, media_data, dimensions: tuple[int, int]=POSTER_SIZE):
-        super().__init__(media_data, dimensions=dimensions)
-        season_data = self.get_data("seasons", [])
-        self.season_count = len(season_data)
-        self.seasons = [Season(season_data[i]) for i in range(self.season_count)]
-
-    def __str__(self) -> str:
-        return str(self.get_data("name", ""))
-    
-    def get_seasons(self):
-        return self.seasons
-    
-    def get_season_n(self, n):
-        if not(0<=n<self.season_count):
-            return {}
-        return self.get_seasons()[n]
-    
-    def set_poster(self, dimensions):
-        self.pillow_image = Image.open(os.path.join(posters_path, f"t_{self.get_id()}.jpg"))
-        self.poster = ctk.CTkImage(self.pillow_image, size=dimensions)
-
-    def get_title(self):
-        return self.get_data("name", "")
-
-class AnimeMovie(Media):
-    def __init__(self, media_data: dict, dimensions: tuple[int, int]=(500, 750)):
-        super().__init__(media_data, dimensions)
-
-    def __str__(self) -> str:
-        return f"{self.get_title()}({self.get_runtime()})"
-
-class Show(Media):
-    def __init__(self, media_data, dimensions: tuple[int, int]=POSTER_SIZE):
-        super().__init__(media_data, dimensions=dimensions)
-        season_data = self.get_data("seasons", [])
-        self.season_count = len(season_data)
-        self.seasons = [Season(season_data[i]) for i in range(self.season_count)]
-
-    def __str__(self) -> str:
-        return str(self.get_data("name", ""))
-    
-    def get_seasons(self):
-        return self.seasons
-    
-    def get_season_n(self, n):
-        if not(0<=n<self.season_count):
-            return {}
-        return self.get_seasons()[n]
-    
-    def set_poster(self, dimensions):
-        self.pillow_image = Image.open(os.path.join(posters_path, f"t_{self.get_id()}.jpg"))
-        self.poster = ctk.CTkImage(self.pillow_image, size=dimensions)
-
-    def get_title(self):
-        return self.get_data("name", "")
-
-class Episode():
-    def __init__(self, episode_number: int):
-        self.episode_number = episode_number
-    
-    def __str__(self) -> str:
-        return str(self.episode_number)
-
-class Season():
-    def __init__(self, media_data: dict, dimensions=POSTER_SIZE):
-        self.media_data = media_data
-        self.season_number = self.get_data("season_number", 0)
-        self.dimensions = dimensions
-        #self.pillow_image = Image.open(os.path.join(posters_path, f"s_{self.get_id()}.jpg")) # FIXME: incomplete imp
-        #self.poster = ctk.CTkImage(self.pillow_image, size=dimensions)
-        self.episode_count = int(self.get_data("episode_count", 0)) # 
-        #self.episodes = [Episode(i) for i in range(1, self.episode_count+1)] FIXME: lag
-    
-    def get_data(self, key: str, default):
-        return self.media_data.get(key, default)
-
-    def get_episode_count(self):
-        return str(self.episode_count)
-
-    def __str__(self) -> str:
-        return str(self.get_data("name", ""))
-
-    def get_id(self) -> int:
-        movie_id = self.get_data("id", 0)
-        assert type(movie_id) == int
-        return movie_id
-    
-def media_get_attribute(data, attribute, default) -> Union[str, int, float]:
-    match attribute:
-        case "score_rating":
-            return data["vote_average"]
-        case "age rating":
-            raise ValueError() # FIXME:
-        case "length":
-            return data["runtime"]
-        case "genre":
-            return data["genres"]
-        case "popularity":
-            return data["popularity"]
-        case _:
-            return data.get(attribute, default)
-
-def restriction_check(filter: str, restriction: str, movie_data: dict):
-    assert filter in FILTER_SORT_OPTIONS
-    assert restriction in RESTRICTIONS_MAP[filter]
-    match filter:
-        case "any":
-            return True
-        case "score rating":
-            movie_score = movie_data["vote_average"] #FIXME: why hardcode movie? also, use the movie_get_attribute function or similar
-            required = float(restriction[1:])
-            return movie_score>=required
-        case "age rating":
-            raise ValueError() # No age ratings yet... FIXME:
-        case "length":
-            movie_length = movie_data["runtime"]
-            required = int(restriction[1:-1])
-            if restriction[0]=="<":
-                return movie_length<required
-            else:
-                return movie_length>required
-        case "genre":
-            movie_genres = movie_data["genres"]
-            for genre in movie_genres:
-                if genre["name"]==restriction:
-                    return True
-            return False
-        case "popularity":
-            movie_popularity = movie_data["popularity"]
-            required = int(restriction[1:])
-            return movie_popularity>=required
-    raise ValueError()  # FIXME: debug, delete later
-
-def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int, decreasing: bool=False):
-    match media_type:
-        case "movie":
-            media_dict = jsons["movie"]
-        case "tv_show":
-            media_dict = jsons["tv"]
-        case "anime_movie":
-            media_dict = jsons["anime_movie"]
-        case "anime":
-            media_dict = jsons["anime"]
-        case _:
-            raise ValueError()
-        
-    assert filter_by, sort_by in FILTER_SORT_OPTIONS
-    assert restriction in RESTRICTIONS_MAP[filter_by]
-    out = []
-    for movie in media_dict:
-        if restriction_check(filter_by, restriction, movie):
-            out.append(movie)
-
-    if sort_by!="any":
-        out.sort(key=lambda x: media_get_attribute(x, sort_by, 0), reverse=decreasing)
-
-    match media_type:
-        case "movie":
-            return [Movie(x) for x in out[:count]]
-        case "tv_show":
-            return [Show(x) for x in out[:count]]
-        case "anime_movie":
-            return [AnimeMovie(x) for x in out[:count]]
-        case "anime":
-            return [Anime(x) for x in out[:count]]
+ctk.set_default_color_theme(theme_path)
 
 class LoadingFrame(ctk.CTkFrame):
     def __init__(self, master, loading_text: str):
@@ -548,7 +160,7 @@ class LoginFrame(ctk.CTkFrame):
         self.email_frame.grid_propagate(False)
         
         self.email = ctk.CTkEntry(self.email_frame, font=main_font, placeholder_text="Email or mobile number", border_width=0, fg_color="#4C4C53", text_color="#98989B")
-        self.email.grid(row=0, column=1, sticky="nesw", pady=2, padx=(0, 15))
+        self.email.grid(row=0, column=1, sticky="nsew", pady=2, padx=(0, 15))
         self.person_icon = ctk.CTkLabel(self.email_frame, image=ctk.CTkImage(light_image=(p:=images["person"]), size=p.size), text="")
         self.person_icon.grid(row=0, column=0, padx=(12, 10))
         
@@ -559,7 +171,7 @@ class LoginFrame(ctk.CTkFrame):
         self.password_frame.grid_propagate(False)
         
         self.password = ctk.CTkEntry(self.password_frame, font=main_font, placeholder_text="Password", border_width=0, fg_color="#4C4C53", show="•", text_color="#98989B")
-        self.password.grid(row=0, column=1, sticky="nesw", pady=2, padx=(0, 15))
+        self.password.grid(row=0, column=1, sticky="nsew", pady=2, padx=(0, 15))
 
         self.lock_icon = ctk.CTkLabel(self.password_frame, image=ctk.CTkImage(light_image=(p:=images["lock"]), size=p.size), text="")
         self.lock_icon.grid(row=0, column=0, padx=(12, 10))
@@ -601,8 +213,6 @@ class LoginFrame(ctk.CTkFrame):
         success = self.login_switch((user, password))
         if not success:
             self.canvas.itemconfigure(self.incorrect_password_label, state="normal")
-            print("Incorrect username, email or password. Please try again.")
-
 
 class Sidebar(ctk.CTkFrame):
     def __init__(self, master, handle_function):
@@ -774,7 +384,7 @@ class HomeFrame(ctk.CTkScrollableFrame):
 class FilterSortFrame(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
-        self.grid_columnconfigure((0, 1, 2), weight=1)
+        self.grid_columnconfigure((0, 1, 2, 3), weight=1)
         self.grid_rowconfigure((0, 1), weight=1)
         self.restrictions_map = RESTRICTIONS_MAP
         self.build_ui()
@@ -783,17 +393,20 @@ class FilterSortFrame(ctk.CTkFrame):
         self.filter_by = ctk.CTkOptionMenu(self, values=FILTER_SORT_OPTIONS, command=self.filter_change)
         self.filter_by_restriction_menu = ctk.CTkOptionMenu(self, values=self.restrictions_map["any"])
         self.sort_by = ctk.CTkOptionMenu(self, values=FILTER_SORT_OPTIONS)
-        self.type = ctk.CTkOptionMenu(self, values=["Movie", "TV Show", "Anime", "Anime movie"])
+        self.media_type = ctk.CTkOptionMenu(self, values=["Movie", "TV Show", "Anime", "Anime movie"])
 
         self.filter_label = ctk.CTkLabel(self, text="Filter by...", font=TEXT_FONT)
         self.sort_label = ctk.CTkLabel(self, text="Sort by...", font=TEXT_FONT)
+        self.media_label = ctk.CTkLabel(self, text="Media type...", font=TEXT_FONT)
 
         self.filter_label.grid(row=0, column=0, columnspan=2, pady=10, padx=10)
         self.sort_label.grid(row=0, column=2, padx=10, pady=10)
+        self.media_label.grid(row=0, column=3, padx=10, pady=10)
 
         self.filter_by.grid(row=1, column=0, padx=10, pady=10)
         self.filter_by_restriction_menu.grid(row=1, column=1, padx=10, pady=10)
         self.sort_by.grid(row=1, column=2, padx=10, pady=10)
+        self.media_type.grid(row=1, column=3, padx=10, pady=10)
 
     def filter_change(self, new: str):
         if new in self.restrictions_map:
@@ -805,6 +418,9 @@ class FilterSortFrame(ctk.CTkFrame):
     
     def get_sort(self):
         return (self.sort_by.get())
+    
+    def get_media_type(self):
+        return (self.media_type.get())
 
 class SearchFrame(ctk.CTkScrollableFrame):
     def __init__(self, master, watch_function):
@@ -812,7 +428,7 @@ class SearchFrame(ctk.CTkScrollableFrame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure((1, 2, 3), weight=1)
-        self.results_bar = LabelledMediabar(self, "Results", [Movie({}, POSTER_SIZE) for _ in range(10)], watch_function)
+        self.results_bar = LabelledMediabar(self, "Results", [Movie({}, POSTER_SIZE) for _ in range(10)], watch_function) # FIXME: FIXME: FIXME:FIXME: FIXME: FIXME: FIXME: FIXME: movie only workes for movie this only works for movie 
         self.build_ui()
 
     def build_ui(self):
@@ -826,7 +442,7 @@ class SearchFrame(ctk.CTkScrollableFrame):
         self.results_bar.grid(row=3, column=0, sticky="nsew")
 
     def button_callback(self):
-        new_movies = get_media("movie", *self.filter_sort_frame.get_filter(), self.filter_sort_frame.get_sort(), count=10)
+        new_movies = get_media(self.filter_sort_frame.get_media_type().lower(), *self.filter_sort_frame.get_filter(), self.filter_sort_frame.get_sort(), count=10)
         self.results_bar.update_media(new_movies)
 
 class StarredFrame(ctk.CTkFrame):
@@ -1049,13 +665,11 @@ class StreamingApp(ctk.CTk):
 
         if logged_in_user:
             username = logged_in_user.username
-            password = logged_in_user.get_password() # FIXME: encapsulation leak
+            password = logged_in_user.get_password() # FIXME: insecure maybe idk
             print(f"Logging in as {username} with password {password}")
             self.login_switch(username)
             return True
         else:
-            # FIXME: 
-            print("Incorrect details.")
             return False
 
     def login_switch(self, user):

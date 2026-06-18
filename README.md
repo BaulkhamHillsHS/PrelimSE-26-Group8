@@ -27,6 +27,7 @@
 - security https://pyauth.github.io/pyotp/
 - OOP - encapsulation, polymorphism, inheritance, composition
 - inputdialogue for secure payment info window check complexexample
+- make it save starred movies between sessions
 
 ## basically now
 
