@@ -1,8 +1,9 @@
 from datetime import datetime
 from typing import Union
+from PIL import Image
+from PIL import ImageTk, ImageEnhance
 import json
 import csv
-import time
 import random
 from PIL import Image
 import customtkinter as ctk
@@ -33,6 +34,7 @@ resource_path = os.path.join(root, "resource")
 posters_path = os.path.join(resource_path, "posters")
 
 image_names = [
+          # HENRY STUFF
           "settings_icon",
           "home_icon",
           "search_icon",
@@ -40,6 +42,14 @@ image_names = [
           "quit_icon",
           "account_icon",
           "logo",
+          # BEN STUFF
+          "blind",
+          "eye",
+          "logo_dark",
+          "logo_light",
+          "lock",
+          "person",
+          "main_logo"
           ]
 
 images = {}
@@ -351,9 +361,6 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
         case "anime":
             return [Anime(x) for x in out[:count]]
 
-#print(*get_media("movie", "score rating", ">8.5", "length", 10, decreasing=True), sep="\n")
-# FIXME: debug command
-
 class LoadingScreen(ctk.CTkFrame):
     def __init__(self, master, loading_text: str):
         super().__init__(master)
@@ -369,6 +376,179 @@ class LoadingScreen(ctk.CTkFrame):
         self.loading_bar.grid(row=3, column=1, padx=(10, 10), pady=(10, 10), sticky="ew")
         self.loading_bar.configure(mode="indeterminate")
         self.loading_bar.start()
+
+def create_rrect(canvas: ctk.CTkCanvas, width, height, pos, r, fill):
+    x1, y1 = pos
+    x2 = x1 + width
+    y2 = y1 + height
+    points = [
+        # corner 1
+        x1, y1 + r, x1, y1 + r,
+        x1, y1,
+        x1 + r, y1, x1 + r, y1,
+        
+        # corner 2
+        x2 - r, y1, x2 - r, y1,
+        x2, y1,
+        x2, y1 + r, x2, y1 + r,
+        
+        # corner 3
+        x2, y2 - r, x2, y2 - r,
+        x2, y2,
+        x2 - r, y2, x2 - r, y2,
+        
+        # corner 4
+        x1 + r, y2, x1 + r, y2,
+        x1, y2,
+        x1, y2 - r, x1, y2 - r
+    ]
+    return canvas.create_polygon(points, smooth=True, fill=fill)
+
+class ImageCell():
+    def __init__(self, canvas: ctk.CTkCanvas, image, pos, speed = 1):
+        self.canvas = canvas
+        self.id = self.canvas.create_image(*pos, image=image, anchor="nw")
+        self.speed = speed
+    
+    def move(self, x, y):
+        self.canvas.move(self.id, x, y)
+    
+    def goto(self, x, y):
+        self.canvas.moveto(self.id, x, y)
+    
+    def slide(self):
+        self.canvas.move(self.id, self.speed, 0)
+    
+    def get_pos(self):
+        return self.canvas.tk.call(self.canvas._w, "coords", self.id) # FIXME: # type: ignore
+    
+    def get_size(self):
+        bbox = self.canvas.bbox(self.id)
+        x = bbox[2] - bbox[0]
+        y = bbox[3] - bbox[1]
+        return (x, y)
+    
+class Panel():
+    def __init__(self, canvas: ctk.CTkCanvas, width, height, r, pos, fill, padding):
+        self.canvas = canvas
+        self.width = width
+        self.height = height
+        self.pos = pos
+        self.padding = padding
+        create_rrect(canvas, width, height, pos, r, fill)
+    
+    def get_pos(self):
+        return (self.pos[0] - 2, self.pos[1])
+    
+    def get_dim(self):
+        return (self.width, self.height)
+    
+    def get_udim(self):
+        return (self.width - self.padding[0] - self.padding[1], self.height - self.padding[2] - self.padding[3])
+
+class LoginFrame(ctk.CTkFrame):
+    def __init__(
+        self,
+        master,
+        login_switch
+    ):
+        super().__init__(master=master, width=1280, height=720, fg_color="transparent")
+        self.width = 1280
+        self.height = 720 
+        self.login_switch = login_switch
+
+        self.update()
+        self.build_ui()
+        
+    def build_ui(self):
+        self.images_count = 9
+        self.row_count = 7
+        
+        pil_image = images["logo_light"]
+        pil_image_dark = ImageEnhance.Brightness(images["logo_light"]).enhance(0.6)
+
+        main_font = ctk.CTkFont(family="Inter Regular", size=16)
+
+        self.image_sizes = [(90, 90), (60, 60)]
+        self.image = ImageTk.PhotoImage(pil_image.resize(self.image_sizes[0]))
+        self.image_dark = ImageTk.PhotoImage(pil_image_dark.resize(self.image_sizes[1]))
+        
+        self.canvas = ctk.CTkCanvas(self, width=1280, height=720, bg="black", highlightthickness=0)
+        self.canvas.place(x=0, y=0)
+        # self.images = self.canvas.create_image(0, 0, image=self.photo, anchor="center")
+
+        self.images = []
+        for j in range(self.row_count):
+            y_pos = self.height / (self.row_count - 1) * j - self.image_sizes[j % 2][0] / 2
+            x_offset = (j // 2) % 2 * self.width / self.images_count / 2
+            # speed = random.randint(40, 100) / 50
+            speed = (1 + j % 2) / 3
+            for i in range(self.images_count + 1):
+                # image = self.canvas.create_image(self.self.width / self.images_count * i - 60 + x_offset, y_pos, image=self.photo, anchor="nw")
+                image = ImageCell(self.canvas, self.image if j % 2 == 0 else self.image_dark, (self.width / self.images_count * i - self.image_sizes[j % 2][0] / 2 + x_offset, y_pos), int(speed))
+                self.images.append(image)
+        
+        login_panel = Panel(self.canvas, (w:=400), (f := 0.85)*self.height, 40, ((self.width - w) / 2, (1 - f)*self.height / 2), "#36363B", (30, 30, 30, 30))
+        
+        title = images["main_logo"]
+        title_pad = 30
+        
+        self.asdf = ImageTk.PhotoImage(title.resize(((w_x:=login_panel.get_udim()[0] - 2 * title_pad), int(title.size[1] / title.size[0] * w_x))))
+        self.netflix = self.canvas.create_image(login_panel.pos[0] + login_panel.padding[0] + title_pad, login_panel.pos[1] + login_panel.padding[2] + title_pad, image=self.asdf, anchor="nw")
+        
+        self.email_frame = ctk.CTkFrame(self, login_panel.get_udim()[0], 56, 10, bg_color="#36363B", fg_color="#4C4C53", border_width=2, border_color="#6F6F70")
+        self.email_frame.place(x=login_panel.get_pos()[0] + login_panel.padding[0], y=self.canvas.bbox(self.netflix)[3] + 40)
+        self.email_frame.rowconfigure(0, weight=1)
+        self.email_frame.columnconfigure(1, weight=1)
+        self.email_frame.grid_propagate(False)
+        
+        self.email = ctk.CTkEntry(self.email_frame, font=main_font, placeholder_text="Email or mobile number", border_width=0, fg_color="#4C4C53", text_color="#98989B")
+        self.email.grid(row=0, column=1, sticky="nesw", pady=2, padx=(0, 15))
+        self.person_icon = ctk.CTkLabel(self.email_frame, image=ctk.CTkImage(light_image=(p:=images["person"]), size=p.size), text="")
+        self.person_icon.grid(row=0, column=0, padx=(12, 10))
+        
+        self.password_frame = ctk.CTkFrame(self, login_panel.get_udim()[0], 56, 10, bg_color="#36363B", fg_color="#4C4C53", border_width=2, border_color="#6F6F70")
+        self.password_frame.place(x=login_panel.get_pos()[0] + login_panel.padding[0], y=self.canvas.bbox(self.netflix)[3] + 40 + 56 + 24)
+        self.password_frame.rowconfigure(0, weight=1)
+        self.password_frame.columnconfigure(1, weight=1)
+        self.password_frame.grid_propagate(False)
+        
+        self.password = ctk.CTkEntry(self.password_frame, font=main_font, placeholder_text="Password", border_width=0, fg_color="#4C4C53", show="•", text_color="#98989B")
+        self.password.grid(row=0, column=1, sticky="nesw", pady=2, padx=(0, 15))
+        self.lock_icon = ctk.CTkLabel(self.password_frame, image=ctk.CTkImage(light_image=(p:=images["lock"]), size=p.size), text="")
+        self.lock_icon.grid(row=0, column=0, padx=(12, 10))
+        
+        self.visibility = [images["eye"], images["blind"]]
+        self.hide = ctk.CTkButton(self.password_frame, width=0, height=40, text="", fg_color="#4C4C53", image=ctk.CTkImage(light_image=(p:=self.visibility[1]), size=p.size), command=lambda: self.toggle_show(self.password, self.hide), anchor="center", hover_color="#4C4C53")
+        self.hide.grid(row=0, column=2, padx=(0, 5), pady=(3, 0))
+        
+        button_width = 56
+        self.login_button = ctk.CTkButton(self, login_panel.get_dim()[0] - login_panel.padding[0] - login_panel.padding[1], button_width, 10, bg_color="#36363B", fg_color="#d81f26", text="Login", font=("Inter Black", 20), text_color="white", hover_color="#b41f24", command=self.button_callback)
+        self.login_button.place(x=login_panel.get_pos()[0] + login_panel.padding[0], y=login_panel.get_pos()[1] + login_panel.get_dim()[1] - login_panel.padding[3] - button_width)
+        
+        self.animate()
+    
+    def animate(self):
+        for x in self.images:
+            x.slide()
+            if x.get_pos()[0] >= self.width / self.images_count + self.width - x.get_size()[0]:
+                x.goto(-x.get_size()[0], "")
+        
+        self.after(16, self.animate)
+        
+    def toggle_show(self, entry: ctk.CTkEntry, button: ctk.CTkButton):
+        current = entry.cget("show")
+        if current != "":
+            entry.configure(show="")
+            button.configure(image=ctk.CTkImage(light_image=(p:=self.visibility[1])))
+        else:
+            entry.configure(show="•")
+            button.configure(image=ctk.CTkImage(light_image=(p:=self.visibility[0])))
+
+    def button_callback(self):
+        user = self.email.get()
+        password = self.password.get()
+        self.login_switch((user, password))
 
 class LoginScreen(ctk.CTkFrame):
     def __init__(self, master, switch_function):
@@ -508,7 +688,6 @@ class Mediabar(ctk.CTkScrollableFrame):
             media_button.grid(row=0, column=i, sticky="ew", pady=0, padx=(10, 10))
     
     def button_callback(self, index):
-        print(self.media[index], "pressed.")
         self.watch_function(self.media[index])
 
     def update_media(self, new_media):
@@ -806,7 +985,6 @@ class MovieBrowser(ctk.CTkFrame):
         self.star_frame.update_media(self.starred_media)
         self.watch_frame.set_starred_state(self.is_starred(media))
 
-
 class StreamingApp(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -818,7 +996,7 @@ class StreamingApp(ctk.CTk):
         self.build_ui()
 
     def build_ui(self):
-        self.login_frame = LoginScreen(self, switch_function=self.handle_login)
+        self.login_frame = LoginFrame(self, self.handle_login)
         self.login_frame.grid(row=0, column=0, sticky="nsew")
         self.loading_frame = LoadingScreen(self, loading_text="Loading...")
         self.browse_frame = MovieBrowser(self, self.user, quit=self.quit)
