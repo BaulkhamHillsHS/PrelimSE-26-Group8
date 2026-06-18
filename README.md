@@ -1,5 +1,7 @@
 # Assessment task 2
 
+Note: in the database/csv, accounts are pulled using username because usernames are unique. This is not a design flaw.
+
 ## very future
 
 - pfp
@@ -23,32 +25,31 @@
 ## near future
 
 - changing subscription plan
-- change profile
 - security https://pyauth.github.io/pyotp/
 - OOP - encapsulation, polymorphism, inheritance, composition
-- inputdialogue for secure payment info window check complexexample
 - make it save starred movies between sessions
 
 ## basically now
 
-- search by text for title
-- ben background could be scrolling movie posters instead of netflix
-- watching media and writing time + duration to a json or csv entry
+- inputdialogue for secure payment info window check complexexample
+- change profile
 
 ## literally now
 
-- search should include tv show and anime stuff movies/anime_movies/anime/tvshows combo box
 - watchframe should show episode count, voting average, age rating, movie length, genres, tag
 - "watching" the media
+- search by text for title
 - restrict content if you're on child profile
+- watching media and writing time + duration to a json or csv entry
 - watch history
 - subscriptions upgrading
 - payment info
-- while in login frame press enter while in password field to submit 
+- search ascending/descending
 
 # BEN
 - real icons
 - improve background
+- GET AGE RATINGS OR AT LEAST A BOOL FOR CHILD APPROPRIATE
 
 # Non-code
 - uml class diagram

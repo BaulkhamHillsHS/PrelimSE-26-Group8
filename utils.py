@@ -307,7 +307,7 @@ class Season():
         assert type(movie_id) == int
         return movie_id
     
-def media_get_attribute(data, attribute, default) -> Union[str, int, float]:
+def media_get_attribute(data, attribute, default):
     match attribute:
         case "score_rating" | "score rating":
             return data["vote_average"]
@@ -329,13 +329,13 @@ def restriction_check(filter: str, restriction: str, media_data: dict):
         case "any":
             return True
         case "score rating":
-            media_score = media_get_attribute(media_data, filter, 0) #FIXME: why hardcode movie? also, use the media_get_attribute function or similar
+            media_score = media_get_attribute(media_data, filter, 0) 
             required = float(restriction[1:])
             return media_score>=required
         case "age rating":
             raise ValueError() # No age ratings yet... FIXME:
         case "length":
-            media_length = media_get_attribute(media_data, filter, 0) #FIXME: why hardcode movie? also, use the media_get_attribute function or similar
+            media_length = media_get_attribute(media_data, filter, 0)
             required = float(restriction[1:])
             required = int(restriction[1:-1])
             if restriction[0]=="<":
@@ -376,16 +376,16 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
 
     if sort_by!="any":
         if sort_by=="genre":
-            out.sort(key=lambda x: media_get_attribute(x, sort_by, 0)[0]["name"], reverse=decreasing) # type: ignore FIXME:
+            out.sort(key=lambda x: media_get_attribute(x, sort_by, 0)[0]["name"] if bool(len(media_get_attribute(x, sort_by, 0))) else "", reverse=decreasing) # type: ignore FIXME: SO SCUFFED
         else:
             out.sort(key=lambda x: media_get_attribute(x, sort_by, 0), reverse=decreasing)
 
     match media_type:
         case "movie":
             return [Movie(x) for x in out[:count]]
-        case "tv_show":
+        case "tv_show" | "tv show":
             return [Show(x) for x in out[:count]]
-        case "anime_movie":
+        case "anime_movie" | "anime movie":
             return [AnimeMovie(x) for x in out[:count]]
         case "anime":
             return [Anime(x) for x in out[:count]]
