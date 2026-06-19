@@ -399,7 +399,7 @@ class HomeFrame(ctk.CTkScrollableFrame):
 class FilterSortFrame(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
-        self.grid_columnconfigure((0, 1, 2, 3), weight=1)
+        self.grid_columnconfigure((0, 1, 2, 3, 4), weight=1)
         self.grid_rowconfigure((0, 1), weight=1)
         self.restrictions_map = RESTRICTIONS_MAP
         self.build_ui()
@@ -409,6 +409,8 @@ class FilterSortFrame(ctk.CTkFrame):
         self.filter_by_restriction_menu = ctk.CTkOptionMenu(self, values=self.restrictions_map["any"])
         self.sort_by = ctk.CTkOptionMenu(self, values=FILTER_SORT_OPTIONS)
         self.media_type = ctk.CTkOptionMenu(self, values=["Movie", "TV Show", "Anime", "Anime movie"])
+        self.sort_ascending = tk.BooleanVar(value=False)
+        self.sort_order_toggle = ctk.CTkSwitch(self, text="Ascending", variable=self.sort_ascending)
 
         self.filter_label = ctk.CTkLabel(self, text="Filter by...", font=TEXT_FONT)
         self.sort_label = ctk.CTkLabel(self, text="Sort by...", font=TEXT_FONT)
@@ -422,6 +424,7 @@ class FilterSortFrame(ctk.CTkFrame):
         self.filter_by_restriction_menu.grid(row=1, column=1, padx=10, pady=10)
         self.sort_by.grid(row=1, column=2, padx=10, pady=10)
         self.media_type.grid(row=1, column=3, padx=10, pady=10)
+        self.sort_order_toggle.grid(row=1, column=4, padx=10, pady=10)
 
     def filter_change(self, new: str):
         if new in self.restrictions_map:
@@ -434,6 +437,9 @@ class FilterSortFrame(ctk.CTkFrame):
     def get_sort(self):
         return (self.sort_by.get())
     
+    def get_sort_ascending(self):
+        return (self.sort_ascending.get())
+
     def get_media_type(self):
         return (self.media_type.get())
 
@@ -450,15 +456,24 @@ class SearchFrame(ctk.CTkScrollableFrame):
         self.title_label = ctk.CTkLabel(self, text="Search", font=TITLE_FONT)
         self.filter_sort_frame = FilterSortFrame(self)
         self.a_button = ctk.CTkButton(self, text="Search button", command=self.button_callback, font=TEXT_FONT)
+        self.sort_order_toggle = ctk.CTkSegmentedButton(self, values=["Descending", "Ascending"], command=self.refresh_search)
+        self.sort_order_toggle.set("Descending")
 
-        self.title_label.grid(row=0, column=0, sticky="nsew")
-        self.filter_sort_frame.grid(row=1, column=0)
-        self.a_button.grid(row=2, column=0)
-        self.results_bar.grid(row=3, column=0, sticky="nsew")
+        self.search_entry = ctk.CTkEntry(self, placeholder_text="Search for media...", font=TEXT_FONT, height=40)
+        self.search_entry.bind("<Return>", self.refresh_search)
+
+        self.title_label.grid(row=0, column=0, sticky="nsew", pady=(10, 10))
+        self.search_entry.grid(row=1, column=0, sticky="nsew", pady=(10, 10), padx=(20, 20))
+        self.filter_sort_frame.grid(row=2, column=0, pady=(10, 10))
+        self.a_button.grid(row=3, column=0)
+        self.results_bar.grid(row=4, column=0, sticky="nsew")
 
     def button_callback(self):
-        new_movies = get_media(self.filter_sort_frame.get_media_type().lower(), *self.filter_sort_frame.get_filter(), self.filter_sort_frame.get_sort(), count=10)
+        new_movies = get_media(self.filter_sort_frame.get_media_type().lower(), *self.filter_sort_frame.get_filter(), self.filter_sort_frame.get_sort(), count=10, ascending=self.filter_sort_frame.get_sort_ascending(), search_query=self.search_entry.get())
         self.results_bar.update_media(new_movies)
+
+    def refresh_search(self, event=None):
+        self.button_callback()
 
 class StarredFrame(ctk.CTkFrame):
     def __init__(self, master, watch_function):

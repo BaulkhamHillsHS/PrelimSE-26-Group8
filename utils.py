@@ -410,7 +410,7 @@ def restriction_check(filter: str, restriction: str, media_data: dict, is_adult_
             return media_popularity>=required
     raise ValueError()  # FIXME: debug, delete later
 
-def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int, decreasing: bool=False, current_profile=None, current_account=None):
+def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int, ascending: bool=False, search_query: str="", current_profile=None, current_account=None):
     match media_type:
         case "movie":
             media_dict = jsons["movie"]
@@ -447,6 +447,12 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
         if current_profile is not None:
             is_adult = current_profile.is_adult
 
+        # SEARCH QUERY CHECK
+        if search_query:
+            title = media.get("title", media.get("name", "")).lower()
+            if search_query.lower() not in title:
+                continue
+
         if restriction_check(filter_by, restriction, media, is_adult_profile=is_adult):
             out.append(media)
 
@@ -454,7 +460,7 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
         if sort_by=="genre":
             out.sort(key=lambda x: media_get_attribute(x, sort_by, 0)[0]["name"] if bool(len(media_get_attribute(x, sort_by, 0))) else "", reverse=decreasing) # type: ignore FIXME: SO SCUFFED
         else:
-            out.sort(key=lambda x: media_get_attribute(x, sort_by, 0), reverse=decreasing)
+            out.sort(key=lambda x: media_get_attribute(x, sort_by, 0), reverse=not ascending)
 
     match media_type:
         case "movie":
