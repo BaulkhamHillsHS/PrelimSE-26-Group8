@@ -11,9 +11,11 @@ from utils import POSTER_SIZE, MEDIUM_POSTER_SIZE, BIG_POSTER_SIZE
 from utils import FILTER_SORT_OPTIONS, RESTRICTIONS_MAP
 from utils import PRIMARY_COLOUR, SECONDARY_COLOUR
 
-from utils import accounts_path, theme_path
+from utils import SubscriptionPlan
+from utils import accounts_path, theme_path, viewing_txt_path
 from utils import images, jsons
-from utils import Movie, Show, Anime, AnimeMovie, AccountManager
+from utils import Movie, Show, Anime, AnimeMovie
+from utils import AccountManager, WatchHistory
 from utils import get_media
 from utils import pretty_time, get_current_time
 
@@ -363,23 +365,32 @@ class HomeFrame(ctk.CTkScrollableFrame):
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0)
-        self.grid_rowconfigure((1, 2, 3, 4, 5), weight=1)
-        self.movie_bar_1 = LabelledMediabar(self, "Recommended movies", [Movie(random.choice(jsons["movie"]), POSTER_SIZE) for x in range(20)], watch_function)
-        self.movie_bar_2 = LabelledMediabar(self, "TV shows", [Show(random.choice(jsons["tv"]), POSTER_SIZE) for x in range(5)], watch_function)
-        self.movie_bar_3 = LabelledMediabar(self, "Anime", [Anime(random.choice(jsons["anime"]), POSTER_SIZE) for i in range(5)], watch_function)
-        self.movie_bar_4 = LabelledMediabar(self, "Anime movies", [AnimeMovie(random.choice(jsons["anime_movie"]), POSTER_SIZE) for x in range(5)], watch_function) 
-        self.movie_bar_5 = LabelledMediabar(self, "Explore(not random)", [Movie(jsons["movie"][i], POSTER_SIZE) for i in range(5)], watch_function)
+        self.grid_rowconfigure((1, 2, 3, 4), weight=1)
+        self.movie_bar = LabelledMediabar(self, "Popular Movies", [Movie(random.choice(jsons["movie"]), POSTER_SIZE) for x in range(15)], watch_function)
+        self.show_bar = LabelledMediabar(self, "TV shows", [Show(random.choice(jsons["tv"]), POSTER_SIZE) for x in range(15)], watch_function)
+        self.anime_bar = LabelledMediabar(self, "Anime", [Anime(random.choice(jsons["anime"]), POSTER_SIZE) for i in range(15)], watch_function)
+        self.anime_movie_bar = LabelledMediabar(self, "Anime movies", [AnimeMovie(random.choice(jsons["anime_movie"]), POSTER_SIZE) for x in range(15)], watch_function) 
 
         self.build_ui()
 
     def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text=f"Welcome, {self.name}", font=TITLE_FONT)
         self.title_label.grid(row=0, column=0, sticky="nsew")
-        self.movie_bar_1.grid(row=1, column=0, sticky="nsew", pady=(0, 10))
-        self.movie_bar_2.grid(row=2, column=0, sticky="nsew")
-        self.movie_bar_3.grid(row=3, column=0, sticky="nsew")
-        self.movie_bar_4.grid(row=4, column=0, sticky="nsew")
-        self.movie_bar_5.grid(row=5, column=0, sticky="nsew")
+        self.movie_bar.grid(row=1, column=0, sticky="nsew", pady=(0, 10))
+        self.show_bar.grid(row=2, column=0, sticky="nsew", pady=(0, 10))
+        self.anime_bar.grid(row=3, column=0, sticky="nsew", pady=(0, 10))
+        self.anime_movie_bar.grid(row=4, column=0, sticky="nsew", pady=(0, 10))
+
+    def refresh_content(self, account, current_profile):
+        movies = get_media("movie", "any", "", "popularity", 15, True, current_profile, account)
+        shows = get_media("tv_show", "any", "", "popularity", 15, True, current_profile, account)
+        animes = get_media("anime", "any", "", "popularity", 15, True, current_profile, account)
+        anime_movies = get_media("anime_movie", "any", "", "popularity", 15, True, current_profile, account)
+
+        self.movie_bar.update_media(movies)
+        self.show_bar.update_media(shows)
+        self.anime_bar.update_media(animes)
+        self.anime_movie_bar.update_media(anime_movies)
 
     def change_name(self, new_name):
         self.name = new_name
@@ -538,25 +549,64 @@ class SettingsFrame(ctk.CTkFrame):
         self.tabs.grid(row=1, column=0, sticky="nsew")
 
 class AccountFrame(ctk.CTkFrame):
-    def __init__(self, master, name):
+    def __init__(self, master, name, open_history_callback=None, switch_profile_callback=None, upgrade_callback=None):
         super().__init__(master, fg_color="transparent")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure((1), weight=1)
         self.name = name
+        self.open_history_callback = open_history_callback
+        self.switch_profile_callback = switch_profile_callback
+        self.upgrade_callback = upgrade_callback
         self.build_ui()
 
     def build_ui(self):
-        self.title_label = ctk.CTkLabel(self, text="Account", font=TITLE_FONT)
+        self.title_label = ctk.CTkLabel(self, text="Account options", font=TITLE_FONT)
         self.title_label.grid(row=0, column=0, sticky="nsew", pady=(10, 10))
         self.tabs= ctk.CTkTabview(self)
-        self.tabs.add("Account")
-        self.tabs.add("Profile")
+        self.tabs.add("Manage Profiles")
+        self.tabs.add("Subscription")
         self.tabs.grid(row=1, column=0, sticky="nsew")
+
+        self.profile_tab = self.tabs.tab("Manage Profiles")
+        self.profile_menu_label = ctk.CTkLabel(self.profile_tab, text="Select Profile:", font=TEXT_FONT)
+        self.profile_menu_label.grid(row=0, column=0, pady=(10, 10))
+        self.profile_dropdown = ctk.CTkOptionMenu(self.profile_tab, values=["Default"], command=self.handle_switch_profile)
+        self.profile_dropdown.grid(row=1, column=0, pady=(10, 10))
+        self.history_button = ctk.CTkButton(self.profile_tab, text="Generate viewing report", font=TEXT_FONT, command=self.open_history_callback)
+        self.history_button.grid(row=2, column=0, pady=(10, 10))
+
+        self.subscription_tab = self.tabs.tab("Subscription")
+        self.sub_info = ctk.CTkLabel(self.subscription_tab, text="Current Plan:", font=TEXT_FONT)
+        self.sub_info.grid(row=0, column=0)
+        self.upgrade_menu = ctk.CTkOptionMenu(self.subscription_tab, values=["Standard Plan", "Premium Plan"], command=self.handle_upgrade)
+        self.upgrade_menu.grid(row=1, column=0, pady=(10, 10))
+
+    def handle_switch_profile(self, selection):
+        if self.switch_profile_callback:
+            self.switch_profile_callback(selection)
+
+    def handle_upgrade(self, selection):
+        if self.upgrade_callback:
+            self.upgrade_callback(selection)
 
     def change_name(self, new_name):
         self.name = new_name
         self.title_label.configure(text=f"Account: {self.name}")
+
+    def refresh_view(self, account, current_profile):
+        self.title_label.configure(text=f"Profile: {current_profile.name}")
+        
+        names = [p.name for p in account.profiles]
+        self.profile_dropdown.configure(Values=names)
+        self.profile_dropdown.set(current_profile.name)
+
+        if current_profile.is_adult:
+            self.sub_info.configure(text=f"Plan: {account.subscription_plan.value} (Adult)")
+            self.upgrade_menu.grid(row=0, column=0, pady=10)
+        else:
+            self.sub_info.configure(text=f"Plan: {account.subscription_plan.value} (Child)\nUpgrading blocked")
+            self.upgrade_menu.grid_forget()
 
 class MovieBrowser(ctk.CTkFrame):
     def __init__(self, master, name, quit):
@@ -570,16 +620,51 @@ class MovieBrowser(ctk.CTkFrame):
         self.name = name
         self.starred_media = []
 
+        self.current_account_data = None
+        self.current_profile = None
+
         self.home_frame = HomeFrame(self, self.name, self.watch_media)
         self.search_frame = SearchFrame(self, self.watch_media)
         self.star_frame = StarredFrame(self, self.watch_media)
         self.settings_frame = SettingsFrame(self)
-        self.account_frame = AccountFrame(self, self.name)
+        self.account_frame = AccountFrame(self, self.name, open_history_callback=self.show_history_window, upgrade_callback=self.handle_upgrade)
         self.watch_frame = WatchFrame(self, Movie({}), self.toggle_favourite)
 
         self.current_frame = self.home_frame
 
         self.build_ui()
+
+    def handle_profile_switch(self, new_profile_name):
+        if self.current_account_data:
+            for p in self.current_account_data.profiles:
+                if p.name == new_profile_name:
+                    self.current_profile = p
+                    print(f"Switched profile to: {p.name} (Adult: {p.is_adult})")
+            self.update_profile_ui()
+
+    def handle_upgrade(self, new_plan_str):
+        if self.current_account_data:
+            if new_plan_str == "Standard Plan":
+                self.current_account_data.subscription_plan = SubscriptionPlan.STANDARD
+            elif new_plan_str == "Premium Plan":
+                self.current_account_data.subscription_plan = SubscriptionPlan.PREMIUM
+
+        app = self.master
+        app.account_manager.update_accounts(app.account_manager.load_accounts())
+        self.update_profile_ui()
+
+    def update_profile_ui(self):
+        if self.current_account_data and self.current_profile:
+            self.account_frame.refresh_view(self.current_account_data, self.current_profile)
+            self.home_frame.refresh_content(self.current_account_data, self.current_profile)
+
+    def show_history_window(self):
+        history_list = []
+        if self.current_account_data and self.current_account_data.profiles:
+            history_list = self.current_account_data.profiles[0].watch_history
+
+        history_window = WatchHistory(self, self.name, history_list, viewing_txt_path)
+        history_window.focus()
     
     def build_ui(self):
         self.logo = ctk.CTkImage(images["small_logo"].resize((100, 100), resample=Image.Resampling.LANCZOS), size=(100,100))
@@ -613,6 +698,7 @@ class MovieBrowser(ctk.CTkFrame):
         self.switch_frame(self.watch_frame)
 
     def change_name(self, new_name: str):
+        self.name = new_name
         self.home_frame.change_name(new_name)
         self.account_frame.change_name(new_name)
 
@@ -671,6 +757,7 @@ class StreamingApp(ctk.CTk):
             username = logged_in_user.username
             password = logged_in_user.get_password() # FIXME: insecure maybe idk
             print(f"Logging in as {username} with password {password}")
+            self.browse_frame.current_account_data = logged_in_user
             self.login_switch(username)
             return True
         else:
@@ -680,6 +767,7 @@ class StreamingApp(ctk.CTk):
         self.switch_frame(self.login_frame, self.loading_frame)
         self.user = user
         self.browse_frame.change_name(user)
+        self.browse_frame.update_profile_ui()
         self.after(500, lambda:self.switch_frame(self.loading_frame, self.browse_frame))
 
     def quit(self):

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Union
 import customtkinter as ctk
 from PIL import Image
@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 from enum import Enum
 import csv
+from datetime import datetime, timedelta
 
 TITLE_FONT = ("Inter", 35, "bold")
 TEXT_FONT = ("Arial", 20)
@@ -30,13 +31,13 @@ RESTRICTIONS_MAP = {
 PRIMARY_COLOUR = "#ecb050"
 SECONDARY_COLOUR = "#f5e35e"
 
-
 root = Path(__file__).resolve().parent
 resource_path = os.path.join(root, "resource")
 posters_path = os.path.join(resource_path, "posters")
 
 accounts_path = os.path.join(resource_path, "accounts.csv")
 theme_path = os.path.join(resource_path, "theme.json")
+viewing_txt_path = os.path.join(resource_path, "viewing_data.txt")
 
 def read_json(filepath: str):
     assert os.path.exists(filepath)
@@ -106,6 +107,55 @@ class Profile:
             "watchlist": self.watchlist,
             "watch_history": self.watch_history
         }
+
+class WatchHistory(ctk.CTkToplevel):
+    def __init__(self, parent, username, watch_history_list, text_path):
+        super().__init__(parent)
+        self.username = username
+        self.watch_history_list = watch_history_list
+        self.text_path = text_path
+
+        self.geometry("400x500")
+        self.title("Watch History")
+        self.resizable(False, False)
+        self.attributes("-topmost", True)
+
+        self.scrollable_frame = ctk.CTkScrollableFrame(self, width=400, height=500)
+        self.scrollable_frame.pack(fill="both", expand=True)
+        self.build_ui()
+
+    def build_ui(self):
+        self.logo_frame = ctk.CTkFrame(self.scrollable_frame, fg_color="transparent")
+        self.logo_frame.pack(pady=20)
+        self.real_logo = ctk.CTkImage(images["small_logo"], size=(64, 64))
+        self.logo_label = ctk.CTkLabel(self.logo_frame, image=self.real_logo, text="")
+        self.logo_label.pack(side="left", padx=(0, 10))
+
+        self.name_label = ctk.CTkLabel( self.logo_frame, text="BreakFlix", text_color="white", font=("Inter", 25, "bold"))
+        self.name_label.pack(side="left")
+
+        self.create_history()
+        self.create_txt()
+
+    def create_history(self):
+        self.receipt = []
+        self.receipt.append("-" * 36)
+
+        if self.watch_history_list:
+            for item in self.watch_history_list:
+                self.receipt.append(f"{item}\n")
+        else:
+            self.receipt.append("No Movies watched\n")
+
+        self.receipt.append(f"ACCOUNT: {self.username.upper()}")
+        self.receipt.append("-" * 36)
+        receipt_display = ctk.CTkLabel(self.scrollable_frame, text="\n".join(self.receipt), font=("Courier New", 14), justify="left")
+        receipt_display.pack(pady=10)
+
+    def create_txt(self):
+        bank_name = "            BreakFlix            \n"
+        with open(self.text_path, "w", encoding="utf-8") as file:
+            file.write(bank_name + "\n".join(self.receipt))
     
 class Account:
     def __init__(self, username, email, password, subscription_plan: SubscriptionPlan, payment_info):
@@ -322,7 +372,14 @@ def media_get_attribute(data, attribute, default):
         case _:
             return data.get(attribute, default)
 
-def restriction_check(filter: str, restriction: str, media_data: dict):
+def restriction_check(filter: str, restriction: str, media_data: dict, is_adult_profile=True):
+    if not is_adult_profile:
+        genres = media_data.get("genres", [])
+        genre_names = [g["name"] for g in genres if "name" in g]
+        if "Horror" in genre_names or "Thriller" in genre_names:
+            return False
+        # FIXME: ADD MORE AGE RESTRICTION CHECKING
+    
     assert filter in FILTER_SORT_OPTIONS
     assert restriction in RESTRICTIONS_MAP[filter]
     match filter:
@@ -336,7 +393,6 @@ def restriction_check(filter: str, restriction: str, media_data: dict):
             raise ValueError() # No age ratings yet... FIXME:
         case "length":
             media_length = media_get_attribute(media_data, filter, 0)
-            required = float(restriction[1:])
             required = int(restriction[1:-1])
             if restriction[0]=="<":
                 return media_length<required
@@ -354,24 +410,44 @@ def restriction_check(filter: str, restriction: str, media_data: dict):
             return media_popularity>=required
     raise ValueError()  # FIXME: debug, delete later
 
-def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int, decreasing: bool=False):
+def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int, decreasing: bool=False, current_profile=None, current_account=None):
     match media_type:
         case "movie":
             media_dict = jsons["movie"]
+            popularity_bounds = (60, 150)
         case "tv_show" | "tv show":
             media_dict = jsons["tv"]
+            popularity_bounds = (80, 200)
         case "anime_movie" | "anime movie":
             media_dict = jsons["anime_movie"]
+            popularity_bounds = (30, 80)
         case "anime":
             media_dict = jsons["anime"]
+            popularity_bounds = (40, 100)
         case _:
             raise ValueError()
         
     assert filter_by, sort_by in FILTER_SORT_OPTIONS
     assert restriction in RESTRICTIONS_MAP[filter_by]
     out = []
+    free_max, standard_max = popularity_bounds
+
     for media in media_dict:
-        if restriction_check(filter_by, restriction, media):
+        # SUBSCRIPTION POPULARITY CHECK
+        popularity = media.get("popularity", 0)
+        if current_account:
+            plan = current_account.subscription_plan.value
+            if plan=="FreePlan" and popularity>free_max:
+                continue
+            if plan=="StandardPlan" and popularity>standard_max:
+                continue
+
+        # ADULT CHECK
+        is_adult = True
+        if current_profile is not None:
+            is_adult = current_profile.is_adult
+
+        if restriction_check(filter_by, restriction, media, is_adult_profile=is_adult):
             out.append(media)
 
     if sort_by!="any":
