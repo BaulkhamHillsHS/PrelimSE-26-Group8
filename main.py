@@ -454,7 +454,7 @@ class AppearanceSettingsFrame(ctk.CTkFrame):
 
     def build_ui(self):
         self.resolution_label = ctk.CTkLabel(self, text="idk, choose something", font=TEXT_FONT)
-        self.resolution_combo = ctk.CTkComboBox(self, values=["you must choose me or else"], font=TEXT_FONT)
+        self.resolution_combo = ctk.CTkOptionMenu(self, values=["you must choose me or else"], font=TEXT_FONT)
         self.unnecessary_var = tk.BooleanVar(value=True)
         self.necessary_var = tk.BooleanVar(value=True)
         self.unnecessary_switch = ctk.CTkSwitch(self, text="Allow unnecessary cookies", variable=self.unnecessary_var, font=TEXT_FONT, command=self.cookie_command)
@@ -496,12 +496,13 @@ class SettingsFrame(ctk.CTkFrame):
         self.tabs.grid(row=1, column=0, sticky="nsew")
 
 class AccountFrame(ctk.CTkFrame):
-    def __init__(self, master, name, open_history_callback, switch_profile_callback, upgrade_callback):
+    def __init__(self, master, name, account, open_history_callback, switch_profile_callback, upgrade_callback):
         super().__init__(master, fg_color="transparent")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure((1), weight=1)
         self.name = name
+        self.account = account
         self.open_history_callback = open_history_callback
         self.switch_profile_callback = switch_profile_callback
         self.upgrade_callback = upgrade_callback
@@ -516,6 +517,8 @@ class AccountFrame(ctk.CTkFrame):
         self.tabs.grid(row=1, column=0, sticky="nsew")
 
         self.profile_tab = self.tabs.tab("Manage Profiles")
+        self.profile_tab.grid_columnconfigure(0, weight=1)
+        self.profile_tab.grid_rowconfigure((0, 1, 2), weight=1)
         self.profile_menu_label = ctk.CTkLabel(self.profile_tab, text="Select Profile:", font=TEXT_FONT)
         self.profile_menu_label.grid(row=0, column=0, pady=(10, 10))
         self.profile_dropdown = ctk.CTkOptionMenu(self.profile_tab, values=["Default"], command=self.handle_switch_profile)
@@ -525,10 +528,19 @@ class AccountFrame(ctk.CTkFrame):
 
 
         self.subscription_tab = self.tabs.tab("Subscription")
-        self.upgrade_button = ctk.CTkButton(self.subscription_tab, text="Upgrade subscription", font=TITLE_FONT, command=self.upgrade_callback())
-        self.upgrade_button.grid(row=1, column=0)
-        self.sub_info = ctk.CTkLabel(self.subscription_tab, text=f"Current Plan: {self.name}", font=TEXT_FONT) # FIXME: add current plan
-        self.sub_info.grid(row=0, column=0)
+        self.subscription_tab.grid_columnconfigure(0, weight=1)
+        self.subscription_tab.grid_rowconfigure((0, 1), weight=1)
+        self.upgrade_button = ctk.CTkButton(self.subscription_tab, text="Upgrade subscription", font=TITLE_FONT, command=self.upgrade_callback, fg_color=PRIMARY_COLOUR, hover_color=SECONDARY_COLOUR, text_color="white")
+        self.upgrade_button.grid(row=1, column=0, pady=(10, 10), sticky="ew", padx=(10, 10))
+        if self.account:
+            self.sub_info = ctk.CTkLabel(self.subscription_tab, text=f"Current Plan: {self.account.subscription_plan.value}", font=TITLE_FONT)
+        else:
+            self.sub_info = ctk.CTkLabel(self.subscription_tab, text=f"Current Plan: None", font=TITLE_FONT)
+        self.sub_info.grid(row=0, column=0, pady=(10, 10), sticky="ew", padx=(10, 10))
+
+    def set_account(self, account):
+        self.account = account
+        self.sub_info.configure(text=f"Current Plan: {self.account.subscription_plan.value}")
 
     def handle_switch_profile(self, selection):
         if self.switch_profile_callback:
@@ -575,7 +587,7 @@ class MovieBrowser(ctk.CTkFrame):
         self.search_frame = SearchFrame(self, self.watch_media)
         self.star_frame = StarredFrame(self, self.watch_media)
         self.settings_frame = SettingsFrame(self)
-        self.account_frame = AccountFrame(self, self.name, open_history_callback=self.show_history_window, upgrade_callback=self.upgrade_prompt, switch_profile_callback=self.handle_profile_switch)
+        self.account_frame = AccountFrame(self, self.name, account=None, open_history_callback=self.show_history_window, upgrade_callback=self.upgrade_prompt, switch_profile_callback=self.handle_profile_switch)
         self.watch_frame = WatchFrame(self, Movie({}), self.toggle_favourite)
 
         self.current_frame = self.home_frame
@@ -583,7 +595,6 @@ class MovieBrowser(ctk.CTkFrame):
         self.build_ui()
 
     def upgrade_prompt(self):
-        # FIXME: something here doesn't work
         if not self.current_account_data:
             return
         
@@ -593,7 +604,6 @@ class MovieBrowser(ctk.CTkFrame):
             return
         
         dialog = PaymentDialog(self, current_plan, lambda x: self.execute_upgrade(x))
-        dialog.geometry("+0+0") #FIXME:
 
     def execute_upgrade(self, target_plan: str):
         if not self.current_account_data:
@@ -604,17 +614,18 @@ class MovieBrowser(ctk.CTkFrame):
         elif target_plan == "PremiumPlan":
             self.current_account_data.subscription_plan = SubscriptionPlan.PREMIUM
         
-        print(f"Successfull upgraded to {target_plan}")
+        print(f"Successfully upgraded to {target_plan}")
+        self.account_frame.set_account(self.current_account_data)
 
-        try: # FIXME: weird
+        try: # FIXME: weird idk if it saves data properly
             accounts_list = self.master.account_manager.load_accounts() # type: ignore
             for acc in accounts_list:
                 if acc.username == self.current_account_data.username:
                     acc.subscription_plan = self.current_account_data.subscription_plan
                     break
-            self.master.account_manager.save_accounts(accounts_list) # type: ignore
-        except:
-            pass
+            self.master.account_manager.update_accounts(accounts_list) # type: ignore
+        except Exception as e:
+            print(e)
 
         self.update_profile_ui()
 
@@ -743,6 +754,7 @@ class StreamingApp(ctk.CTk):
             password = logged_in_user.get_password() # FIXME: insecure maybe idk
             print(f"Logging in as {username} with password {password}")
             self.browse_frame.current_account_data = logged_in_user
+            self.browse_frame.account_frame.set_account(logged_in_user)
             self.login_switch(username)
             return True
         else:

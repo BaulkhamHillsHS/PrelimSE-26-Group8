@@ -130,7 +130,7 @@ class PaymentDialog(ctk.CTkToplevel):
         self.build_ui()
 
     def build_ui(self):
-        self.main_label = ctk.CTkLabel(self, text=f"Upgrade Subscription Plan", font=BIG_TYPEWRITER_FONT)
+        self.main_label = ctk.CTkLabel(self, text=f"Upgrade Subscription Plan", font=BOLD_TYPEWRITER_FONT)
         self.select_label = ctk.CTkLabel(self, text="Select Tier", font=BOLD_TYPEWRITER_FONT)
         self.available_options = []
         if self.current_plan == "FreePlan":
@@ -141,7 +141,7 @@ class PaymentDialog(ctk.CTkToplevel):
             self.available_options = ["Already at highest tier"]
 
         self.plan_dropdown = ctk.CTkOptionMenu(self, values=self.available_options, font=SMALL_FONT, height=38, button_color=PRIMARY_COLOUR, button_hover_color=SECONDARY_COLOUR, command=self.update_price_display)
-        self.price_label = ctk.CTkLabel(self, text="", font=TYPEWRITER_FONT)
+        self.price_label = ctk.CTkLabel(self, text="", font=BIG_TYPEWRITER_FONT)
         self.update_price_display(self.plan_dropdown.get())
 
         self.card_entry = ctk.CTkEntry(self, placeholder_text="Card number", font=SMALL_FONT, height=40)
@@ -149,7 +149,7 @@ class PaymentDialog(ctk.CTkToplevel):
         self.cvv_entry = ctk.CTkEntry(self, placeholder_text="CVV", font=SMALL_FONT, height=40, show="*")
         self.error_label = ctk.CTkLabel(self, text="", text_color="red", font=SMALL_FONT)
         
-        self.pay_button = ctk.CTkButton(self, text="Confirm Payment", font=BOLD_TYPEWRITER_FONT, fg_color=PRIMARY_COLOUR, hover_color=SECONDARY_COLOUR, command=self.process_payment)
+        self.pay_button = ctk.CTkButton(self, text="Confirm Payment", font=BOLD_TYPEWRITER_FONT, fg_color=PRIMARY_COLOUR, text_color="white", hover_color=SECONDARY_COLOUR, command=self.process_payment)
         self.cancel_button = ctk.CTkButton(self, text="Cancel", font=SMALL_FONT, height=40, fg_color="transparent", command=self.destroy)
         
         self.main_label.grid(row=0, column=0, columnspan=2, pady=(30, 5), padx=20, sticky="ew")
@@ -186,7 +186,7 @@ class PaymentDialog(ctk.CTkToplevel):
         cvv = self.cvv_entry.get().strip()
 
         if len(card)<15 or not card.isdigit():
-            self.error_label.configure(text="Invalid card number")
+            self.error_label.configure(text="Invalid card number(15 digits)")
             return
         if "/" not in expiry or len(expiry)!=5:
             self.error_label.configure(text="Invalid expiry date (MM/YY)")
