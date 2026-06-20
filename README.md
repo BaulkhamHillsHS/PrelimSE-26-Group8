@@ -4,46 +4,29 @@ Note: in the database/csv, accounts are pulled using username because usernames 
 
 ## very future
 
-- pfp
 - forget password
 - change password
 - remember me
 - stripe pay
-- add ctrl+ ctrl- zoom hotkeys
-- do the thing where when ur searching it shows recommendations then u click on it and it says wait we dont have this
-- make loading screen really long but when you buy a subscription it gets really short at the start and slowly get longer until its basically normal again lol, higher subscription => shorter loading time
-- add back button
 
 ## future
 
-- sort by collection
-- see others in collection
-- search and home title labels are slightly higher or lower than the other ones because its a scrollable frame. either make all of them inherit from the same base class or fix this manually
-- sort increasing/decreasing switch
 - search history
+- search and home title labels are slightly higher or lower than the other ones because its a scrollable frame. either make all of them inherit from the same base class or fix this manually
 
 ## near future
 
-- changing subscription plan
 - security https://pyauth.github.io/pyotp/
 - OOP - encapsulation, polymorphism, inheritance, composition
-- make it save starred movies between sessions
-
-## basically now
-
-- inputdialogue for secure payment info window check complexexample
-- change profile
+- make it save starred movies between sessions or like for profile ?
 
 ## literally now
 
-- watchframe should show episode count, voting average, age rating, movie length, genres, tag
-- "watching" the media
+- "watching" the media like episodes and stuff
 - restrict content if you're on child profile
-- watching media and writing time of watch to a json or csv entry
-- watch history
+- watching media and writing time of watch to a json or csv entry -> watch history
 - switching profiles
-- **subscriptions upgrading**
-- **payment info**              <-- doing
+- **store payment info**              <-- doing
 - **remove sorting by genre cuz thats stupid also note you cant filter by genre in tv shows and animes**
 
 # BEN

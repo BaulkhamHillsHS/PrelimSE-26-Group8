@@ -1,5 +1,5 @@
 username,email,password,subscription_plan,payment_info,profiles
-MrDunne,ryan.dunne9@det.nsw.edu.au,Baulko11!!,PremiumPlan,American Express Centurion Card,"[{""name"": ""Mr and Mrs Dunne"", ""is_adult"": true, ""watchlist"": [], ""watch_history"": []}, {""name"": ""Kids"", ""is_adult"": false, ""watchlist"": [], ""watch_history"": []}]"
+MrDunne,ryan.dunne9@det.nsw.edu.au,Baulko11!!,PremiumPlan,012345678901234,"[{""name"": ""Mr and Mrs Dunne"", ""is_adult"": true, ""watchlist"": [], ""watch_history"": []}, {""name"": ""Kids"", ""is_adult"": false, ""watchlist"": [], ""watch_history"": []}]"
 a,a@a,a,PremiumPlan,a,"[{""name"": ""a"", ""is_adult"": true, ""watchlist"": [], ""watch_history"": []}, {""name"": ""a's children"", ""is_adult"": false, ""watchlist"": [], ""watch_history"": []}]"
 user3,user3@gmail.com,OriginalPassword67,FreePlan,Credit card,"[{""name"": ""User3"", ""is_adult"": true, ""watchlist"": [], ""watch_history"": []}]"
 user4,user4@gmail.com,OriginalPassword67,StandardPlan,Credit card,"[{""name"": ""User4"", ""is_adult"": false, ""watchlist"": [], ""watch_history"": []}]"
