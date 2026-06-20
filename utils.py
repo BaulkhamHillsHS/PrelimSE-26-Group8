@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-from typing import Union
 import customtkinter as ctk
 from PIL import Image
 import os
@@ -7,7 +5,7 @@ import json
 from pathlib import Path
 from enum import Enum
 import csv
-from datetime import datetime, timedelta
+from datetime import datetime
 
 TITLE_FONT = ("Inter", 35, "bold")
 TEXT_FONT = ("Arial", 20)
@@ -264,11 +262,9 @@ class Account:
         self.email = email
         self.subscription_plan = subscription_plan
 
-        # ENCAPSULATION
         self.__password = password
         self.__payment_info = payment_info
 
-        # COMPOSITION
         self.profiles = []
 
     def check_password(self, attempt):
@@ -443,9 +439,7 @@ class Season():
         self.media_data = media_data
         self.season_number = self.get_data("season_number", 0)
         self.dimensions = dimensions
-        #self.pillow_image = Image.open(os.path.join(posters_path, f"s_{self.get_id()}.jpg")) # FIXME: incomplete impl
-        #self.poster = ctk.CTkImage(self.pillow_image, size=dimensions)
-        self.episode_count = int(self.get_data("episode_count", 0)) # 
+        self.episode_count = int(self.get_data("episode_count", 0))
     
     def get_data(self, key: str, default):
         return self.media_data.get(key, default)

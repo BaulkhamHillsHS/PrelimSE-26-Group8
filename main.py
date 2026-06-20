@@ -673,21 +673,18 @@ class MovieBrowser(ctk.CTkFrame):
         print(f"Successfully upgraded to {target_plan}")
         self.account_frame.set_account(self.current_account_data)
 
-        try: # FIXME: weird idk if it saves data properly
-            accounts_list = self.master.account_manager.load_accounts() # type: ignore
-            for acc in accounts_list:
-                if acc.username == self.current_account_data.username:
-                    acc.subscription_plan = self.current_account_data.subscription_plan
-                    break
-            self.master.account_manager.update_accounts(accounts_list) # type: ignore
-        except Exception as e:
-            print(e)
+        accounts_list = self.master.account_manager.load_accounts() # type: ignore
+        for acc in accounts_list:
+            if acc.username == self.current_account_data.username:
+                acc.subscription_plan = self.current_account_data.subscription_plan
+                break
+        self.master.account_manager.update_accounts(accounts_list) # type: ignore
 
         self.update_profile_ui()
 
     def handle_profile_switch(self, new_profile_name):
         if self.current_account_data:
-            for p in self.current_account_data.profiles: # type: ignore FIXME:
+            for p in self.current_account_data.profiles:
                 if p.name == new_profile_name:
                     self.current_profile = p
                     print(f"Switched profile to: {p.name} (Adult: {p.is_adult})")
@@ -777,7 +774,7 @@ class MovieBrowser(ctk.CTkFrame):
 class StreamingApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("streaming service")
+        self.title("Breakflix")
         self.geometry("1280x720")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
