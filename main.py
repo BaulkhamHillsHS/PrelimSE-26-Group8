@@ -196,31 +196,66 @@ class WatchFrame(ctk.CTkFrame):
         self.media = media
         self.favourite_callback = favourite_callback
         
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure((0, 1), weight=0)
+        self.grid_columnconfigure(0, weight=0)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure((0, 1), weight=1)
         self.grid_rowconfigure(1, weight=0)
         self.grid_rowconfigure(2, weight=3)
         self.grid_rowconfigure(3, weight=0)
         self.build_ui()
     
     def build_ui(self):
+        vote_average = self.media.get_data("vote_average", "N/A")
+        runtime = pretty_time(self.media.get_runtime())
+        if isinstance(self.media, (Anime, Show)):
+            episode_count = sum([season.episode_count for season in self.media.get_seasons()])
+        else:
+            episode_count = "N/A"
+        genres = ", ".join(genre["name"] for genre in self.media.get_data("genres", []))
+        tagline = self.media.get_data("tagline", "")
+
         self.title_label = ctk.CTkLabel(self, text=self.media.get_title(), font=TITLE_FONT)
         self.poster_label = ctk.CTkLabel(self, image=self.media.get_poster(BIG_POSTER_SIZE), text="")
         overview = self.media.get_overview()[:300]
         if(len(self.media.get_overview())>=300):
             overview+="..."
-        self.overview_textbox = ctk.CTkTextbox(self, wrap="word", fg_color="transparent", font=SMALL_FONT)
+
+        self.info_frame = ctk.CTkFrame(self, fg_color="transparent")
+        self.overview_textbox = ctk.CTkTextbox(self.info_frame, wrap="word", fg_color="transparent", font=SMALL_FONT)
         self.overview_textbox.insert("0.0", self.media.get_overview())
         self.overview_textbox.configure(state="disabled")
-        self.star_button = ctk.CTkButton(self, text="☆ Add to favourites", command=self.toggle_favourite, font=TEXT_FONT)
+        self.star_button = ctk.CTkButton(self.info_frame, text="☆ Add to favourites", command=self.toggle_favourite, font=TEXT_FONT)
+        self.vote_label = ctk.CTkLabel(self.info_frame, text=f"Vote average: {vote_average}", font=TEXT_FONT, anchor="w")
+        self.runtime_label = ctk.CTkLabel(self.info_frame, text=f"runtime: {runtime}", font=TEXT_FONT, anchor="w")
+        self.episode_label = ctk.CTkLabel(self.info_frame, text=f"Episodes: {episode_count}", font=TEXT_FONT, anchor="w")
+        self.genre_label = ctk.CTkLabel(self.info_frame, text=f"Genres: {genres}", font=TEXT_FONT, anchor="w")
+        self.tagline_label = ctk.CTkLabel(self.info_frame, text=f"Tagline:\n{tagline}", anchor="w", wraplength=400, justify="left", font=SMALL_FONT)
 
-        self.title_label.grid(row=0, column=0, pady=(10, 10), padx=0)
+        self.info_frame.grid_columnconfigure(0, weight=1)
+        self.info_frame.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6), weight=1)
+        self.vote_label.grid(row=0, column=0, sticky="nsew", padx=(10, 10), pady=(10, 10))
+        self.runtime_label.grid(row=1, column=0, sticky="nsew", pady=(10, 10), padx=(10, 10))
+        self.episode_label.grid(row=2, column=0, sticky="nsew", pady=(10, 10), padx=(10, 10))
+        self.genre_label.grid(row=3, column=0, sticky="nsew", pady=(10, 10), padx=(10, 10))
+        self.tagline_label.grid(row=4, column=0, sticky="nsew", pady=(10, 10), padx=(10, 10))
+        self.overview_textbox.grid(row=5, column=0, pady=(10, 10), padx=(10, 10), sticky="nsew")
+        self.star_button.grid(row=6, column=0, pady=(10, 10), columnspan=2)
+
+        self.title_label.grid(row=0, column=0, columnspan=2, pady=(10, 10), padx=0)
         self.poster_label.grid(row=1, column=0, pady=(10, 10), padx=(10, 10), sticky="nsew")
-        self.overview_textbox.grid(row=2, column=0, pady=(10, 10), padx=(10, 10), sticky="nsew")
-        self.star_button.grid(row=3, column=0, pady=(10, 10))
+        self.info_frame.grid(row=1, column=1, pady=(10, 10), padx=(10, 10), sticky="nsew")
 
     def switch_media(self, new_media):
         self.media = new_media
+
+        vote_average = self.media.get_data("vote_average", "N/A")
+        runtime = pretty_time(self.media.get_runtime())
+        if isinstance(self.media, (Anime, Show)):
+            episode_count = sum([season.episode_count for season in self.media.get_seasons()])
+        else:
+            episode_count = "N/A"
+        genres = ", ".join(genre["name"] for genre in self.media.get_data("genres", []))
+        tagline = self.media.get_data("tagline", "")
 
         self.title_label.configure(text=self.media.get_title())
         self.poster_label.configure(image=self.media.get_poster(BIG_POSTER_SIZE))
@@ -231,6 +266,11 @@ class WatchFrame(ctk.CTkFrame):
         self.overview_textbox.delete("0.0", "end")
         self.overview_textbox.insert("0.0", self.media.get_overview())
         self.overview_textbox.configure(state="disabled")
+        self.vote_label.configure(text=f"Vote Average: {vote_average}")
+        self.runtime_label.configure(text=f"Runtime: {runtime}")
+        self.episode_label.configure(text=f"Episodes: {episode_count}")
+        self.genre_label.configure(text=f"Genres: {genres}")
+        self.tagline_label.configure(text=f'Tagline:\n"{tagline}"')
 
     def toggle_favourite(self):
         self.favourite_callback(self.media)
@@ -525,7 +565,6 @@ class AccountFrame(ctk.CTkFrame):
         self.profile_dropdown.grid(row=1, column=0, pady=(10, 10))
         self.history_button = ctk.CTkButton(self.profile_tab, text="Generate viewing report", font=TEXT_FONT, command=self.open_history_callback)
         self.history_button.grid(row=2, column=0, pady=(10, 10))
-
 
         self.subscription_tab = self.tabs.tab("Subscription")
         self.subscription_tab.grid_columnconfigure(0, weight=1)

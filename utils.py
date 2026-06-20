@@ -20,13 +20,12 @@ POSTER_SIZE = (96, 144)
 MEDIUM_POSTER_SIZE = (160, 240)
 BIG_POSTER_SIZE = (320, 480)
 
-FILTER_SORT_OPTIONS = ["any", "score rating", "age rating", "length", "genre", "popularity"]
+FILTER_SORT_OPTIONS = ["any", "score rating", "age rating", "length", "popularity"]
 RESTRICTIONS_MAP = {
             "any": [""],
             "score rating": [">8.5", ">8", ">7.5", ">7"],
             "age rating": ["PG", "PG13", "MA15+", "M", "R"],
             "length": ["<75m", "<90m", "<120m", ">75m", ">90m", ">120m"],
-            "genre": ["Science Fiction", "Action", "Fantasy", "Comedy", "Adventure"],
             "popularity": [">200", ">175", ">150", ">100", ">50"]
         }
 
@@ -270,6 +269,9 @@ class Account:
     def get_payment_info(self):
         return self.__payment_info
     
+    def set_payment_info(self, new_payment_info):
+        self.__payment_info = new_payment_info
+    
     def add_profile(self, profile: Profile):
         self.profiles.append(profile)
     
@@ -456,8 +458,6 @@ def media_get_attribute(data, attribute, default):
             raise ValueError() # FIXME:
         case "length":
             return data["runtime"]
-        case "genre":
-            return data["genres"]
         case "popularity":
             return data["popularity"]
         case _:
@@ -465,10 +465,7 @@ def media_get_attribute(data, attribute, default):
 
 def restriction_check(filter: str, restriction: str, media_data: dict, is_adult_profile=True):
     if not is_adult_profile:
-        genres = media_data.get("genres", [])
-        genre_names = [g["name"] for g in genres if "name" in g]
-        if "Horror" in genre_names or "Thriller" in genre_names:
-            return False
+        pass
         # FIXME: ADD MORE AGE RESTRICTION CHECKING
     
     assert filter in FILTER_SORT_OPTIONS
@@ -489,12 +486,6 @@ def restriction_check(filter: str, restriction: str, media_data: dict, is_adult_
                 return media_length<required
             else:
                 return media_length>required
-        case "genre":
-            media_genres = media_get_attribute(media_data, filter, [])
-            for genre in media_genres:
-                if genre["name"]==restriction:
-                    return True
-            return False
         case "popularity":
             media_popularity = media_get_attribute(media_data, "popularity", 0)
             required = int(restriction[1:])
@@ -548,10 +539,7 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
             out.append(media)
 
     if sort_by!="any":
-        if sort_by=="genre":
-            out.sort(key=lambda x: media_get_attribute(x, sort_by, 0)[0]["name"] if bool(len(media_get_attribute(x, sort_by, 0))) else "", reverse=not ascending) # type: ignore FIXME: SO SCUFFED
-        else:
-            out.sort(key=lambda x: media_get_attribute(x, sort_by, 0), reverse=not ascending)
+        out.sort(key=lambda x: media_get_attribute(x, sort_by, 0), reverse=not ascending)
 
     match media_type:
         case "movie":
