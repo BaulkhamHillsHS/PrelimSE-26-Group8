@@ -38,13 +38,13 @@ Note: in the database/csv, accounts are pulled using username because usernames 
 
 - watchframe should show episode count, voting average, age rating, movie length, genres, tag
 - "watching" the media
-- search by text for title
 - restrict content if you're on child profile
-- watching media and writing time + duration to a json or csv entry
+- watching media and writing time of watch to a json or csv entry
 - watch history
-- subscriptions upgrading
-- payment info
-- search ascending/descending
+- switching profiles
+- **subscriptions upgrading**
+- **payment info**              <-- doing
+- **remove sorting by genre cuz thats stupid also note you cant filter by genre in tv shows and animes**
 
 # BEN
 - real icons
@@ -57,3 +57,4 @@ Note: in the database/csv, accounts are pulled using username because usernames 
 - structured walkthrough
 - logbook
 - individual evaluation
+- ADD COMMENTS, readability

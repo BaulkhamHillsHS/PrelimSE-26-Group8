@@ -13,6 +13,8 @@ TITLE_FONT = ("Inter", 35, "bold")
 TEXT_FONT = ("Arial", 20)
 SMALL_FONT = ("Arial", 17)
 TYPEWRITER_FONT = ("Courier New", 14)
+BOLD_TYPEWRITER_FONT = ("Courier New", 18, "bold")
+BIG_TYPEWRITER_FONT = ("Courier New", 24)
 
 POSTER_SIZE = (96, 144)
 MEDIUM_POSTER_SIZE = (160, 240)
@@ -107,6 +109,95 @@ class Profile:
             "watchlist": self.watchlist,
             "watch_history": self.watch_history
         }
+    
+class PaymentDialog(ctk.CTkToplevel):
+    def __init__(self, master, current_plan_name: str, success_callback):
+        super().__init__(master)
+        self.title("Payment Checkout")
+        self.geometry("400x500")
+        self.resizable(False, False)
+
+        # Force interaction
+        self.transient(master)
+        self.grab_set()
+
+        self.on_success = success_callback
+        self.current_plan = current_plan_name
+
+        self.price_dict = {"FreePlan": 0, "StandardPlan": 9, "PremiumPlan": 15}
+
+        self.grid_columnconfigure((0, 1), weight=1)
+        self.build_ui()
+
+    def build_ui(self):
+        self.main_label = ctk.CTkLabel(self, text=f"Upgrade Subscription Plan", font=BIG_TYPEWRITER_FONT)
+        self.select_label = ctk.CTkLabel(self, text="Select Tier", font=BOLD_TYPEWRITER_FONT)
+        self.available_options = []
+        if self.current_plan == "FreePlan":
+            self.available_options = ["Standard Plan ($8.99/month)", "Premium Plan ($14.99/month)"]
+        elif self.current_plan == "StandardPlan":
+            self.available_options = ["Premium Plan ($14.99/month, additional $6 dollars) [SAVE 8 DOLLARS BUYING NOW]"]
+        else:
+            self.available_options = ["Already at highest tier"]
+
+        self.plan_dropdown = ctk.CTkOptionMenu(self, values=self.available_options, font=SMALL_FONT, height=38, button_color=PRIMARY_COLOUR, button_hover_color=SECONDARY_COLOUR, command=self.update_price_display)
+        self.price_label = ctk.CTkLabel(self, text="", font=TYPEWRITER_FONT)
+        self.update_price_display(self.plan_dropdown.get())
+
+        self.card_entry = ctk.CTkEntry(self, placeholder_text="Card number", font=SMALL_FONT, height=40)
+        self.expiry_entry = ctk.CTkEntry(self, placeholder_text="MM/YY", font=SMALL_FONT, height=40)
+        self.cvv_entry = ctk.CTkEntry(self, placeholder_text="CVV", font=SMALL_FONT, height=40, show="*")
+        self.error_label = ctk.CTkLabel(self, text="", text_color="red", font=SMALL_FONT)
+        
+        self.pay_button = ctk.CTkButton(self, text="Confirm Payment", font=BOLD_TYPEWRITER_FONT, fg_color=PRIMARY_COLOUR, hover_color=SECONDARY_COLOUR, command=self.process_payment)
+        self.cancel_button = ctk.CTkButton(self, text="Cancel", font=SMALL_FONT, height=40, fg_color="transparent", command=self.destroy)
+        
+        self.main_label.grid(row=0, column=0, columnspan=2, pady=(30, 5), padx=20, sticky="ew")
+        self.select_label.grid(row=1, column=0, columnspan=2, pady=(10, 2), padx=40, sticky="w")
+        self.plan_dropdown.grid(row=2, column=0, columnspan=2, pady=(0, 15), padx=40, sticky="ew")
+        self.price_label.grid(row=3, column=0, columnspan=2, pady=(0, 15), padx=40, sticky="ew")
+        
+        self.card_entry.grid(row=4, column=0, columnspan=2, pady=10, padx=40, sticky="ew")
+        self.expiry_entry.grid(row=5, column=0, pady=10, padx=(40, 5), sticky="ew")
+        self.cvv_entry.grid(row=5, column=1, pady=10, padx=(5, 40), sticky="ew")
+        
+        self.error_label.grid(row=6, column=0, columnspan=2, pady=5, padx=20, sticky="ew")
+        self.pay_button.grid(row=7, column=0, columnspan=2, pady=(15, 10), padx=40, sticky="ew")
+        self.cancel_button.grid(row=8, column=0, columnspan=2, pady=5, padx=40, sticky="ew")
+
+    def update_price_display(self, selected_choice: str):
+        if "Standard" in selected_choice:
+            self.price_label.configure(text="Total: $8.99/month")
+        elif "additional $6" in selected_choice:
+            self.price_label.configure(text="Total Upgrade Fee: $6.00")
+        elif "Premium Plan" in selected_choice:
+            self.price_label.configure(text="Total: $14.99/month")
+        else:
+            self.price_label.configure(text="No active transaction amount due.")
+
+    def process_payment(self):
+        choice = self.plan_dropdown.get()
+        if "Already" in choice:
+            self.error_label.configure(text="You are already on the highest tier.")
+            return
+
+        card = self.card_entry.get().replace(" ", "")
+        expiry = self.expiry_entry.get().strip()
+        cvv = self.cvv_entry.get().strip()
+
+        if len(card)<15 or not card.isdigit():
+            self.error_label.configure(text="Invalid card number")
+            return
+        if "/" not in expiry or len(expiry)!=5:
+            self.error_label.configure(text="Invalid expiry date (MM/YY)")
+            return
+        if len(cvv)!=3 or not cvv.isdigit():
+            self.error_label.configure(text="Invalid CVV.")
+            return
+        
+        chosen_plan = "StandardPlan" if "Standard" in choice else "PremiumPlan"
+        self.on_success(chosen_plan)
+        self.destroy()
 
 class WatchHistory(ctk.CTkToplevel):
     def __init__(self, parent, username, watch_history_list, text_path):
@@ -410,7 +501,7 @@ def restriction_check(filter: str, restriction: str, media_data: dict, is_adult_
             return media_popularity>=required
     raise ValueError()  # FIXME: debug, delete later
 
-def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int, decreasing: bool=False, current_profile=None, current_account=None):
+def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int, ascending: bool=False, search_query: str="", current_profile=None, current_account=None):
     match media_type:
         case "movie":
             media_dict = jsons["movie"]
@@ -447,14 +538,20 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
         if current_profile is not None:
             is_adult = current_profile.is_adult
 
+        # SEARCH QUERY CHECK
+        if search_query:
+            title = media.get("title", media.get("name", "")).lower()
+            if search_query.lower() not in title:
+                continue
+
         if restriction_check(filter_by, restriction, media, is_adult_profile=is_adult):
             out.append(media)
 
     if sort_by!="any":
         if sort_by=="genre":
-            out.sort(key=lambda x: media_get_attribute(x, sort_by, 0)[0]["name"] if bool(len(media_get_attribute(x, sort_by, 0))) else "", reverse=decreasing) # type: ignore FIXME: SO SCUFFED
+            out.sort(key=lambda x: media_get_attribute(x, sort_by, 0)[0]["name"] if bool(len(media_get_attribute(x, sort_by, 0))) else "", reverse=not ascending) # type: ignore FIXME: SO SCUFFED
         else:
-            out.sort(key=lambda x: media_get_attribute(x, sort_by, 0), reverse=decreasing)
+            out.sort(key=lambda x: media_get_attribute(x, sort_by, 0), reverse=not ascending)
 
     match media_type:
         case "movie":
@@ -474,3 +571,72 @@ def pretty_time(minutes: int, clock=False):
     
 def get_current_time():
     return datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+def create_rrect(canvas: ctk.CTkCanvas, width, height, pos, r, fill):
+    x1, y1 = pos
+    x2 = x1 + width
+    y2 = y1 + height
+    points = [
+        # corner 1
+        x1, y1 + r, x1, y1 + r,
+        x1, y1,
+        x1 + r, y1, x1 + r, y1,
+        
+        # corner 2
+        x2 - r, y1, x2 - r, y1,
+        x2, y1,
+        x2, y1 + r, x2, y1 + r,
+        
+        # corner 3
+        x2, y2 - r, x2, y2 - r,
+        x2, y2,
+        x2 - r, y2, x2 - r, y2,
+        
+        # corner 4
+        x1 + r, y2, x1 + r, y2,
+        x1, y2,
+        x1, y2 - r, x1, y2 - r
+    ]
+    return canvas.create_polygon(points, smooth=True, fill=fill)
+
+class ImageCell():
+    def __init__(self, canvas: ctk.CTkCanvas, image, pos, speed = 1.0):
+        self.canvas = canvas
+        self.id = self.canvas.create_image(*pos, image=image, anchor="nw")
+        self.speed = speed
+    
+    def move(self, x, y):
+        self.canvas.move(self.id, x, y)
+    
+    def goto(self, x, y):
+        self.canvas.moveto(self.id, x, y)
+    
+    def slide(self):
+        self.canvas.move(self.id, self.speed, 0)
+    
+    def get_pos(self):
+        return self.canvas.tk.call(self.canvas._w, "coords", self.id) # type: ignore
+    
+    def get_size(self):
+        bbox = self.canvas.bbox(self.id)
+        x = bbox[2] - bbox[0]
+        y = bbox[3] - bbox[1]
+        return (x, y)
+    
+class Panel():
+    def __init__(self, canvas: ctk.CTkCanvas, width, height, r, pos, fill, padding):
+        self.canvas = canvas
+        self.width = width
+        self.height = height
+        self.pos = pos
+        self.padding = padding
+        create_rrect(canvas, width, height, pos, r, fill)
+    
+    def get_pos(self):
+        return (self.pos[0] - 2, self.pos[1])
+    
+    def get_dim(self):
+        return (self.width, self.height)
+    
+    def get_udim(self):
+        return (self.width - self.padding[0] - self.padding[1], self.height - self.padding[2] - self.padding[3])

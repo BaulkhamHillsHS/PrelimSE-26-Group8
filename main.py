@@ -11,11 +11,12 @@ from utils import POSTER_SIZE, MEDIUM_POSTER_SIZE, BIG_POSTER_SIZE
 from utils import FILTER_SORT_OPTIONS, RESTRICTIONS_MAP
 from utils import PRIMARY_COLOUR, SECONDARY_COLOUR
 
+from utils import ImageCell, Panel
 from utils import SubscriptionPlan
 from utils import accounts_path, theme_path, viewing_txt_path
 from utils import images, jsons
 from utils import Movie, Show, Anime, AnimeMovie
-from utils import AccountManager, WatchHistory
+from utils import AccountManager, WatchHistory, PaymentDialog
 from utils import get_media
 from utils import pretty_time, get_current_time
 
@@ -37,75 +38,6 @@ class LoadingFrame(ctk.CTkFrame):
         self.loading_bar.grid(row=3, column=1, padx=(10, 10), pady=(10, 10), sticky="ew")
         self.loading_bar.configure(mode="indeterminate")
         self.loading_bar.start()
-
-def create_rrect(canvas: ctk.CTkCanvas, width, height, pos, r, fill):
-    x1, y1 = pos
-    x2 = x1 + width
-    y2 = y1 + height
-    points = [
-        # corner 1
-        x1, y1 + r, x1, y1 + r,
-        x1, y1,
-        x1 + r, y1, x1 + r, y1,
-        
-        # corner 2
-        x2 - r, y1, x2 - r, y1,
-        x2, y1,
-        x2, y1 + r, x2, y1 + r,
-        
-        # corner 3
-        x2, y2 - r, x2, y2 - r,
-        x2, y2,
-        x2 - r, y2, x2 - r, y2,
-        
-        # corner 4
-        x1 + r, y2, x1 + r, y2,
-        x1, y2,
-        x1, y2 - r, x1, y2 - r
-    ]
-    return canvas.create_polygon(points, smooth=True, fill=fill)
-
-class ImageCell():
-    def __init__(self, canvas: ctk.CTkCanvas, image, pos, speed = 1.0):
-        self.canvas = canvas
-        self.id = self.canvas.create_image(*pos, image=image, anchor="nw")
-        self.speed = speed
-    
-    def move(self, x, y):
-        self.canvas.move(self.id, x, y)
-    
-    def goto(self, x, y):
-        self.canvas.moveto(self.id, x, y)
-    
-    def slide(self):
-        self.canvas.move(self.id, self.speed, 0)
-    
-    def get_pos(self):
-        return self.canvas.tk.call(self.canvas._w, "coords", self.id) # type: ignore
-    
-    def get_size(self):
-        bbox = self.canvas.bbox(self.id)
-        x = bbox[2] - bbox[0]
-        y = bbox[3] - bbox[1]
-        return (x, y)
-    
-class Panel():
-    def __init__(self, canvas: ctk.CTkCanvas, width, height, r, pos, fill, padding):
-        self.canvas = canvas
-        self.width = width
-        self.height = height
-        self.pos = pos
-        self.padding = padding
-        create_rrect(canvas, width, height, pos, r, fill)
-    
-    def get_pos(self):
-        return (self.pos[0] - 2, self.pos[1])
-    
-    def get_dim(self):
-        return (self.width, self.height)
-    
-    def get_udim(self):
-        return (self.width - self.padding[0] - self.padding[1], self.height - self.padding[2] - self.padding[3])
 
 class LoginFrame(ctk.CTkFrame):
     def __init__(
@@ -399,7 +331,7 @@ class HomeFrame(ctk.CTkScrollableFrame):
 class FilterSortFrame(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
-        self.grid_columnconfigure((0, 1, 2, 3), weight=1)
+        self.grid_columnconfigure((0, 1, 2, 3, 4), weight=1)
         self.grid_rowconfigure((0, 1), weight=1)
         self.restrictions_map = RESTRICTIONS_MAP
         self.build_ui()
@@ -409,6 +341,8 @@ class FilterSortFrame(ctk.CTkFrame):
         self.filter_by_restriction_menu = ctk.CTkOptionMenu(self, values=self.restrictions_map["any"])
         self.sort_by = ctk.CTkOptionMenu(self, values=FILTER_SORT_OPTIONS)
         self.media_type = ctk.CTkOptionMenu(self, values=["Movie", "TV Show", "Anime", "Anime movie"])
+        self.sort_ascending = tk.BooleanVar(value=False)
+        self.sort_order_toggle = ctk.CTkSwitch(self, text="Ascending", variable=self.sort_ascending)
 
         self.filter_label = ctk.CTkLabel(self, text="Filter by...", font=TEXT_FONT)
         self.sort_label = ctk.CTkLabel(self, text="Sort by...", font=TEXT_FONT)
@@ -422,6 +356,7 @@ class FilterSortFrame(ctk.CTkFrame):
         self.filter_by_restriction_menu.grid(row=1, column=1, padx=10, pady=10)
         self.sort_by.grid(row=1, column=2, padx=10, pady=10)
         self.media_type.grid(row=1, column=3, padx=10, pady=10)
+        self.sort_order_toggle.grid(row=1, column=4, padx=10, pady=10)
 
     def filter_change(self, new: str):
         if new in self.restrictions_map:
@@ -434,6 +369,9 @@ class FilterSortFrame(ctk.CTkFrame):
     def get_sort(self):
         return (self.sort_by.get())
     
+    def get_sort_ascending(self):
+        return (self.sort_ascending.get())
+
     def get_media_type(self):
         return (self.media_type.get())
 
@@ -449,16 +387,25 @@ class SearchFrame(ctk.CTkScrollableFrame):
     def build_ui(self):
         self.title_label = ctk.CTkLabel(self, text="Search", font=TITLE_FONT)
         self.filter_sort_frame = FilterSortFrame(self)
-        self.a_button = ctk.CTkButton(self, text="Search button", command=self.button_callback, font=TEXT_FONT)
+        self.a_button = ctk.CTkButton(self, text="Search", command=self.button_callback, font=TEXT_FONT)
+        self.sort_order_toggle = ctk.CTkSegmentedButton(self, values=["Descending", "Ascending"], command=self.refresh_search)
+        self.sort_order_toggle.set("Descending")
 
-        self.title_label.grid(row=0, column=0, sticky="nsew")
-        self.filter_sort_frame.grid(row=1, column=0)
-        self.a_button.grid(row=2, column=0)
-        self.results_bar.grid(row=3, column=0, sticky="nsew")
+        self.search_entry = ctk.CTkEntry(self, placeholder_text="Search for media...", font=TEXT_FONT, height=40)
+        self.search_entry.bind("<Return>", self.refresh_search)
+
+        self.title_label.grid(row=0, column=0, sticky="nsew", pady=(10, 10))
+        self.search_entry.grid(row=1, column=0, sticky="nsew", pady=(10, 10), padx=(20, 20))
+        self.filter_sort_frame.grid(row=2, column=0, pady=(10, 10))
+        self.a_button.grid(row=3, column=0)
+        self.results_bar.grid(row=4, column=0, sticky="nsew")
 
     def button_callback(self):
-        new_movies = get_media(self.filter_sort_frame.get_media_type().lower(), *self.filter_sort_frame.get_filter(), self.filter_sort_frame.get_sort(), count=10)
+        new_movies = get_media(self.filter_sort_frame.get_media_type().lower(), *self.filter_sort_frame.get_filter(), self.filter_sort_frame.get_sort(), count=10, ascending=self.filter_sort_frame.get_sort_ascending(), search_query=self.search_entry.get())
         self.results_bar.update_media(new_movies)
+
+    def refresh_search(self, event=None):
+        self.button_callback()
 
 class StarredFrame(ctk.CTkFrame):
     def __init__(self, master, watch_function):
@@ -549,7 +496,7 @@ class SettingsFrame(ctk.CTkFrame):
         self.tabs.grid(row=1, column=0, sticky="nsew")
 
 class AccountFrame(ctk.CTkFrame):
-    def __init__(self, master, name, open_history_callback=None, switch_profile_callback=None, upgrade_callback=None):
+    def __init__(self, master, name, open_history_callback, switch_profile_callback, upgrade_callback):
         super().__init__(master, fg_color="transparent")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0)
@@ -576,11 +523,12 @@ class AccountFrame(ctk.CTkFrame):
         self.history_button = ctk.CTkButton(self.profile_tab, text="Generate viewing report", font=TEXT_FONT, command=self.open_history_callback)
         self.history_button.grid(row=2, column=0, pady=(10, 10))
 
+
         self.subscription_tab = self.tabs.tab("Subscription")
-        self.sub_info = ctk.CTkLabel(self.subscription_tab, text="Current Plan:", font=TEXT_FONT)
+        self.upgrade_button = ctk.CTkButton(self.subscription_tab, text="Upgrade subscription", font=TITLE_FONT, command=self.upgrade_callback())
+        self.upgrade_button.grid(row=1, column=0)
+        self.sub_info = ctk.CTkLabel(self.subscription_tab, text=f"Current Plan: {self.name}", font=TEXT_FONT) # FIXME: add current plan
         self.sub_info.grid(row=0, column=0)
-        self.upgrade_menu = ctk.CTkOptionMenu(self.subscription_tab, values=["Standard Plan", "Premium Plan"], command=self.handle_upgrade)
-        self.upgrade_menu.grid(row=1, column=0, pady=(10, 10))
 
     def handle_switch_profile(self, selection):
         if self.switch_profile_callback:
@@ -598,15 +546,15 @@ class AccountFrame(ctk.CTkFrame):
         self.title_label.configure(text=f"Profile: {current_profile.name}")
         
         names = [p.name for p in account.profiles]
-        self.profile_dropdown.configure(Values=names)
+        self.profile_dropdown.configure(values=names)
         self.profile_dropdown.set(current_profile.name)
 
         if current_profile.is_adult:
             self.sub_info.configure(text=f"Plan: {account.subscription_plan.value} (Adult)")
-            self.upgrade_menu.grid(row=0, column=0, pady=10)
+            self.upgrade_button.grid(row=1, column=0)
         else:
             self.sub_info.configure(text=f"Plan: {account.subscription_plan.value} (Child)\nUpgrading blocked")
-            self.upgrade_menu.grid_forget()
+            self.upgrade_button.grid_forget()
 
 class MovieBrowser(ctk.CTkFrame):
     def __init__(self, master, name, quit):
@@ -627,22 +575,59 @@ class MovieBrowser(ctk.CTkFrame):
         self.search_frame = SearchFrame(self, self.watch_media)
         self.star_frame = StarredFrame(self, self.watch_media)
         self.settings_frame = SettingsFrame(self)
-        self.account_frame = AccountFrame(self, self.name, open_history_callback=self.show_history_window, upgrade_callback=self.handle_upgrade)
+        self.account_frame = AccountFrame(self, self.name, open_history_callback=self.show_history_window, upgrade_callback=self.upgrade_prompt, switch_profile_callback=self.handle_profile_switch)
         self.watch_frame = WatchFrame(self, Movie({}), self.toggle_favourite)
 
         self.current_frame = self.home_frame
 
         self.build_ui()
 
+    def upgrade_prompt(self):
+        # FIXME: something here doesn't work
+        if not self.current_account_data:
+            return
+        
+        current_plan = self.current_account_data.subscription_plan.value
+        if(current_plan == "PremiumPlan"):
+            print("Account is already at highest tier.")
+            return
+        
+        dialog = PaymentDialog(self, current_plan, lambda x: self.execute_upgrade(x))
+        dialog.geometry("+0+0") #FIXME:
+
+    def execute_upgrade(self, target_plan: str):
+        if not self.current_account_data:
+            return
+        
+        if target_plan == "StandardPlan":
+            self.current_account_data.subscription_plan = SubscriptionPlan.STANDARD
+        elif target_plan == "PremiumPlan":
+            self.current_account_data.subscription_plan = SubscriptionPlan.PREMIUM
+        
+        print(f"Successfull upgraded to {target_plan}")
+
+        try: # FIXME: weird
+            accounts_list = self.master.account_manager.load_accounts() # type: ignore
+            for acc in accounts_list:
+                if acc.username == self.current_account_data.username:
+                    acc.subscription_plan = self.current_account_data.subscription_plan
+                    break
+            self.master.account_manager.save_accounts(accounts_list) # type: ignore
+        except:
+            pass
+
+        self.update_profile_ui()
+
     def handle_profile_switch(self, new_profile_name):
         if self.current_account_data:
-            for p in self.current_account_data.profiles:
+            for p in self.current_account_data.profiles: # type: ignore FIXME:
                 if p.name == new_profile_name:
                     self.current_profile = p
                     print(f"Switched profile to: {p.name} (Adult: {p.is_adult})")
             self.update_profile_ui()
 
     def handle_upgrade(self, new_plan_str):
+        # FIXME: something here doesn't work
         if self.current_account_data:
             if new_plan_str == "Standard Plan":
                 self.current_account_data.subscription_plan = SubscriptionPlan.STANDARD
@@ -650,7 +635,7 @@ class MovieBrowser(ctk.CTkFrame):
                 self.current_account_data.subscription_plan = SubscriptionPlan.PREMIUM
 
         app = self.master
-        app.account_manager.update_accounts(app.account_manager.load_accounts())
+        app.account_manager.update_accounts(app.account_manager.load_accounts()) # FIXME: # type: ignore
         self.update_profile_ui()
 
     def update_profile_ui(self):
