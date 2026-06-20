@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-from typing import Union
 import customtkinter as ctk
 from PIL import Image
 import os
@@ -7,7 +5,7 @@ import json
 from pathlib import Path
 from enum import Enum
 import csv
-from datetime import datetime, timedelta
+from datetime import datetime
 
 TITLE_FONT = ("Inter", 35, "bold")
 TEXT_FONT = ("Arial", 20)
@@ -41,11 +39,11 @@ viewing_txt_path = os.path.join(resource_path, "viewing_data.txt")
 
 def read_json(filepath: str):
     assert os.path.exists(filepath)
-    with open(filepath, "r") as f:
+    with open(filepath, "r", encoding="utf-8") as f:
         data = json.load(f)
     return data
 
-def write_json(obj, filepath: str):
+def write_json(obj, filepath: str, encoding="utf-8"):
     assert os.path.exists(filepath)
     with open(filepath, "w") as f:
         json.dump(obj, f)
@@ -109,7 +107,7 @@ class Profile:
         }
     
 class PaymentDialog(ctk.CTkToplevel):
-    def __init__(self, master, current_plan_name: str, success_callback):
+    def __init__(self, master, current_plan_name: str, success_callback, payment_info: str=""):
         super().__init__(master)
         self.title("Payment Checkout")
         self.geometry("400x500")
@@ -121,6 +119,7 @@ class PaymentDialog(ctk.CTkToplevel):
 
         self.on_success = success_callback
         self.current_plan = current_plan_name
+        self.payment_info = payment_info
 
         self.price_dict = {"FreePlan": 0, "StandardPlan": 9, "PremiumPlan": 15}
 
@@ -146,6 +145,15 @@ class PaymentDialog(ctk.CTkToplevel):
         self.expiry_entry = ctk.CTkEntry(self, placeholder_text="MM/YY", font=SMALL_FONT, height=40)
         self.cvv_entry = ctk.CTkEntry(self, placeholder_text="CVV", font=SMALL_FONT, height=40, show="*")
         self.error_label = ctk.CTkLabel(self, text="", text_color="red", font=SMALL_FONT)
+
+        if self.payment_info and self.payment_info.strip() != "":
+            parts = [p.strip() for p in self.payment_info.split("|")]
+            if len(parts)>=1:
+                self.card_entry.insert(0, parts[0])
+            if len(parts)>=2:
+                self.expiry_entry.insert(0, parts[1])
+            if len(parts)>=3:
+                self.cvv_entry.insert(0, parts[2])
         
         self.pay_button = ctk.CTkButton(self, text="Confirm Payment", font=BOLD_TYPEWRITER_FONT, fg_color=PRIMARY_COLOUR, text_color="white", hover_color=SECONDARY_COLOUR, command=self.process_payment)
         self.cancel_button = ctk.CTkButton(self, text="Cancel", font=SMALL_FONT, height=40, fg_color="transparent", command=self.destroy)
@@ -192,6 +200,8 @@ class PaymentDialog(ctk.CTkToplevel):
         if len(cvv)!=3 or not cvv.isdigit():
             self.error_label.configure(text="Invalid CVV.")
             return
+        
+
         
         chosen_plan = "StandardPlan" if "Standard" in choice else "PremiumPlan"
         self.on_success(chosen_plan)
@@ -252,11 +262,9 @@ class Account:
         self.email = email
         self.subscription_plan = subscription_plan
 
-        # ENCAPSULATION
         self.__password = password
         self.__payment_info = payment_info
 
-        # COMPOSITION
         self.profiles = []
 
     def check_password(self, attempt):
@@ -431,9 +439,7 @@ class Season():
         self.media_data = media_data
         self.season_number = self.get_data("season_number", 0)
         self.dimensions = dimensions
-        #self.pillow_image = Image.open(os.path.join(posters_path, f"s_{self.get_id()}.jpg")) # FIXME: incomplete impl
-        #self.poster = ctk.CTkImage(self.pillow_image, size=dimensions)
-        self.episode_count = int(self.get_data("episode_count", 0)) # 
+        self.episode_count = int(self.get_data("episode_count", 0))
     
     def get_data(self, key: str, default):
         return self.media_data.get(key, default)
@@ -462,8 +468,18 @@ def media_get_attribute(data, attribute, default):
 
 def restriction_check(filter: str, restriction: str, media_data: dict, is_adult_profile=True):
     if not is_adult_profile:
-        pass
-        # FIXME: ADD MORE AGE RESTRICTION CHECKING
+        rating = None
+        for key in ["rating", "content_rating", "certification"]:
+            if key in media_data:
+                rating = str(media_data[key]).strip().upper()
+                break
+        if not rating or rating == "" or rating == "UNRATED":
+            return False
+        
+        allowed_child_ratings = ["G", "PG", "TV-Y", "TV-Y7", "TV-G", "TV-PG"]
+
+        if rating not in allowed_child_ratings:
+            return False
     
     assert filter in FILTER_SORT_OPTIONS
     assert restriction in RESTRICTIONS_MAP[filter]

@@ -255,7 +255,7 @@ class WatchFrame(ctk.CTkFrame):
         else:
             episode_count = "N/A"
         genres = ", ".join(genre["name"] for genre in self.media.get_data("genres", []))
-        tagline = self.media.get_data("tagline", "")
+        tagline = self.media.get_data("tagline", "N/A")
 
         self.title_label.configure(text=self.media.get_title())
         self.poster_label.configure(image=self.media.get_poster(BIG_POSTER_SIZE))
@@ -270,7 +270,7 @@ class WatchFrame(ctk.CTkFrame):
         self.runtime_label.configure(text=f"Runtime: {runtime}")
         self.episode_label.configure(text=f"Episodes: {episode_count}")
         self.genre_label.configure(text=f"Genres: {genres}")
-        self.tagline_label.configure(text=f'Tagline:\n"{tagline}"')
+        self.tagline_label.configure(text=f'Tagline:\n{tagline}')
 
     def toggle_favourite(self):
         self.favourite_callback(self.media)
@@ -426,6 +426,9 @@ class SearchFrame(ctk.CTkScrollableFrame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure((1, 2, 3), weight=1)
+
+        self.current_account = None
+        self.current_profile = None
         self.results_bar = LabelledMediabar(self, "Results", [Movie({}, POSTER_SIZE) for _ in range(10)], watch_function)
         self.build_ui()
 
@@ -446,11 +449,15 @@ class SearchFrame(ctk.CTkScrollableFrame):
         self.results_bar.grid(row=4, column=0, sticky="nsew")
 
     def button_callback(self):
-        new_movies = get_media(self.filter_sort_frame.get_media_type().lower(), *self.filter_sort_frame.get_filter(), self.filter_sort_frame.get_sort(), count=10, ascending=self.filter_sort_frame.get_sort_ascending(), search_query=self.search_entry.get())
+        new_movies = get_media(self.filter_sort_frame.get_media_type().lower(), *self.filter_sort_frame.get_filter(), self.filter_sort_frame.get_sort(), count=10, ascending=self.filter_sort_frame.get_sort_ascending(), search_query=self.search_entry.get(), current_profile=self.current_profile, current_account=self.current_account)
         self.results_bar.update_media(new_movies)
 
     def refresh_search(self, event=None):
         self.button_callback()
+
+    def refresh_content(self):
+        self.search_entry.delete(0, "end")
+        self.results_bar.update_media([])
 
 class StarredFrame(ctk.CTkFrame):
     def __init__(self, master, watch_function):
@@ -650,7 +657,9 @@ class MovieBrowser(ctk.CTkFrame):
             print("Account is already at highest tier.")
             return
         
-        dialog = PaymentDialog(self, current_plan, lambda x: self.execute_upgrade(x))
+        current_payment = self.current_account_data.get_payment_info()
+        
+        dialog = PaymentDialog(self, current_plan, lambda x: self.execute_upgrade(x), payment_info=current_payment)
 
     def execute_upgrade(self, target_plan: str):
         if not self.current_account_data:
@@ -664,21 +673,18 @@ class MovieBrowser(ctk.CTkFrame):
         print(f"Successfully upgraded to {target_plan}")
         self.account_frame.set_account(self.current_account_data)
 
-        try: # FIXME: weird idk if it saves data properly
-            accounts_list = self.master.account_manager.load_accounts() # type: ignore
-            for acc in accounts_list:
-                if acc.username == self.current_account_data.username:
-                    acc.subscription_plan = self.current_account_data.subscription_plan
-                    break
-            self.master.account_manager.update_accounts(accounts_list) # type: ignore
-        except Exception as e:
-            print(e)
+        accounts_list = self.master.account_manager.load_accounts() # type: ignore
+        for acc in accounts_list:
+            if acc.username == self.current_account_data.username:
+                acc.subscription_plan = self.current_account_data.subscription_plan
+                break
+        self.master.account_manager.update_accounts(accounts_list) # type: ignore
 
         self.update_profile_ui()
 
     def handle_profile_switch(self, new_profile_name):
         if self.current_account_data:
-            for p in self.current_account_data.profiles: # type: ignore FIXME:
+            for p in self.current_account_data.profiles:
                 if p.name == new_profile_name:
                     self.current_profile = p
                     print(f"Switched profile to: {p.name} (Adult: {p.is_adult})")
@@ -686,7 +692,6 @@ class MovieBrowser(ctk.CTkFrame):
             self.update_profile_ui()
 
     def handle_upgrade(self, new_plan_str):
-        # FIXME: something here doesn't work
         if self.current_account_data:
             if new_plan_str == "Standard Plan":
                 self.current_account_data.subscription_plan = SubscriptionPlan.STANDARD
@@ -694,11 +699,14 @@ class MovieBrowser(ctk.CTkFrame):
                 self.current_account_data.subscription_plan = SubscriptionPlan.PREMIUM
 
         app = self.master
-        app.account_manager.update_accounts(app.account_manager.load_accounts()) # FIXME: # type: ignore
+        app.account_manager.update_accounts(app.account_manager.load_accounts())
         self.update_profile_ui()
 
     def update_profile_ui(self):
         if self.current_account_data and self.current_profile:
+            self.search_frame.current_account = self.current_account_data
+            self.search_frame.current_profile = self.current_profile
+            self.search_frame.refresh_content()
             self.account_frame.refresh_view(self.current_account_data, self.current_profile)
             self.home_frame.refresh_content(account=self.current_account_data, current_profile=self.current_profile)
 
@@ -766,7 +774,7 @@ class MovieBrowser(ctk.CTkFrame):
 class StreamingApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("streaming service")
+        self.title("Breakflix")
         self.geometry("1280x720")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
