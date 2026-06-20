@@ -20,11 +20,10 @@ POSTER_SIZE = (96, 144)
 MEDIUM_POSTER_SIZE = (160, 240)
 BIG_POSTER_SIZE = (320, 480)
 
-FILTER_SORT_OPTIONS = ["any", "score rating", "age rating", "length", "popularity"]
+FILTER_SORT_OPTIONS = ["any", "score rating", "length", "popularity"]
 RESTRICTIONS_MAP = {
             "any": [""],
             "score rating": [">8.5", ">8", ">7.5", ">7"],
-            "age rating": ["PG", "PG13", "MA15+", "M", "R"],
             "length": ["<75m", "<90m", "<120m", ">75m", ">90m", ">120m"],
             "popularity": [">200", ">175", ">150", ">100", ">50"]
         }
@@ -454,12 +453,10 @@ def media_get_attribute(data, attribute, default):
     match attribute:
         case "score_rating" | "score rating":
             return data["vote_average"]
-        case "age_rating" | "age rating":
-            raise ValueError() # FIXME:
         case "length":
-            return data["runtime"]
+            return data.get("runtime", 0)
         case "popularity":
-            return data["popularity"]
+            return data.get("popularity", 0)
         case _:
             return data.get(attribute, default)
 
@@ -477,8 +474,6 @@ def restriction_check(filter: str, restriction: str, media_data: dict, is_adult_
             media_score = media_get_attribute(media_data, filter, 0) 
             required = float(restriction[1:])
             return media_score>=required
-        case "age rating":
-            raise ValueError() # No age ratings yet... FIXME:
         case "length":
             media_length = media_get_attribute(media_data, filter, 0)
             required = int(restriction[1:-1])
@@ -490,7 +485,6 @@ def restriction_check(filter: str, restriction: str, media_data: dict, is_adult_
             media_popularity = media_get_attribute(media_data, "popularity", 0)
             required = int(restriction[1:])
             return media_popularity>=required
-    raise ValueError()  # FIXME: debug, delete later
 
 def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int, ascending: bool=False, search_query: str="", current_profile=None, current_account=None):
     match media_type:
