@@ -149,7 +149,7 @@ class PaymentDialog(ctk.CTkToplevel):
         self.error_label = ctk.CTkLabel(self, text="", text_color="red", font=SMALL_FONT)
 
         if self.payment_info and self.payment_info.strip() != "":
-            parts = [p.strip() for p in self.payment_info.strip("|")]
+            parts = [p.strip() for p in self.payment_info.split("|")]
             if len(parts)>=1:
                 self.card_entry.insert(0, parts[0])
             if len(parts)>=2:
