@@ -296,7 +296,7 @@ class Mediabar(ctk.CTkScrollableFrame):
         self.buttons = []
         for i, media in enumerate(self.media):
             assert type(media) in [Movie, Show, Anime, AnimeMovie]
-            media_image = media.get_poster()
+            media_image = media.get_poster(POSTER_SIZE)
             media_button = ctk.CTkButton(self, image=media_image, text="", fg_color="transparent", command=lambda i=i: self.button_callback(i))
             self.images.append(media_image)
             self.buttons.append(media_button)
@@ -338,10 +338,10 @@ class HomeFrame(ctk.CTkScrollableFrame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure((1, 2, 3, 4), weight=1)
-        self.movie_bar = LabelledMediabar(self, "Popular Movies", [Movie(random.choice(jsons["movie"]), POSTER_SIZE) for x in range(15)], watch_function)
-        self.show_bar = LabelledMediabar(self, "TV shows", [Show(random.choice(jsons["tv"]), POSTER_SIZE) for x in range(15)], watch_function)
-        self.anime_bar = LabelledMediabar(self, "Anime", [Anime(random.choice(jsons["anime"]), POSTER_SIZE) for i in range(15)], watch_function)
-        self.anime_movie_bar = LabelledMediabar(self, "Anime movies", [AnimeMovie(random.choice(jsons["anime_movie"]), POSTER_SIZE) for x in range(15)], watch_function) 
+        self.movie_bar = LabelledMediabar(self, "Popular Movies", [], watch_function)
+        self.show_bar = LabelledMediabar(self, "TV shows", [], watch_function)
+        self.anime_bar = LabelledMediabar(self, "Anime", [], watch_function)
+        self.anime_movie_bar = LabelledMediabar(self, "Anime movies", [], watch_function)
 
         self.build_ui()
 
@@ -354,10 +354,15 @@ class HomeFrame(ctk.CTkScrollableFrame):
         self.anime_movie_bar.grid(row=4, column=0, sticky="nsew", pady=(0, 10))
 
     def refresh_content(self, account, current_profile):
-        movies = get_media("movie", "any", "", "popularity", 15, True, current_profile, account)
-        shows = get_media("tv_show", "any", "", "popularity", 15, True, current_profile, account)
-        animes = get_media("anime", "any", "", "popularity", 15, True, current_profile, account)
-        anime_movies = get_media("anime_movie", "any", "", "popularity", 15, True, current_profile, account)
+        movie_pool = get_media("movie", "any", "", "popularity", 40, True, search_query="", current_profile=current_profile, current_account=account)
+        show_pool = get_media("tv_show", "any", "", "popularity", 40, True, search_query="", current_profile=current_profile, current_account=account)
+        anime_pool = get_media("anime", "any", "", "popularity", 40, True, search_query="", current_profile=current_profile, current_account=account)
+        anime_movie_pool = get_media("anime_movie", "any", "", "popularity", 40, True, search_query="", current_profile=current_profile, current_account=account)
+
+        movies = random.sample(movie_pool, min(len(movie_pool), 15))
+        shows = random.sample(show_pool, min(len(show_pool), 15))
+        animes = random.sample(anime_pool, min(len(anime_pool), 15))
+        anime_movies = random.sample(anime_movie_pool, min(len(anime_movie_pool), 15))
 
         self.movie_bar.update_media(movies)
         self.show_bar.update_media(shows)
@@ -557,15 +562,16 @@ class AccountFrame(ctk.CTkFrame):
         self.tabs.grid(row=1, column=0, sticky="nsew")
 
         self.profile_tab = self.tabs.tab("Manage Profiles")
-        self.profile_tab.grid_columnconfigure(0, weight=1)
+        self.profile_tab.grid_columnconfigure((0, 1), weight=1)
         self.profile_tab.grid_rowconfigure((0, 1, 2), weight=1)
         self.profile_menu_label = ctk.CTkLabel(self.profile_tab, text="Select Profile:", font=TEXT_FONT)
-        self.profile_menu_label.grid(row=0, column=0, pady=(10, 10))
-        self.profile_dropdown = ctk.CTkOptionMenu(self.profile_tab, values=["Default"], command=self.handle_switch_profile)
-        self.profile_dropdown.grid(row=1, column=0, pady=(10, 10))
+        self.profile_menu_label.grid(row=0, column=0, columnspan=2, pady=(10, 10))
+        self.profile_dropdown = ctk.CTkOptionMenu(self.profile_tab, values=["Default"], command=lambda selection: self.switch_button.configure(state="disabled" if selection==self.current_profile_name else "normal"))
+        self.profile_dropdown.grid(row=1, column=0, pady=(10, 10), padx=(10, 5), sticky="e")
+        self.switch_button = ctk.CTkButton(self.profile_tab, text="Switch profile", font=TEXT_FONT, command=lambda: self.handle_switch_profile(self.profile_dropdown.get()))
+        self.switch_button.grid(row=1, column=1, pady=(10, 10), padx=(5, 10), sticky="w")
         self.history_button = ctk.CTkButton(self.profile_tab, text="Generate viewing report", font=TEXT_FONT, command=self.open_history_callback)
-        self.history_button.grid(row=2, column=0, pady=(10, 10))
-
+        self.history_button.grid(row=2, column=0, columnspan=2, pady=(10, 10))
         self.subscription_tab = self.tabs.tab("Subscription")
         self.subscription_tab.grid_columnconfigure(0, weight=1)
         self.subscription_tab.grid_rowconfigure((0, 1), weight=1)
@@ -595,10 +601,12 @@ class AccountFrame(ctk.CTkFrame):
 
     def refresh_view(self, account, current_profile):
         self.title_label.configure(text=f"Profile: {current_profile.name}")
+        self.current_profile_name = current_profile.name
         
         names = [p.name for p in account.profiles]
         self.profile_dropdown.configure(values=names)
         self.profile_dropdown.set(current_profile.name)
+        self.switch_button.configure(state="disabled")
 
         if current_profile.is_adult:
             self.sub_info.configure(text=f"Plan: {account.subscription_plan.value} (Adult)")
@@ -674,6 +682,7 @@ class MovieBrowser(ctk.CTkFrame):
                 if p.name == new_profile_name:
                     self.current_profile = p
                     print(f"Switched profile to: {p.name} (Adult: {p.is_adult})")
+                    self.change_name(p.name)
             self.update_profile_ui()
 
     def handle_upgrade(self, new_plan_str):
@@ -691,7 +700,7 @@ class MovieBrowser(ctk.CTkFrame):
     def update_profile_ui(self):
         if self.current_account_data and self.current_profile:
             self.account_frame.refresh_view(self.current_account_data, self.current_profile)
-            self.home_frame.refresh_content(self.current_account_data, self.current_profile)
+            self.home_frame.refresh_content(account=self.current_account_data, current_profile=self.current_profile)
 
     def show_history_window(self):
         history_list = []
@@ -790,9 +799,12 @@ class StreamingApp(ctk.CTk):
 
         if logged_in_user:
             username = logged_in_user.username
-            password = logged_in_user.get_password() # FIXME: insecure maybe idk
+            password = logged_in_user.get_password()
             print(f"Logging in as {username} with password {password}")
+
             self.browse_frame.current_account_data = logged_in_user
+            if logged_in_user.profiles:
+                self.browse_frame.current_profile = logged_in_user.profiles[0]
             self.browse_frame.account_frame.set_account(logged_in_user)
             self.login_switch(username)
             return True
