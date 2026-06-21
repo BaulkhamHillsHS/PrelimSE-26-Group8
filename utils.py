@@ -1,3 +1,4 @@
+# Import required libraries for utility
 import customtkinter as ctk
 from PIL import Image
 import os
@@ -7,6 +8,7 @@ from enum import Enum
 import csv
 from datetime import datetime
 
+# Define constants for fonts, poser sizes, colours, and restriction filtering
 TITLE_FONT = ("Inter", 35, "bold")
 TEXT_FONT = ("Arial", 20)
 SMALL_FONT = ("Arial", 17)
@@ -29,25 +31,30 @@ RESTRICTIONS_MAP = {
 PRIMARY_COLOUR = "#ecb050"
 SECONDARY_COLOUR = "#f5e35e"
 
+# Manage paths
 root = Path(__file__).resolve().parent
 resource_path = os.path.join(root, "resource")
 posters_path = os.path.join(resource_path, "posters")
 
 accounts_path = os.path.join(resource_path, "accounts.csv")
 theme_path = os.path.join(resource_path, "theme.json")
-viewing_txt_path = os.path.join(resource_path, "viewing_data.txt")
+viewing_txt_path = os.path.join(root, "viewing_report.txt")
 
+# Define file reading functions
 def read_json(filepath: str):
-    assert os.path.exists(filepath)
+    if not os.path.exists(filepath):
+        return {}
     with open(filepath, "r", encoding="utf-8") as f:
         data = json.load(f)
     return data
 
-def write_json(obj, filepath: str, encoding="utf-8"):
-    assert os.path.exists(filepath)
-    with open(filepath, "w") as f:
+def write_json(obj, filepath: str):
+    if not os.path.exists(filepath):
+        return
+    with open(filepath, "w", encoding="utf-8") as f:
         json.dump(obj, f)
 
+# Pull json files
 json_names = [
     "movie",
     "tv",
@@ -62,8 +69,8 @@ for name in json_names:
     data = read_json(json_path)
     jsons[name] = data
 
+# Pull image files
 image_names = [
-          # HENRY STUFF
           "settings_icon",
           "home_icon",
           "search_icon",
@@ -71,7 +78,6 @@ image_names = [
           "quit_icon",
           "account_icon",
           "small_logo",
-          # BEN STUFF
           "blind",
           "eye",
           "lock",
@@ -86,11 +92,13 @@ for name in image_names:
     image = Image.open(image_path)
     images[name] = image
 
+# Subscription plan class
 class SubscriptionPlan(Enum):
     FREE = "FreePlan"
     STANDARD = "StandardPlan"
     PREMIUM = "PremiumPlan"
 
+# Profile class
 class Profile:
     def __init__(self, name, is_adult: bool, watchlist=None, watch_history=None):
         self.name = name
@@ -105,7 +113,8 @@ class Profile:
             "watchlist": self.watchlist,
             "watch_history": self.watch_history
         }
-    
+
+# Payment Dialog toplevel class for subscription upgrades
 class PaymentDialog(ctk.CTkToplevel):
     def __init__(self, master, current_plan_name: str, success_callback, payment_info: str=""):
         super().__init__(master)
@@ -117,6 +126,7 @@ class PaymentDialog(ctk.CTkToplevel):
         self.transient(master)
         self.grab_set()
 
+        # Defining attributes
         self.on_success = success_callback
         self.current_plan = current_plan_name
         self.payment_info = payment_info
@@ -127,6 +137,7 @@ class PaymentDialog(ctk.CTkToplevel):
         self.build_ui()
 
     def build_ui(self):
+        # Main ui widgets
         self.main_label = ctk.CTkLabel(self, text=f"Upgrade Subscription Plan", font=BOLD_TYPEWRITER_FONT)
         self.select_label = ctk.CTkLabel(self, text="Select Tier", font=BOLD_TYPEWRITER_FONT)
         self.available_options = []
@@ -137,15 +148,18 @@ class PaymentDialog(ctk.CTkToplevel):
         else:
             self.available_options = ["Already at highest tier"]
 
+        # Plan info and price
         self.plan_dropdown = ctk.CTkOptionMenu(self, values=self.available_options, font=SMALL_FONT, height=38, button_color=PRIMARY_COLOUR, button_hover_color=SECONDARY_COLOUR, command=self.update_price_display)
         self.price_label = ctk.CTkLabel(self, text="", font=BIG_TYPEWRITER_FONT)
         self.update_price_display(self.plan_dropdown.get())
 
+        # Payment entries
         self.card_entry = ctk.CTkEntry(self, placeholder_text="Card number", font=SMALL_FONT, height=40)
         self.expiry_entry = ctk.CTkEntry(self, placeholder_text="MM/YY", font=SMALL_FONT, height=40)
         self.cvv_entry = ctk.CTkEntry(self, placeholder_text="CVV", font=SMALL_FONT, height=40, show="*")
         self.error_label = ctk.CTkLabel(self, text="", text_color="red", font=SMALL_FONT)
 
+        # Autofill payment information
         if self.payment_info and self.payment_info.strip() != "":
             parts = [p.strip() for p in self.payment_info.split("|")]
             if len(parts)>=1:
@@ -158,20 +172,20 @@ class PaymentDialog(ctk.CTkToplevel):
         self.pay_button = ctk.CTkButton(self, text="Confirm Payment", font=BOLD_TYPEWRITER_FONT, fg_color=PRIMARY_COLOUR, text_color="white", hover_color=SECONDARY_COLOUR, command=self.process_payment)
         self.cancel_button = ctk.CTkButton(self, text="Cancel", font=SMALL_FONT, height=40, fg_color="transparent", command=self.destroy)
         
+        # Grid all widgets to the frame
         self.main_label.grid(row=0, column=0, columnspan=2, pady=(30, 5), padx=20, sticky="ew")
         self.select_label.grid(row=1, column=0, columnspan=2, pady=(10, 2), padx=40, sticky="w")
         self.plan_dropdown.grid(row=2, column=0, columnspan=2, pady=(0, 15), padx=40, sticky="ew")
         self.price_label.grid(row=3, column=0, columnspan=2, pady=(0, 15), padx=40, sticky="ew")
-        
         self.card_entry.grid(row=4, column=0, columnspan=2, pady=10, padx=40, sticky="ew")
         self.expiry_entry.grid(row=5, column=0, pady=10, padx=(40, 5), sticky="ew")
         self.cvv_entry.grid(row=5, column=1, pady=10, padx=(5, 40), sticky="ew")
-        
         self.error_label.grid(row=6, column=0, columnspan=2, pady=5, padx=20, sticky="ew")
         self.pay_button.grid(row=7, column=0, columnspan=2, pady=(15, 10), padx=40, sticky="ew")
         self.cancel_button.grid(row=8, column=0, columnspan=2, pady=5, padx=40, sticky="ew")
 
     def update_price_display(self, selected_choice: str):
+        # Update price label
         if "Standard" in selected_choice:
             self.price_label.configure(text="Total: $8.99/month")
         elif "additional $6" in selected_choice:
@@ -182,6 +196,7 @@ class PaymentDialog(ctk.CTkToplevel):
             self.price_label.configure(text="No active transaction amount due.")
 
     def process_payment(self):
+        # Process payment
         choice = self.plan_dropdown.get()
         if "Already" in choice:
             self.error_label.configure(text="You are already on the highest tier.")
@@ -191,6 +206,7 @@ class PaymentDialog(ctk.CTkToplevel):
         expiry = self.expiry_entry.get().strip()
         cvv = self.cvv_entry.get().strip()
 
+        # Make sure payment details are valid
         if len(card)<15 or not card.isdigit():
             self.error_label.configure(text="Invalid card number(15 digits)")
             return
@@ -201,15 +217,16 @@ class PaymentDialog(ctk.CTkToplevel):
             self.error_label.configure(text="Invalid CVV.")
             return
         
-
-        
+        # Call the success plan and close window 
         chosen_plan = "StandardPlan" if "Standard" in choice else "PremiumPlan"
         self.on_success(chosen_plan)
         self.destroy()
 
+# Watch history toplevel
 class WatchHistory(ctk.CTkToplevel):
     def __init__(self, parent, username, watch_history_list, text_path):
         super().__init__(parent)
+        # Defining attributes
         self.username = username
         self.watch_history_list = watch_history_list
         self.text_path = text_path
@@ -224,6 +241,7 @@ class WatchHistory(ctk.CTkToplevel):
         self.build_ui()
 
     def build_ui(self):
+        # Building logo and name
         self.logo_frame = ctk.CTkFrame(self.scrollable_frame, fg_color="transparent")
         self.logo_frame.pack(pady=20)
         self.real_logo = ctk.CTkImage(images["small_logo"], size=(64, 64))
@@ -233,47 +251,54 @@ class WatchHistory(ctk.CTkToplevel):
         self.name_label = ctk.CTkLabel( self.logo_frame, text="BreakFlix", text_color="white", font=("Inter", 25, "bold"))
         self.name_label.pack(side="left")
 
+        # Building history and saving txt
         self.create_history()
         self.create_txt()
 
     def create_history(self):
+        # Building history section
         self.receipt = []
         self.receipt.append("-" * 36)
-
+        self.receipt.append(f"ACCOUNT: {self.username.upper()}")
         if self.watch_history_list:
             for item in self.watch_history_list:
-                self.receipt.append(f"{item}\n")
+                self.receipt.append(f"\n{item['title']}\nType: {item['type']}\nWatched: {item['time']}")
         else:
-            self.receipt.append("No Movies watched\n")
-
-        self.receipt.append(f"ACCOUNT: {self.username.upper()}")
+            self.receipt.append("No media watched")
         self.receipt.append("-" * 36)
+        # Display as a label
         receipt_display = ctk.CTkLabel(self.scrollable_frame, text="\n".join(self.receipt), font=("Courier New", 14), justify="left")
         receipt_display.pack(pady=10)
 
     def create_txt(self):
+        # Save as txt file
         bank_name = "            BreakFlix            \n"
         with open(self.text_path, "w", encoding="utf-8") as file:
             file.write(bank_name + "\n".join(self.receipt))
     
+# Account class
 class Account:
     def __init__(self, username, email, password, subscription_plan: SubscriptionPlan, payment_info):
         self.username = username
         self.email = email
         self.subscription_plan = subscription_plan
 
+        # Encapsulated password and payment info
         self.__password = password
         self.__payment_info = payment_info
 
         self.profiles = []
 
     def check_password(self, attempt):
+        # Access using interface/public command
         return attempt==self.__password
     
     def get_password(self):
+        # Only for data saving
         return self.__password
     
     def get_payment_info(self):
+        # Only for data saving and autofill in paying
         return self.__payment_info
     
     def set_payment_info(self, new_payment_info):
@@ -282,12 +307,14 @@ class Account:
     def add_profile(self, profile: Profile):
         self.profiles.append(profile)
     
+# Account Manager class
 class AccountManager:
     def __init__(self, filepath):
         self.filepath = filepath
         self.fields = ["username", "email", "password", "subscription_plan", "payment_info", "profiles"]
     
     def load_accounts(self):
+        # Loading from file
         accounts = []
         if not os.path.exists(self.filepath):
             return accounts
@@ -302,12 +329,12 @@ class AccountManager:
                 for profile_data in profiles:
                     profile = Profile(profile_data["name"], profile_data["is_adult"], profile_data.get("watchlist", []), profile_data.get("watch_history", []))
                     account.add_profile(profile)
-
                 accounts.append(account)
 
         return accounts
     
     def save_account(self, account: Account):
+        # Saving to file a single account
         file_exists = os.path.exists(self.filepath)
         with open(self.filepath, "a", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=self.fields)
@@ -323,6 +350,7 @@ class AccountManager:
                 })
             
     def update_accounts(self, accounts: list[Account]):
+        # Updating file, all accounts
         with open(self.filepath, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=self.fields)
             writer.writeheader()
@@ -336,6 +364,7 @@ class AccountManager:
                     "profiles": json.dumps([p.to_dict() for p in account.profiles])
                 })
 
+# Media base class
 class Media():
     def __init__(self, media_data: dict, dimensions: tuple[int, int]):
         self.media_data = media_data
@@ -360,6 +389,7 @@ class Media():
         return self.get_data("runtime", 0)
     
     def __str__(self) -> str:
+        # Placeholder to be overwritten for polymorphism
         return "Base Media"
     
     def get_title(self) -> str:
@@ -367,16 +397,26 @@ class Media():
 
     def get_id(self) -> int:
         movie_id = self.get_data("id", 0)
-        assert type(movie_id) == int
+        if type(movie_id) != int: return 0
         return movie_id
     
+    def play(self) -> str:
+        # Placeholder to be overwritten for polymorphism
+        return "Playing media"
+    
+# Inherits from Media
 class Movie(Media):
     def __init__(self, media_data: dict, dimensions: tuple[int, int]=POSTER_SIZE):
         super().__init__(media_data, dimensions)
 
     def __str__(self) -> str:
         return f"{self.get_title()}({self.get_runtime()})"
+    
+    def play(self) -> str:
+        # Polymorphism
+        return f"Playing movie: {self.get_title()}"
 
+# Inherits from Media
 class Anime(Media):
     def __init__(self, media_data, dimensions: tuple[int, int]=POSTER_SIZE):
         super().__init__(media_data, dimensions=dimensions)
@@ -385,6 +425,7 @@ class Anime(Media):
         self.seasons = [Season(season_data[i]) for i in range(self.season_count)]
 
     def __str__(self) -> str:
+        # Polymorphism
         return str(self.get_data("name", ""))
     
     def get_seasons(self):
@@ -401,14 +442,25 @@ class Anime(Media):
 
     def get_title(self):
         return self.get_data("name", "")
+    
+    def play(self) -> str:
+        # Polymorphism
+        return f"Select season for: {self.get_title()}"
 
+# Inherits from Media
 class AnimeMovie(Media):
     def __init__(self, media_data: dict, dimensions: tuple[int, int]=(500, 750)):
         super().__init__(media_data, dimensions)
 
     def __str__(self) -> str:
+        # Polymorphism
         return f"{self.get_title()}({self.get_runtime()})"
 
+    def play(self) -> str:
+        # Polymorphism
+        return f"Playing anime movie: {self.get_title()}"
+
+# Inherits from Media
 class Show(Media):
     def __init__(self, media_data, dimensions: tuple[int, int]=POSTER_SIZE):
         super().__init__(media_data, dimensions=dimensions)
@@ -417,6 +469,7 @@ class Show(Media):
         self.seasons = [Season(season_data[i]) for i in range(self.season_count)]
 
     def __str__(self) -> str:
+        # Polymorphism
         return str(self.get_data("name", ""))
     
     def get_seasons(self):
@@ -433,6 +486,10 @@ class Show(Media):
 
     def get_title(self):
         return self.get_data("name", "")
+    
+    def play(self) -> str:
+        # Polymorphism
+        return f"Select season for: {self.get_title()}"
 
 class Season():
     def __init__(self, media_data: dict, dimensions=POSTER_SIZE):
@@ -452,12 +509,14 @@ class Season():
 
     def get_id(self) -> int:
         movie_id = self.get_data("id", 0)
-        assert type(movie_id) == int
+        if type(movie_id) != int:
+            return 0
         return movie_id
     
+# Media functions
 def media_get_attribute(data, attribute, default):
     match attribute:
-        case "score_rating" | "score rating":
+        case "score_rating" | "score rating": # score rating or score_rating
             return data["vote_average"]
         case "length":
             return data.get("runtime", 0)
@@ -468,6 +527,7 @@ def media_get_attribute(data, attribute, default):
 
 def restriction_check(filter: str, restriction: str, media_data: dict, is_adult_profile=True):
     if not is_adult_profile:
+        # Restrict content for children
         rating = None
         for key in ["rating", "content_rating", "certification"]:
             if key in media_data:
@@ -480,9 +540,13 @@ def restriction_check(filter: str, restriction: str, media_data: dict, is_adult_
 
         if rating not in allowed_child_ratings:
             return False
+        
+    if filter not in FILTER_SORT_OPTIONS:
+        return False
+    if restriction not in RESTRICTIONS_MAP.get(filter, []):
+        return False
     
-    assert filter in FILTER_SORT_OPTIONS
-    assert restriction in RESTRICTIONS_MAP[filter]
+    # Manage filter
     match filter:
         case "any":
             return True
@@ -503,6 +567,8 @@ def restriction_check(filter: str, restriction: str, media_data: dict, is_adult_
             return media_popularity>=required
 
 def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, count: int, ascending: bool=False, search_query: str="", current_profile=None, current_account=None):
+    # Define popularity bounds based on media type and subscription
+    media_dict = []
     match media_type:
         case "movie":
             media_dict = jsons["movie"]
@@ -517,13 +583,16 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
             media_dict = jsons["anime"]
             popularity_bounds = (40, 100)
         case _:
-            raise ValueError()
-        
-    assert filter_by, sort_by in FILTER_SORT_OPTIONS
-    assert restriction in RESTRICTIONS_MAP[filter_by]
+            media_dict = []
+            popularity_bounds = (0, 0)
+    
+    if filter_by not in FILTER_SORT_OPTIONS:
+        return []
+    if restriction not in RESTRICTIONS_MAP.get(filter_by, []):
+        return []
+
     out = []
     free_max, standard_max = popularity_bounds
-
     for media in media_dict:
         # SUBSCRIPTION POPULARITY CHECK
         popularity = media.get("popularity", 0)
@@ -545,12 +614,14 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
             if search_query.lower() not in title:
                 continue
 
+        # Ensure age check and filter check
         if restriction_check(filter_by, restriction, media, is_adult_profile=is_adult):
             out.append(media)
 
-    if sort_by!="any":
+    if sort_by!="any": # Sort media
         out.sort(key=lambda x: media_get_attribute(x, sort_by, 0), reverse=not ascending)
 
+    # Return media in correct type
     match media_type:
         case "movie":
             return [Movie(x) for x in out[:count]]
@@ -561,15 +632,19 @@ def get_media(media_type: str, filter_by: str, restriction: str, sort_by: str, c
         case "anime":
             return [Anime(x) for x in out[:count]]
 
+# Turn minutes to pretty h and m
 def pretty_time(minutes: int, clock=False):
+    """Minutes to hours+minutes, clock bool for clock variant"""
     if clock:
         return f"{minutes//60}:{minutes%60}"
     else:
         return f"{minutes//60}h{minutes%60}m"
     
+# Get current time in dd/mm/yyyy hh/mm/ss
 def get_current_time():
     return datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
+# Rounded rectangle
 def create_rrect(canvas: ctk.CTkCanvas, width, height, pos, r, fill):
     x1, y1 = pos
     x2 = x1 + width
@@ -597,6 +672,7 @@ def create_rrect(canvas: ctk.CTkCanvas, width, height, pos, r, fill):
     ]
     return canvas.create_polygon(points, smooth=True, fill=fill)
 
+# Image cell class for login screen
 class ImageCell():
     def __init__(self, canvas: ctk.CTkCanvas, image, pos, speed = 1.0):
         self.canvas = canvas
@@ -621,6 +697,7 @@ class ImageCell():
         y = bbox[3] - bbox[1]
         return (x, y)
     
+# Panel class for login screen
 class Panel():
     def __init__(self, canvas: ctk.CTkCanvas, width, height, r, pos, fill, padding):
         self.canvas = canvas
