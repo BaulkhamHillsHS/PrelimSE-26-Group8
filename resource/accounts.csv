@@ -1,6 +1,6 @@
 username,email,password,subscription_plan,payment_info,profiles
 MrDunne,ryan.dunne9@det.nsw.edu.au,Baulko11!!,PremiumPlan,123456789012345|12/30|123,"[{""name"": ""Mr and Mrs Dunne"", ""is_adult"": true, ""watchlist"": [], ""watch_history"": []}, {""name"": ""Kids"", ""is_adult"": false, ""watchlist"": [], ""watch_history"": []}]"
-a,a@a,a,FreePlan,123456789012345|12/30|123,"[{""name"": ""a"", ""is_adult"": true, ""watchlist"": [], ""watch_history"": []}, {""name"": ""a's children"", ""is_adult"": false, ""watchlist"": [], ""watch_history"": []}]"
+a,a@a,a,PremiumPlan,123456789012345|12/30|123,"[{""name"": ""a"", ""is_adult"": true, ""watchlist"": [], ""watch_history"": []}, {""name"": ""a's children"", ""is_adult"": false, ""watchlist"": [], ""watch_history"": []}]"
 user3,user3@gmail.com,OriginalPassword67,FreePlan,123456789012345|12/30|123,"[{""name"": ""User3"", ""is_adult"": true, ""watchlist"": [], ""watch_history"": []}]"
 user4,user4@gmail.com,OriginalPassword67,StandardPlan,123456789012345|12/30|123,"[{""name"": ""User4"", ""is_adult"": false, ""watchlist"": [], ""watch_history"": []}]"
 user5,user5@gmail.com,OriginalPassword67,PremiumPlan,123456789012345|12/30|123,"[{""name"": ""User5"", ""is_adult"": true, ""watchlist"": [], ""watch_history"": []}]"
